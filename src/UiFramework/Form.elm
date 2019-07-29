@@ -189,16 +189,22 @@ numberField : NumberFieldConfig msg -> UiElement context msg
 numberField { onChange, onBlur, disabled, value, error, showError, attributes } =
     Internal.fromElement
         (\context ->
+            let
+                stepAttr =
+                    attributes.step
+                        |> Maybe.map String.fromFloat
+                        |> Maybe.withDefault "any"
+            in
             Input.text
                 (viewAttributes context
                     |> withHtmlAttribute Html.Attributes.type_ (Just "number")
-                    |> withHtmlAttribute (String.fromFloat >> Html.Attributes.step) (Just attributes.step)
+                    |> withHtmlAttribute Html.Attributes.step (Just stepAttr)
                     |> withHtmlAttribute (String.fromFloat >> Html.Attributes.max) attributes.max
                     |> withHtmlAttribute (String.fromFloat >> Html.Attributes.min) attributes.min
                     |> withCommonAttrs showError error disabled onBlur context.themeConfig.themeColor
                 )
-                { onChange = fromString String.toFloat value >> onChange
-                , text = value |> Maybe.map String.fromFloat |> Maybe.withDefault ""
+                { onChange = onChange
+                , text = value
                 , placeholder = placeholder attributes
                 , label = labelAbove (showError && error /= Nothing) attributes context.themeConfig.themeColor
                 }
@@ -327,6 +333,9 @@ errorToString error =
 
         Error.ValidationFailed validationError ->
             validationError
+
+        Error.External externalError ->
+            externalError
 
 
 
