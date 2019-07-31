@@ -114,6 +114,15 @@ type alias InputConfig =
     }
 
 
+type alias ContainerConfig =
+    { jumbotronBackgroundColor : Color
+    , backgroundColor : Color
+    , borderColor : Color
+    , borderWidth : Int
+    , borderRadius : Int
+    }
+
+
 type alias ThemeConfig =
     { colors : Colors
     , themeColor : ThemeColor
@@ -128,11 +137,6 @@ type alias ThemeConfig =
     , navConfig : NavConfig
     , inputConfig : InputConfig
     , containerConfig : ContainerConfig
-    }
-
-
-type alias ContainerConfig =
-    { backgroundColor : Color
     }
 
 
@@ -325,7 +329,11 @@ defaultInputConfig themeColor =
 
 defaultContainerConfig : ContainerConfig
 defaultContainerConfig =
-    { backgroundColor = bootstrapColors.gray200
+    { jumbotronBackgroundColor = bootstrapColors.gray200
+    , backgroundColor = bootstrapColors.white
+    , borderColor = bootstrapColors.gray200
+    , borderWidth = 0
+    , borderRadius = 4
     }
 
 

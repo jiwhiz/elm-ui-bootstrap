@@ -1,4 +1,4 @@
-module UiFramework.Container exposing (Container, Options, UiElement, child, default, defaultOptions, jumbotron, roundCorners, view, viewAttributes)
+module UiFramework.Container exposing (Container(..), Options, UiElement, default, defaultOptions, jumbotron, view, viewAttributes, withChild)
 
 import Element exposing (Attribute)
 import Element.Background as Background
@@ -17,7 +17,6 @@ type Container context msg
 
 type alias Options context msg =
     { jumbotron : Bool
-    , roundedCorners : Int
     , child : UiElement context msg
     }
 
@@ -25,24 +24,18 @@ type alias Options context msg =
 defaultOptions : Options context msg
 defaultOptions =
     { jumbotron = False
-    , roundedCorners = 4
     , child = UiFramework.uiNone
     }
 
 
-jumbotron : Container context msg -> Container context msg
-jumbotron (Container options) =
-    Container { options | jumbotron = True }
+withChild : UiElement context msg -> Container context msg -> Container context msg
+withChild child (Container options) =
+    Container { options | child = child }
 
 
-roundCorners : Int -> Container context msg -> Container context msg
-roundCorners int (Container options) =
-    Container { options | roundedCorners = int }
-
-
-child : UiElement context msg -> Container context msg -> Container context msg
-child c (Container options) =
-    Container { options | child = c }
+jumbotron : Container context msg
+jumbotron =
+    Container { defaultOptions | jumbotron = True }
 
 
 default : Container context msg
@@ -65,9 +58,18 @@ viewAttributes context options =
     let
         config =
             context.themeConfig.containerConfig
+
+        backgroundColor =
+            if options.jumbotron then
+                config.jumbotronBackgroundColor
+
+            else
+                config.backgroundColor
     in
     [ Element.paddingXY 32 64
-    , Border.rounded <| options.roundedCorners
-    , Background.color <| config.backgroundColor
+    , Border.rounded config.borderRadius
+    , Border.color config.borderColor
+    , Border.width config.borderWidth
+    , Background.color backgroundColor
     , Element.width Element.fill
     ]

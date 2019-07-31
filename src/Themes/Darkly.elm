@@ -120,7 +120,8 @@ darklyInputConfig themeColor =
 darklyContainerConfig : ContainerConfig
 darklyContainerConfig =
     { defaultContainerConfig
-        | backgroundColor = darklyColors.gray800
+        | backgroundColor = darklyColors.gray900
+        , jumbotronBackgroundColor = darklyColors.gray800
     }
 
 
