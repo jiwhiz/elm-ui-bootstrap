@@ -1,4 +1,4 @@
-module UiFramework exposing (UiContextual, WithContext, flatMap, fromElement, toElement, uiColumn, uiParagraph, uiRow, uiText)
+module UiFramework exposing (UiContextual, WithContext, flatMap, fromElement, toElement, uiColumn, uiNone, uiParagraph, uiRow, uiText)
 
 import Element exposing (Attribute, Element)
 import UiFramework.Internal as Internal

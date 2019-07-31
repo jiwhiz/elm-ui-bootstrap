@@ -1,4 +1,4 @@
-module UiFramework.Configuration exposing (AlertConfig, ButtonConfig, Colors, DropdownConfig, FontConfig, InputConfig, NavConfig, NavbarConfig, ThemeColor, ThemeConfig, bootstrapColors, bootstrapThemeColor, defaultAlertConfig, defaultButtonConfig, defaultDropdownConfig, defaultFontConfig, defaultFontSize, defaultInputConfig, defaultNavConfig, defaultNavbarConfig, defaultThemeConfig)
+module UiFramework.Configuration exposing (AlertConfig, ButtonConfig, Colors, ContainerConfig, DropdownConfig, FontConfig, InputConfig, NavConfig, NavbarConfig, ThemeColor, ThemeConfig, bootstrapColors, bootstrapThemeColor, defaultAlertConfig, defaultButtonConfig, defaultContainerConfig, defaultDropdownConfig, defaultFontConfig, defaultFontSize, defaultInputConfig, defaultNavConfig, defaultNavbarConfig, defaultThemeConfig)
 
 import Element exposing (Color)
 import Element.Font as Font
@@ -127,6 +127,12 @@ type alias ThemeConfig =
     , navbarConfig : NavbarConfig
     , navConfig : NavConfig
     , inputConfig : InputConfig
+    , containerConfig : ContainerConfig
+    }
+
+
+type alias ContainerConfig =
+    { backgroundColor : Color
     }
 
 
@@ -317,6 +323,12 @@ defaultInputConfig themeColor =
     }
 
 
+defaultContainerConfig : ContainerConfig
+defaultContainerConfig =
+    { backgroundColor = bootstrapColors.gray200
+    }
+
+
 defaultThemeConfig : ThemeConfig
 defaultThemeConfig =
     let
@@ -335,4 +347,5 @@ defaultThemeConfig =
     , navConfig = defaultNavConfig
     , navbarConfig = defaultNavbarConfig
     , inputConfig = defaultInputConfig themeColor
+    , containerConfig = defaultContainerConfig
     }

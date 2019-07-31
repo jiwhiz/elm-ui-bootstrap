@@ -5,6 +5,7 @@ import UiFramework.Configuration
     exposing
         ( AlertConfig
         , Colors
+        , ContainerConfig
         , DropdownConfig
         , InputConfig
         , ThemeColor
@@ -12,6 +13,7 @@ import UiFramework.Configuration
         , bootstrapColors
         , defaultAlertConfig
         , defaultButtonConfig
+        , defaultContainerConfig
         , defaultDropdownConfig
         , defaultFontConfig
         , defaultFontSize
@@ -115,6 +117,13 @@ darklyInputConfig themeColor =
     }
 
 
+darklyContainerConfig : ContainerConfig
+darklyContainerConfig =
+    { defaultContainerConfig
+        | backgroundColor = darklyColors.gray800
+    }
+
+
 darklyThemeConfig : ThemeConfig
 darklyThemeConfig =
     let
@@ -133,4 +142,5 @@ darklyThemeConfig =
     , navConfig = defaultNavConfig
     , navbarConfig = defaultNavbarConfig
     , inputConfig = darklyInputConfig themeColor
+    , containerConfig = darklyContainerConfig
     }
