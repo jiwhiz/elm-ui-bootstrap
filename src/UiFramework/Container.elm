@@ -59,14 +59,14 @@ viewAttributes context options =
         config =
             context.themeConfig.containerConfig
 
-        backgroundColor =
+        ( backgroundColor, padding ) =
             if options.jumbotron then
-                config.jumbotronBackgroundColor
+                ( config.jumbotronBackgroundColor, config.jumbotronPadding context.device.class )
 
             else
-                config.backgroundColor
+                ( config.backgroundColor, config.containerPadding )
     in
-    [ Element.paddingXY 32 64
+    [ Element.paddingXY padding.x padding.y
     , Border.rounded config.borderRadius
     , Border.color config.borderColor
     , Border.width config.borderWidth
