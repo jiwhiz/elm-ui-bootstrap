@@ -1,9 +1,13 @@
-module UiFramework.Configuration exposing (AlertConfig, ButtonConfig, Colors, DropdownConfig, FontConfig, InputConfig, NavConfig, NavbarConfig, ThemeColor, ThemeConfig, bootstrapColors, bootstrapThemeColor, defaultAlertConfig, defaultButtonConfig, defaultDropdownConfig, defaultFontConfig, defaultFontSize, defaultInputConfig, defaultNavConfig, defaultNavbarConfig, defaultThemeConfig)
+module UiFramework.Configuration exposing (AlertConfig, ButtonConfig, Colors, ContainerConfig, DropdownConfig, FontConfig, InputConfig, NavConfig, NavbarConfig, ThemeColor, ThemeConfig, bootstrapColors, bootstrapThemeColor, defaultAlertConfig, defaultButtonConfig, defaultContainerConfig, defaultDropdownConfig, defaultFontConfig, defaultFontSize, defaultInputConfig, defaultNavConfig, defaultNavbarConfig, defaultThemeConfig)
 
-import Element exposing (Color)
+import Element exposing (Color, DeviceClass(..))
 import Element.Font as Font
 import UiFramework.Colors exposing (alterColor, colorLevel, contrastTextColor, darken, getColor, lighten)
 import UiFramework.Types exposing (Role(..), Size(..))
+
+
+type alias PaddingByScreenSize =
+    DeviceClass -> { x : Int, y : Int }
 
 
 type alias Colors =
@@ -114,6 +118,17 @@ type alias InputConfig =
     }
 
 
+type alias ContainerConfig =
+    { jumbotronBackgroundColor : Color
+    , backgroundColor : Color
+    , borderColor : Color
+    , borderWidth : Int
+    , borderRadius : Int
+    , jumbotronPadding : PaddingByScreenSize
+    , containerPadding : { x : Int, y : Int }
+    }
+
+
 type alias ThemeConfig =
     { colors : Colors
     , themeColor : ThemeColor
@@ -127,6 +142,7 @@ type alias ThemeConfig =
     , navbarConfig : NavbarConfig
     , navConfig : NavConfig
     , inputConfig : InputConfig
+    , containerConfig : ContainerConfig
     }
 
 
@@ -317,6 +333,25 @@ defaultInputConfig themeColor =
     }
 
 
+defaultContainerConfig : ContainerConfig
+defaultContainerConfig =
+    { jumbotronBackgroundColor = bootstrapColors.gray200
+    , backgroundColor = bootstrapColors.white
+    , borderColor = bootstrapColors.gray200
+    , borderWidth = 0
+    , borderRadius = 4
+    , jumbotronPadding =
+        \deviceClass ->
+            case deviceClass of
+                Phone ->
+                    { x = 16, y = 32 }
+
+                _ ->
+                    { x = 32, y = 64 }
+    , containerPadding = { x = 15, y = 0 }
+    }
+
+
 defaultThemeConfig : ThemeConfig
 defaultThemeConfig =
     let
@@ -335,4 +370,5 @@ defaultThemeConfig =
     , navConfig = defaultNavConfig
     , navbarConfig = defaultNavbarConfig
     , inputConfig = defaultInputConfig themeColor
+    , containerConfig = defaultContainerConfig
     }

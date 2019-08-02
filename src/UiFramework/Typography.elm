@@ -1,11 +1,11 @@
-module UiFramework.Typography exposing (h1, h2, h3, h4, h5, h6, textExtraSmall, textLead, textSmall)
+module UiFramework.Typography exposing (display1, display2, display3, display4, h1, h2, h3, h4, h5, h6, textExtraSmall, textLead, textSmall)
 
 {-|
 
 
 # Functions
 
-@docs h1, h2, h3, h4, h5, h6, introspection, textExtraSmall, textLead, textSmall
+@docs display1, display2, display3, display4, h1, h2, h3, h4, h5, h6, introspection, textExtraSmall, textLead, textSmall
 
 -}
 
@@ -20,46 +20,66 @@ type alias UiElement context msg =
     Internal.WithContext (Internal.UiContextual context) msg
 
 
+display1 : List (Element.Attribute msg) -> UiElement context msg -> UiElement context msg
+display1 listAttr =
+    heading Display1 (Font.light :: listAttr)
+
+
+display2 : List (Element.Attribute msg) -> UiElement context msg -> UiElement context msg
+display2 listAttr =
+    heading Display2 (Font.light :: listAttr)
+
+
+display3 : List (Element.Attribute msg) -> UiElement context msg -> UiElement context msg
+display3 listAttr =
+    heading Display3 (Font.light :: listAttr)
+
+
+display4 : List (Element.Attribute msg) -> UiElement context msg -> UiElement context msg
+display4 listAttr =
+    heading Display4 (Font.light :: listAttr)
+
+
 {-| -}
 h1 : List (Element.Attribute msg) -> UiElement context msg -> UiElement context msg
-h1 listAttr element =
-    heading SizeH1 listAttr element
+h1 listAttr =
+    heading SizeH1 (Font.bold :: listAttr)
 
 
 {-| -}
 h2 : List (Element.Attribute msg) -> UiElement context msg -> UiElement context msg
-h2 =
-    heading SizeH2
+h2 listAttr =
+    heading SizeH2 (Font.bold :: listAttr)
 
 
 {-| -}
 h3 : List (Element.Attribute msg) -> UiElement context msg -> UiElement context msg
-h3 =
-    heading SizeH3
+h3 listAttr =
+    heading SizeH3 (Font.bold :: listAttr)
 
 
 {-| -}
 h4 : List (Element.Attribute msg) -> UiElement context msg -> UiElement context msg
-h4 =
-    heading SizeH4
+h4 listAttr =
+    heading SizeH4 (Font.bold :: listAttr)
 
 
 {-| -}
 h5 : List (Element.Attribute msg) -> UiElement context msg -> UiElement context msg
-h5 =
-    heading SizeH5
+h5 listAttr =
+    heading SizeH5 (Font.bold :: listAttr)
 
 
 {-| -}
 h6 : List (Element.Attribute msg) -> UiElement context msg -> UiElement context msg
-h6 =
-    heading SizeH6
+h6 listAttr =
+    heading SizeH6 (Font.bold :: listAttr)
 
 
 {-| -}
 textLead : List (Element.Attribute msg) -> UiElement context msg -> UiElement context msg
-textLead =
-    textSection SizeLead
+textLead listAttr =
+    textSection SizeLead (Font.light :: listAttr)
 
 
 {-| -}
@@ -103,7 +123,6 @@ heading level attributes child =
                  , Font.size <| fontSize level
                  , paddingEach { top = 0, right = 0, bottom = 0, left = 0 }
                  , alignLeft
-                 , Font.bold
                  ]
                     ++ attributes
                 )
@@ -112,7 +131,11 @@ heading level attributes child =
 
 
 type FontLevel
-    = SizeH1
+    = Display1
+    | Display2
+    | Display3
+    | Display4
+    | SizeH1
     | SizeH2
     | SizeH3
     | SizeH4
@@ -126,6 +149,18 @@ type FontLevel
 headingLevel : FontLevel -> Int
 headingLevel level =
     case level of
+        Display1 ->
+            1
+
+        Display2 ->
+            1
+
+        Display3 ->
+            1
+
+        Display4 ->
+            1
+
         SizeH1 ->
             1
 
@@ -151,6 +186,18 @@ headingLevel level =
 fontSize : FontLevel -> Int
 fontSize level =
     case level of
+        Display1 ->
+            96
+
+        Display2 ->
+            88
+
+        Display3 ->
+            72
+
+        Display4 ->
+            56
+
         SizeH1 ->
             32
 
