@@ -1,6 +1,6 @@
 module Themes.Darkly exposing (darklyThemeConfig)
 
-import UiFramework.Colors exposing (contrastTextColor, getColor, transparent)
+import UiFramework.Colors exposing (alterColor, contrastTextColor, getColor, lighten, transparent)
 import UiFramework.Configuration
     exposing
         ( AlertConfig
@@ -8,6 +8,7 @@ import UiFramework.Configuration
         , ContainerConfig
         , DropdownConfig
         , InputConfig
+        , TableConfig
         , ThemeColor
         , ThemeConfig
         , bootstrapColors
@@ -20,6 +21,7 @@ import UiFramework.Configuration
         , defaultInputConfig
         , defaultNavConfig
         , defaultNavbarConfig
+        , defaultTableConfig
         )
 import UiFramework.Types exposing (Role(..), Size(..))
 
@@ -125,6 +127,18 @@ darklyContainerConfig =
     }
 
 
+darklyTableConfig : TableConfig
+darklyTableConfig =
+    { defaultTableConfig
+        | color = darklyColors.white
+        , backgroundColor = darklyColors.gray800
+        , accentBackground = alterColor darklyColors.white 0.05
+        , borderColor = lighten 0.075 darklyColors.gray800
+        , headColor = darklyColors.white
+        , headBackgroundColor = darklyColors.gray900
+    }
+
+
 darklyThemeConfig : ThemeConfig
 darklyThemeConfig =
     let
@@ -144,4 +158,5 @@ darklyThemeConfig =
     , navbarConfig = defaultNavbarConfig
     , inputConfig = darklyInputConfig themeColor
     , containerConfig = darklyContainerConfig
+    , tableConfig = darklyTableConfig
     }

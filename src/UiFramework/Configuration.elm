@@ -1,4 +1,4 @@
-module UiFramework.Configuration exposing (AlertConfig, ButtonConfig, Colors, ContainerConfig, DropdownConfig, FontConfig, InputConfig, NavConfig, NavbarConfig, ThemeColor, ThemeConfig, bootstrapColors, bootstrapThemeColor, defaultAlertConfig, defaultButtonConfig, defaultContainerConfig, defaultDropdownConfig, defaultFontConfig, defaultFontSize, defaultInputConfig, defaultNavConfig, defaultNavbarConfig, defaultThemeConfig)
+module UiFramework.Configuration exposing (AlertConfig, ButtonConfig, Colors, ContainerConfig, DropdownConfig, FontConfig, InputConfig, NavConfig, NavbarConfig, TableConfig, ThemeColor, ThemeConfig, bootstrapColors, bootstrapThemeColor, defaultAlertConfig, defaultButtonConfig, defaultContainerConfig, defaultDropdownConfig, defaultFontConfig, defaultFontSize, defaultInputConfig, defaultNavConfig, defaultNavbarConfig, defaultTableConfig, defaultThemeConfig)
 
 import Element exposing (Color, DeviceClass(..))
 import Element.Font as Font
@@ -129,6 +129,19 @@ type alias ContainerConfig =
     }
 
 
+type alias TableConfig =
+    { color : Color
+    , backgroundColor : Color
+    , accentBackground : Color
+    , borderColor : Color
+    , borderWidth : Int
+    , headColor : Color
+    , headBackgroundColor : Color
+    , cellPadding : Int
+    , cellPaddingCompact : Int
+    }
+
+
 type alias ThemeConfig =
     { colors : Colors
     , themeColor : ThemeColor
@@ -143,6 +156,7 @@ type alias ThemeConfig =
     , navConfig : NavConfig
     , inputConfig : InputConfig
     , containerConfig : ContainerConfig
+    , tableConfig : TableConfig
     }
 
 
@@ -352,6 +366,20 @@ defaultContainerConfig =
     }
 
 
+defaultTableConfig : TableConfig
+defaultTableConfig =
+    { color = bootstrapColors.gray900
+    , backgroundColor = bootstrapColors.white
+    , accentBackground = alterColor bootstrapColors.black 0.05
+    , borderColor = bootstrapColors.gray300
+    , borderWidth = 1
+    , headColor = bootstrapColors.gray700
+    , headBackgroundColor = bootstrapColors.gray200
+    , cellPadding = 12
+    , cellPaddingCompact = 5
+    }
+
+
 defaultThemeConfig : ThemeConfig
 defaultThemeConfig =
     let
@@ -371,4 +399,5 @@ defaultThemeConfig =
     , navbarConfig = defaultNavbarConfig
     , inputConfig = defaultInputConfig themeColor
     , containerConfig = defaultContainerConfig
+    , tableConfig = defaultTableConfig
     }
