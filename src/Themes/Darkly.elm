@@ -13,6 +13,7 @@ import UiFramework.Configuration
         , ThemeConfig
         , bootstrapColors
         , defaultAlertConfig
+        , defaultBadgeConfig
         , defaultButtonConfig
         , defaultContainerConfig
         , defaultDropdownConfig
@@ -152,6 +153,7 @@ darklyThemeConfig =
     , fontColor = \bgColor -> contrastTextColor bgColor darklyColors.gray900 darklyColors.white
     , fontConfig = defaultFontConfig
     , alertConfig = alertConfig themeColor
+    , badgeConfig = defaultBadgeConfig themeColor
     , buttonConfig = defaultButtonConfig themeColor
     , dropdownConfig = dropdownConfig
     , navConfig = defaultNavConfig

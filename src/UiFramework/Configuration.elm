@@ -1,4 +1,4 @@
-module UiFramework.Configuration exposing (AlertConfig, ButtonConfig, Colors, ContainerConfig, DropdownConfig, FontConfig, InputConfig, NavConfig, NavbarConfig, TableConfig, ThemeColor, ThemeConfig, bootstrapColors, bootstrapThemeColor, defaultAlertConfig, defaultButtonConfig, defaultContainerConfig, defaultDropdownConfig, defaultFontConfig, defaultFontSize, defaultInputConfig, defaultNavConfig, defaultNavbarConfig, defaultTableConfig, defaultThemeConfig)
+module UiFramework.Configuration exposing (AlertConfig, BadgeConfig, ButtonConfig, Colors, ContainerConfig, DropdownConfig, FontConfig, InputConfig, NavConfig, NavbarConfig, TableConfig, ThemeColor, ThemeConfig, bootstrapColors, bootstrapThemeColor, defaultAlertConfig, defaultBadgeConfig, defaultButtonConfig, defaultContainerConfig, defaultDropdownConfig, defaultFontConfig, defaultFontSize, defaultInputConfig, defaultNavConfig, defaultNavbarConfig, defaultTableConfig, defaultThemeConfig)
 
 import Element exposing (Color, DeviceClass(..))
 import Element.Font as Font
@@ -57,6 +57,17 @@ type alias AlertConfig =
     , borderColor : ThemeColor
     , borderWidth : Size -> Int
     , borderRadius : Size -> Int
+    }
+
+
+type alias BadgeConfig =
+    { paddingX : Int
+    , paddingY : Int
+    , backgroundColor : ThemeColor
+    , fontColor : ThemeColor
+    , borderRadius : Int
+    , pillBorderRadius : Int
+    , pillPaddingX : Int
     }
 
 
@@ -150,6 +161,7 @@ type alias ThemeConfig =
     , fontConfig : FontConfig
     , fontColor : Color -> Color
     , alertConfig : AlertConfig
+    , badgeConfig : BadgeConfig
     , buttonConfig : ButtonConfig
     , dropdownConfig : DropdownConfig
     , navbarConfig : NavbarConfig
@@ -247,6 +259,20 @@ defaultAlertConfig themeColor =
     , borderColor = themeColor >> colorLevel -9
     , borderWidth = \_ -> 1
     , borderRadius = \_ -> 4
+    }
+
+
+defaultBadgeConfig : ThemeColor -> BadgeConfig
+defaultBadgeConfig themeColor =
+    { paddingX = 6
+    , paddingY = 4
+    , backgroundColor = themeColor
+    , fontColor =
+        \role ->
+            contrastTextColor (themeColor role) bootstrapColors.gray900 bootstrapColors.white
+    , borderRadius = 4
+    , pillBorderRadius = 160
+    , pillPaddingX = 9
     }
 
 
@@ -393,6 +419,7 @@ defaultThemeConfig =
     , fontColor = \bgColor -> contrastTextColor bgColor bootstrapColors.gray900 bootstrapColors.white
     , fontConfig = defaultFontConfig
     , alertConfig = defaultAlertConfig themeColor
+    , badgeConfig = defaultBadgeConfig themeColor
     , buttonConfig = defaultButtonConfig themeColor
     , dropdownConfig = defaultDropdownConfig
     , navConfig = defaultNavConfig
