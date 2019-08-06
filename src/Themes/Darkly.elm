@@ -133,7 +133,7 @@ darklyTableConfig =
     { defaultTableConfig
         | color = darklyColors.white
         , backgroundColor = darklyColors.gray800
-        , accentBackground = alterColor darklyColors.white 0.05
+        , accentBackground = alterColor 0.05 darklyColors.white 
         , borderColor = lighten 0.075 darklyColors.gray800
         , headColor = darklyColors.white
         , headBackgroundColor = darklyColors.gray900
