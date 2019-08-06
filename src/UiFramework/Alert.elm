@@ -76,7 +76,7 @@ default =
     Alert defaultOptions
 
 
-simple : Role -> UiElement context msg -> UiElement context msg
+simple : Role -> UiElement context msg -> Alert context msg
 simple role child =
     default
         |> withRole role

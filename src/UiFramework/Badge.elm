@@ -64,7 +64,7 @@ default =
         }
 
 
-simple : Role -> String -> UiElement context msg
+simple : Role -> String -> Badge context msg 
 simple role label =
     default
         |> withRole role
