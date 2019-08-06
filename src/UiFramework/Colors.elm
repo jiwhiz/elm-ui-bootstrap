@@ -48,8 +48,8 @@ colorLevel level color =
     weightedMix baseColor color <| 0.08 * toFloat (abs level)
 
 
-alterColor : Color -> Float -> Color
-alterColor color alpha =
+alterColor : Float -> Color -> Color
+alterColor alpha color =
     let
         rgba =
             toRgb color
