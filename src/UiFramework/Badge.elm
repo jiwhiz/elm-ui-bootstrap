@@ -69,7 +69,6 @@ simple role label =
     default
         |> withRole role
         |> withLabel label
-        |> view
 
 
 

@@ -81,7 +81,6 @@ simple role child =
     default
         |> withRole role
         |> withChild child
-        |> view
 
 
 
