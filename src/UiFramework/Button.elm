@@ -117,11 +117,12 @@ default =
     Button defaultOptions
 
 
-simple : msg -> String -> Button context msg
+simple : msg -> String -> UiElement context msg
 simple msg label =
     default
         |> withMessage (Just msg)
         |> withLabel label
+        |> view
 
 
 
