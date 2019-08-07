@@ -128,7 +128,7 @@ view data (Table options) =
                 tableAttributes =
                     [ Background.color <| config.backgroundColor
                     , Font.color config.color
-                    , scrollbars
+                    , width fill
                     ]
 
                 borderWidthX =
@@ -187,18 +187,20 @@ view data (Table options) =
                         ]
                         (Internal.toElement context cell)
             in
-            indexedTable
-                tableAttributes
-                { data = data
-                , columns =
-                    List.map
-                        (\column ->
-                            { header = headWrapper column.head
-                            , width = fill
-                            , view =
-                                \index record -> cellWrapper index (column.viewData record)
-                            }
-                        )
-                        options.columns
-                }
+            el [ width fill, height fill, scrollbars ]
+                (indexedTable
+                    tableAttributes
+                    { data = data
+                    , columns =
+                        List.map
+                            (\column ->
+                                { header = headWrapper column.head
+                                , width = fill
+                                , view =
+                                    \index record -> cellWrapper index (column.viewData record)
+                                }
+                            )
+                            options.columns
+                    }
+                )
         )
