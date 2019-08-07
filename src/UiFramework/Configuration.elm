@@ -358,7 +358,7 @@ defaultDropdownConfig =
     , backgroundColor = bootstrapColors.white
     , fontColor = bootstrapColors.gray900
     , fontSize = defaultFontSize
-    , borderColor = alterColor bootstrapColors.black 0.15
+    , borderColor = alterColor 0.15 bootstrapColors.black
     , borderWidth = 1
     , borderRadius = 4
     }
@@ -471,7 +471,7 @@ defaultTableConfig : TableConfig
 defaultTableConfig =
     { color = bootstrapColors.gray900
     , backgroundColor = bootstrapColors.white
-    , accentBackground = alterColor bootstrapColors.black 0.05
+    , accentBackground = alterColor 0.05 bootstrapColors.black 
     , borderColor = bootstrapColors.gray300
     , borderWidth = 1
     , headColor = bootstrapColors.gray700

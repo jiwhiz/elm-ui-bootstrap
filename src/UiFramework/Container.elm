@@ -1,9 +1,10 @@
-module UiFramework.Container exposing (Container(..), Options, UiElement, default, defaultOptions, jumbotron, view, viewAttributes, withChild)
+module UiFramework.Container exposing (Container(..), Options, UiElement, default, defaultOptions, jumbotron, maxWidth, view, viewAttributes, withChild, withFullWidth)
 
-import Element exposing (Attribute)
+import Element exposing (Attribute, DeviceClass(..))
 import Element.Background as Background
 import Element.Border as Border
 import UiFramework
+import UiFramework.Colors as Colors
 import UiFramework.Internal as Internal
 
 
@@ -15,8 +16,13 @@ type Container context msg
     = Container (Options context msg)
 
 
+{-| jumbotron adds a background to the container
+fillWidth is the same as toggling container-fluid. If it's false it will automatically have a "max-width" attribute
+containers only have one child element.
+-}
 type alias Options context msg =
     { jumbotron : Bool
+    , fillWidth : Bool
     , child : UiElement context msg
     }
 
@@ -24,6 +30,7 @@ type alias Options context msg =
 defaultOptions : Options context msg
 defaultOptions =
     { jumbotron = False
+    , fillWidth = False
     , child = UiFramework.uiNone
     }
 
@@ -31,6 +38,15 @@ defaultOptions =
 withChild : UiElement context msg -> Container context msg -> Container context msg
 withChild child (Container options) =
     Container { options | child = child }
+
+
+
+-- same as declaring 'container-fluid"
+
+
+withFullWidth : Container context msg -> Container context msg
+withFullWidth (Container options) =
+    Container { options | fillWidth = True }
 
 
 jumbotron : Container context msg
@@ -42,6 +58,12 @@ default : Container context msg
 default =
     Container defaultOptions
 
+-- basically `<div class="container> child </div>`
+simple : UiElement context msg -> UiElement context msg 
+simple child =
+    default 
+        |> withChild child
+        |> view
 
 view : Container context msg -> UiElement context msg
 view (Container options) =
@@ -64,12 +86,35 @@ viewAttributes context options =
                 ( config.jumbotronBackgroundColor, config.jumbotronPadding context.device.class )
 
             else
-                ( config.backgroundColor, config.containerPadding )
+                ( Colors.transparent, config.containerPadding )
+
+        width =
+            Element.fill
+                |> (if options.fillWidth then
+                        identity
+
+                    else
+                        Element.maximum (maxWidth context.device.class)
+                   )
     in
     [ Element.paddingXY padding.x padding.y
     , Border.rounded config.borderRadius
     , Border.color config.borderColor
     , Border.width config.borderWidth
     , Background.color backgroundColor
-    , Element.width Element.fill
+    , Element.width width
+    , Element.centerX
     ]
+
+
+maxWidth : DeviceClass -> Int
+maxWidth device =
+    case device of
+        Phone ->
+            540
+
+        Tablet ->
+            720
+
+        _ ->
+            1140
