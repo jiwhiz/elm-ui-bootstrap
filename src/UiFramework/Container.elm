@@ -58,11 +58,12 @@ default : Container context msg
 default =
     Container defaultOptions
 
--- basically `<div class="container></div>`
+-- basically `<div class="container> child </div>`
 simple : UiElement context msg -> UiElement context msg 
 simple child =
     default 
         |> withChild child
+        |> view
 
 view : Container context msg -> UiElement context msg
 view (Container options) =
