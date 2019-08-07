@@ -1,4 +1,4 @@
-module UiFramework.Configuration exposing (AlertConfig, BadgeConfig, ButtonConfig, Colors, ContainerConfig, DropdownConfig, FontConfig, InputConfig, NavConfig, NavbarConfig, TableConfig, ThemeColor, ThemeConfig, bootstrapColors, bootstrapThemeColor, defaultAlertConfig, defaultBadgeConfig, defaultButtonConfig, defaultContainerConfig, defaultDropdownConfig, defaultFontConfig, defaultFontSize, defaultInputConfig, defaultNavConfig, defaultNavbarConfig, defaultTableConfig, defaultThemeConfig)
+module UiFramework.Configuration exposing (AlertConfig, BadgeConfig, ButtonConfig, Colors, ContainerConfig, DropdownConfig, FontConfig, InputConfig, NavConfig, NavbarConfig, PaginationConfig, TableConfig, ThemeColor, ThemeConfig, bootstrapColors, bootstrapThemeColor, defaultAlertConfig, defaultBadgeConfig, defaultButtonConfig, defaultContainerConfig, defaultDropdownConfig, defaultFontConfig, defaultFontSize, defaultInputConfig, defaultNavConfig, defaultNavbarConfig, defaultPaginationConfig, defaultTableConfig, defaultThemeConfig)
 
 import Element exposing (Color, DeviceClass(..))
 import Element.Font as Font
@@ -140,6 +140,26 @@ type alias ContainerConfig =
     }
 
 
+type alias PaginationConfig =
+    { paddingX : Size -> Int
+    , paddingY : Size -> Int
+    , fontSize : Size -> Int
+    , color : Color
+    , backgroundColor : Color
+    , borderColor : Color
+    , borderWidth : Size -> Int
+    , borderRadius : Size -> Int
+    , hoverColor : Color
+    , hoverBackgroundColor : Color
+    , hoverBorderColor : Color
+    , activeColor : Color
+    , activeBackgroundColor : Color
+    , disabledColor : Color
+    , disabledBackgroundColor : Color
+    , disabledBorderColor : Color
+    }
+
+
 type alias TableConfig =
     { color : Color
     , backgroundColor : Color
@@ -167,6 +187,7 @@ type alias ThemeConfig =
     , navbarConfig : NavbarConfig
     , navConfig : NavConfig
     , inputConfig : InputConfig
+    , paginationConfig : PaginationConfig
     , containerConfig : ContainerConfig
     , tableConfig : TableConfig
     }
@@ -248,6 +269,24 @@ defaultFontSize size =
             20
 
 
+defaultBorderWidth : Size -> Int
+defaultBorderWidth _ =
+    1
+
+
+defaultBorderRadius : Size -> Int
+defaultBorderRadius size =
+    case size of
+        SizeSmall ->
+            3
+
+        SizeDefault ->
+            4
+
+        SizeLarge ->
+            5
+
+
 defaultAlertConfig : ThemeColor -> AlertConfig
 defaultAlertConfig themeColor =
     { paddingX = 20
@@ -257,7 +296,7 @@ defaultAlertConfig themeColor =
     , linkFontColor = themeColor >> darken 0.3
     , fontSize = defaultFontSize
     , borderColor = themeColor >> colorLevel -9
-    , borderWidth = \_ -> 1
+    , borderWidth = defaultBorderWidth
     , borderRadius = \_ -> 4
     }
 
@@ -306,20 +345,8 @@ defaultButtonConfig themeColor =
             contrastTextColor (themeColor role) bootstrapColors.gray900 bootstrapColors.white
     , fontSize = defaultFontSize
     , borderColor = themeColor
-    , borderWidth =
-        \_ ->
-            1
-    , borderRadius =
-        \size ->
-            case size of
-                SizeSmall ->
-                    3
-
-                SizeDefault ->
-                    4
-
-                SizeLarge ->
-                    5
+    , borderWidth = defaultBorderWidth
+    , borderRadius = defaultBorderRadius
     }
 
 
@@ -370,6 +397,54 @@ defaultInputConfig themeColor =
     , borderRadius = 4
     , borderColor = bootstrapColors.gray400
     , focusedBorderColor = (themeColor >> lighten 0.25) Primary
+    }
+
+
+defaultPaginationConfig : ThemeColor -> PaginationConfig
+defaultPaginationConfig themeColor =
+    let
+        paddingX : Size -> Int
+        paddingX =
+            \size ->
+                case size of
+                    SizeSmall ->
+                        8
+
+                    SizeDefault ->
+                        12
+
+                    SizeLarge ->
+                        24
+
+        paddingY : Size -> Int
+        paddingY =
+            \size ->
+                case size of
+                    SizeSmall ->
+                        4
+
+                    SizeDefault ->
+                        8
+
+                    SizeLarge ->
+                        12
+    in
+    { paddingX = paddingX
+    , paddingY = paddingY
+    , fontSize = defaultFontSize
+    , color = themeColor Primary
+    , backgroundColor = bootstrapColors.white
+    , borderColor = bootstrapColors.gray300
+    , borderWidth = defaultBorderWidth
+    , borderRadius = defaultBorderRadius
+    , hoverColor = themeColor Primary |> darken 0.15
+    , hoverBackgroundColor = bootstrapColors.gray200
+    , hoverBorderColor = bootstrapColors.gray300
+    , activeColor = bootstrapColors.white -- component active color?
+    , activeBackgroundColor = themeColor Primary
+    , disabledColor = bootstrapColors.gray600
+    , disabledBackgroundColor = bootstrapColors.white
+    , disabledBorderColor = bootstrapColors.gray300
     }
 
 
@@ -425,6 +500,7 @@ defaultThemeConfig =
     , navConfig = defaultNavConfig
     , navbarConfig = defaultNavbarConfig
     , inputConfig = defaultInputConfig themeColor
+    , paginationConfig = defaultPaginationConfig themeColor
     , containerConfig = defaultContainerConfig
     , tableConfig = defaultTableConfig
     }

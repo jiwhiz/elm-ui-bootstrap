@@ -1,6 +1,6 @@
 module Themes.Darkly exposing (darklyThemeConfig)
 
-import UiFramework.Colors exposing (alterColor, contrastTextColor, getColor, lighten, transparent)
+import UiFramework.Colors exposing (alterColor, contrastTextColor, darken, getColor, lighten, transparent)
 import UiFramework.Configuration
     exposing
         ( AlertConfig
@@ -8,6 +8,7 @@ import UiFramework.Configuration
         , ContainerConfig
         , DropdownConfig
         , InputConfig
+        , PaginationConfig
         , TableConfig
         , ThemeColor
         , ThemeConfig
@@ -22,6 +23,7 @@ import UiFramework.Configuration
         , defaultInputConfig
         , defaultNavConfig
         , defaultNavbarConfig
+        , defaultPaginationConfig
         , defaultTableConfig
         )
 import UiFramework.Types exposing (Role(..), Size(..))
@@ -120,6 +122,27 @@ darklyInputConfig themeColor =
     }
 
 
+darklyPaginationConfig : ThemeColor -> PaginationConfig
+darklyPaginationConfig themeColor =
+    let
+        default =
+            defaultPaginationConfig themeColor
+    in
+    { default
+        | color = bootstrapColors.white
+        , backgroundColor = themeColor Success
+        , borderColor = transparent
+        , borderWidth = \_ -> 0
+        , hoverColor = bootstrapColors.white
+        , hoverBackgroundColor = themeColor Success |> lighten 0.1
+        , hoverBorderColor = transparent
+        , activeBackgroundColor = themeColor Success |> lighten 0.1
+        , disabledColor = bootstrapColors.white
+        , disabledBackgroundColor = themeColor Success |> darken 0.15
+        , disabledBorderColor = transparent
+    }
+
+
 darklyContainerConfig : ContainerConfig
 darklyContainerConfig =
     { defaultContainerConfig
@@ -159,6 +182,7 @@ darklyThemeConfig =
     , navConfig = defaultNavConfig
     , navbarConfig = defaultNavbarConfig
     , inputConfig = darklyInputConfig themeColor
+    , paginationConfig = darklyPaginationConfig themeColor
     , containerConfig = darklyContainerConfig
     , tableConfig = darklyTableConfig
     }
