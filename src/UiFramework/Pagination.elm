@@ -25,7 +25,7 @@ import UiFramework.Types exposing (Role(..), Size(..))
 
 type alias PaginationState =
     { numberOfSlices : Int
-    , currentSliceNumber : Int -- start from 1
+    , currentSliceNumber : Int -- start from 0
     }
 
 
@@ -54,6 +54,7 @@ type alias Options msg =
     , ellipsis : Icon.Icon
     , size : Size
     , items : List Item
+    , itemLabel : Int -> Element msg
     , attributes : List (Attribute msg)
     }
 
@@ -111,6 +112,11 @@ withItems items (Pagination options) =
     Pagination { options | items = items }
 
 
+withItemLabel : (Int -> Element msg) -> Pagination context msg -> Pagination context msg
+withItemLabel itemLabel (Pagination options) =
+    Pagination { options | itemLabel = itemLabel }
+
+
 {-| Pagination Item type
 -}
 type Item
@@ -132,6 +138,7 @@ default selectedMsg =
         , ellipsis = FontAwesome.Solid.ellipsisH
         , size = SizeDefault
         , items = []
+        , itemLabel = \i -> text <| String.fromInt (i + 1)
         , attributes = []
         }
 
@@ -176,16 +183,16 @@ view (Pagination options) =
                         config.borderColor
 
                 firstDisabled =
-                    context.state.currentSliceNumber == 1
+                    context.state.currentSliceNumber == 0
 
                 previousDisabled =
-                    context.state.currentSliceNumber == 1
+                    context.state.currentSliceNumber == 0
 
                 nextDisabled =
-                    context.state.currentSliceNumber == context.state.numberOfSlices
+                    context.state.currentSliceNumber == context.state.numberOfSlices - 1
 
                 lastDisabled =
-                    context.state.currentSliceNumber == context.state.numberOfSlices
+                    context.state.currentSliceNumber == context.state.numberOfSlices - 1
 
                 commonAttrs disabled =
                     [ height fill
@@ -231,7 +238,7 @@ view (Pagination options) =
                             text labels.first
                     )
                     firstDisabled
-                    1
+                    0
                 , linkItem
                     (Border.rounded 0 :: commonAttrs previousDisabled)
                     (case options.labels of
@@ -273,7 +280,7 @@ view (Pagination options) =
                                     text labels.last
                             )
                             lastDisabled
-                            context.state.numberOfSlices
+                            (context.state.numberOfSlices - 1)
                        ]
         )
 
@@ -312,7 +319,7 @@ renderItem context options item =
                 , pointer
                 ]
                 { onPress = Just <| options.selectedMsg index
-                , label = text <| String.fromInt index
+                , label = options.itemLabel index
                 }
 
         EllipsisItem ->
