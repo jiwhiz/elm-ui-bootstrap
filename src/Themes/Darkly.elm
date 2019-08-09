@@ -1,6 +1,6 @@
 module Themes.Darkly exposing (darklyThemeConfig)
 
-import UiFramework.Colors exposing (alterColor, contrastTextColor, darken, getColor, lighten, transparent)
+import UiFramework.ColorUtils exposing (alterColor, contrastTextColor, darken, hexToColor, lighten, transparent)
 import UiFramework.Configuration
     exposing
         ( AlertConfig
@@ -31,28 +31,28 @@ import UiFramework.Types exposing (Role(..), Size(..))
 
 darklyColors : Colors
 darklyColors =
-    { white = getColor "#fff"
-    , gray = getColor "#6c757d"
-    , gray100 = getColor "#f8f9fa"
-    , gray200 = getColor "#ebebeb"
-    , gray300 = getColor "#dee2e6"
-    , gray400 = getColor "#ced4da"
-    , gray500 = getColor "#adb5bd"
-    , gray600 = getColor "#999"
-    , gray700 = getColor "#444"
-    , gray800 = getColor "#303030"
-    , gray900 = getColor "#222"
-    , black = getColor "#000"
-    , blue = getColor "#375a7f"
-    , indigo = getColor "#6610f2"
-    , purple = getColor "#6f42c1"
-    , pink = getColor "#e83e8c"
-    , red = getColor "#E74C3C"
-    , orange = getColor "#fd7e14"
-    , yellow = getColor "#F39C12"
-    , green = getColor "#00bc8c"
-    , teal = getColor "#20c997"
-    , cyan = getColor "#3498DB"
+    { white = hexToColor "#fff"
+    , gray = hexToColor "#6c757d"
+    , gray100 = hexToColor "#f8f9fa"
+    , gray200 = hexToColor "#ebebeb"
+    , gray300 = hexToColor "#dee2e6"
+    , gray400 = hexToColor "#ced4da"
+    , gray500 = hexToColor "#adb5bd"
+    , gray600 = hexToColor "#999"
+    , gray700 = hexToColor "#444"
+    , gray800 = hexToColor "#303030"
+    , gray900 = hexToColor "#222"
+    , black = hexToColor "#000"
+    , blue = hexToColor "#375a7f"
+    , indigo = hexToColor "#6610f2"
+    , purple = hexToColor "#6f42c1"
+    , pink = hexToColor "#e83e8c"
+    , red = hexToColor "#E74C3C"
+    , orange = hexToColor "#fd7e14"
+    , yellow = hexToColor "#F39C12"
+    , green = hexToColor "#00bc8c"
+    , teal = hexToColor "#20c997"
+    , cyan = hexToColor "#3498DB"
     }
 
 
@@ -156,7 +156,7 @@ darklyTableConfig =
     { defaultTableConfig
         | color = darklyColors.white
         , backgroundColor = darklyColors.gray800
-        , accentBackground = alterColor 0.05 darklyColors.white 
+        , accentBackground = alterColor 0.05 darklyColors.white
         , borderColor = lighten 0.075 darklyColors.gray800
         , headColor = darklyColors.white
         , headBackgroundColor = darklyColors.gray900

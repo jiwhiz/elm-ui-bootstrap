@@ -32,7 +32,6 @@ import Element.Font as Font
 import Element.Region as Region
 import Html.Events
 import Json.Decode as Json
-import UiFramework.Colors as Colors
 import UiFramework.Configuration exposing (ThemeConfig)
 import UiFramework.Icon as Icon
 import UiFramework.Internal as Internal
@@ -74,7 +73,6 @@ type alias NavbarOptions context state msg =
 type BackgroundColor
     = Roled Role
     | Custom Color
-    | Class String
 
 
 type MenuItem context state msg
@@ -243,9 +241,6 @@ view (Navbar options) =
 
                         Custom color ->
                             color
-
-                        Class cssStr ->
-                            Colors.getColor cssStr
 
                 fontColor =
                     context.themeConfig.fontColor backgroundColor

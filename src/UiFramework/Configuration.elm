@@ -2,7 +2,7 @@ module UiFramework.Configuration exposing (AlertConfig, BadgeConfig, ButtonConfi
 
 import Element exposing (Color, DeviceClass(..))
 import Element.Font as Font
-import UiFramework.Colors exposing (alterColor, colorLevel, contrastTextColor, darken, getColor, lighten)
+import UiFramework.ColorUtils exposing (alterColor, colorLevel, contrastTextColor, darken, hexToColor, lighten)
 import UiFramework.Types exposing (Role(..), Size(..))
 
 
@@ -195,28 +195,28 @@ type alias ThemeConfig =
 
 bootstrapColors : Colors
 bootstrapColors =
-    { white = getColor "#fff"
-    , gray = getColor "#6c757d"
-    , gray100 = getColor "#f8f9fa"
-    , gray200 = getColor "#e9ecef"
-    , gray300 = getColor "#dee2e6"
-    , gray400 = getColor "#ced4da"
-    , gray500 = getColor "#adb5bd"
-    , gray600 = getColor "#6c757d"
-    , gray700 = getColor "#495057"
-    , gray800 = getColor "#343a40"
-    , gray900 = getColor "#212529"
-    , black = getColor "#000"
-    , blue = getColor "#007bff"
-    , indigo = getColor "#6610f2"
-    , purple = getColor "#6f42c1"
-    , pink = getColor "#e83e8c"
-    , red = getColor "#dc3545"
-    , orange = getColor "#fd7e14"
-    , yellow = getColor "#ffc107"
-    , green = getColor "#28a745"
-    , teal = getColor "#20c997"
-    , cyan = getColor "#17a2b8"
+    { white = hexToColor "#fff"
+    , gray = hexToColor "#6c757d"
+    , gray100 = hexToColor "#f8f9fa"
+    , gray200 = hexToColor "#e9ecef"
+    , gray300 = hexToColor "#dee2e6"
+    , gray400 = hexToColor "#ced4da"
+    , gray500 = hexToColor "#adb5bd"
+    , gray600 = hexToColor "#6c757d"
+    , gray700 = hexToColor "#495057"
+    , gray800 = hexToColor "#343a40"
+    , gray900 = hexToColor "#212529"
+    , black = hexToColor "#000"
+    , blue = hexToColor "#007bff"
+    , indigo = hexToColor "#6610f2"
+    , purple = hexToColor "#6f42c1"
+    , pink = hexToColor "#e83e8c"
+    , red = hexToColor "#dc3545"
+    , orange = hexToColor "#fd7e14"
+    , yellow = hexToColor "#ffc107"
+    , green = hexToColor "#28a745"
+    , teal = hexToColor "#20c997"
+    , cyan = hexToColor "#17a2b8"
     }
 
 
@@ -471,7 +471,7 @@ defaultTableConfig : TableConfig
 defaultTableConfig =
     { color = bootstrapColors.gray900
     , backgroundColor = bootstrapColors.white
-    , accentBackground = alterColor 0.05 bootstrapColors.black 
+    , accentBackground = alterColor 0.05 bootstrapColors.black
     , borderColor = bootstrapColors.gray300
     , borderWidth = 1
     , headColor = bootstrapColors.gray700
