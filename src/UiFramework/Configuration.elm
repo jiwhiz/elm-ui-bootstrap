@@ -2,7 +2,7 @@ module UiFramework.Configuration exposing (AlertConfig, BadgeConfig, ButtonConfi
 
 import Element exposing (Color, DeviceClass(..))
 import Element.Font as Font
-import UiFramework.Colors exposing (alterColor, colorLevel, contrastTextColor, darken, getColor, lighten)
+import UiFramework.ColorUtils exposing (alterColor, colorLevel, contrastTextColor, darken, hexToColor, lighten)
 import UiFramework.Types exposing (Role(..), Size(..))
 
 
@@ -83,25 +83,14 @@ type alias ButtonConfig =
     }
 
 
-type alias NavbarConfig =
-    { paddingX : Int
-    , paddingY : Int
-    , menubarPaddingX : Int
-    , menubarPaddingY : Int
-    , brandFontSize : Int
-    , brandPaddingY : Int
-    , togglerPaddingX : Int
-    , togglerPaddingY : Int
-    , togglerBorderRadius : Int
-    }
-
-
-type alias NavConfig =
-    { linkPaddingX : Int
-    , linkPaddingY : Int
-    , disabledColor : Color
-    , dividerColor : Color
-    , dividerMarginY : Int
+type alias ContainerConfig =
+    { jumbotronBackgroundColor : Color
+    , backgroundColor : Color
+    , borderColor : Color
+    , borderWidth : Int
+    , borderRadius : Int
+    , jumbotronPadding : PaddingByScreenSize
+    , containerPadding : { x : Int, y : Int }
     }
 
 
@@ -129,14 +118,25 @@ type alias InputConfig =
     }
 
 
-type alias ContainerConfig =
-    { jumbotronBackgroundColor : Color
-    , backgroundColor : Color
-    , borderColor : Color
-    , borderWidth : Int
-    , borderRadius : Int
-    , jumbotronPadding : PaddingByScreenSize
-    , containerPadding : { x : Int, y : Int }
+type alias NavConfig =
+    { linkPaddingX : Int
+    , linkPaddingY : Int
+    , disabledColor : Color
+    , dividerColor : Color
+    , dividerMarginY : Int
+    }
+
+
+type alias NavbarConfig =
+    { paddingX : Int
+    , paddingY : Int
+    , menubarPaddingX : Int
+    , menubarPaddingY : Int
+    , brandFontSize : Int
+    , brandPaddingY : Int
+    , togglerPaddingX : Int
+    , togglerPaddingY : Int
+    , togglerBorderRadius : Int
     }
 
 
@@ -195,28 +195,28 @@ type alias ThemeConfig =
 
 bootstrapColors : Colors
 bootstrapColors =
-    { white = getColor "#fff"
-    , gray = getColor "#6c757d"
-    , gray100 = getColor "#f8f9fa"
-    , gray200 = getColor "#e9ecef"
-    , gray300 = getColor "#dee2e6"
-    , gray400 = getColor "#ced4da"
-    , gray500 = getColor "#adb5bd"
-    , gray600 = getColor "#6c757d"
-    , gray700 = getColor "#495057"
-    , gray800 = getColor "#343a40"
-    , gray900 = getColor "#212529"
-    , black = getColor "#000"
-    , blue = getColor "#007bff"
-    , indigo = getColor "#6610f2"
-    , purple = getColor "#6f42c1"
-    , pink = getColor "#e83e8c"
-    , red = getColor "#dc3545"
-    , orange = getColor "#fd7e14"
-    , yellow = getColor "#ffc107"
-    , green = getColor "#28a745"
-    , teal = getColor "#20c997"
-    , cyan = getColor "#17a2b8"
+    { white = hexToColor "#fff"
+    , gray = hexToColor "#6c757d"
+    , gray100 = hexToColor "#f8f9fa"
+    , gray200 = hexToColor "#e9ecef"
+    , gray300 = hexToColor "#dee2e6"
+    , gray400 = hexToColor "#ced4da"
+    , gray500 = hexToColor "#adb5bd"
+    , gray600 = hexToColor "#6c757d"
+    , gray700 = hexToColor "#495057"
+    , gray800 = hexToColor "#343a40"
+    , gray900 = hexToColor "#212529"
+    , black = hexToColor "#000"
+    , blue = hexToColor "#007bff"
+    , indigo = hexToColor "#6610f2"
+    , purple = hexToColor "#6f42c1"
+    , pink = hexToColor "#e83e8c"
+    , red = hexToColor "#dc3545"
+    , orange = hexToColor "#fd7e14"
+    , yellow = hexToColor "#ffc107"
+    , green = hexToColor "#28a745"
+    , teal = hexToColor "#20c997"
+    , cyan = hexToColor "#17a2b8"
     }
 
 
@@ -350,6 +350,25 @@ defaultButtonConfig themeColor =
     }
 
 
+defaultContainerConfig : ContainerConfig
+defaultContainerConfig =
+    { jumbotronBackgroundColor = bootstrapColors.gray200
+    , backgroundColor = bootstrapColors.white
+    , borderColor = bootstrapColors.gray200
+    , borderWidth = 0
+    , borderRadius = 4
+    , jumbotronPadding =
+        \deviceClass ->
+            case deviceClass of
+                Phone ->
+                    { x = 16, y = 32 }
+
+                _ ->
+                    { x = 32, y = 64 }
+    , containerPadding = { x = 15, y = 0 }
+    }
+
+
 defaultDropdownConfig : DropdownConfig
 defaultDropdownConfig =
     { paddingX = 16
@@ -364,17 +383,15 @@ defaultDropdownConfig =
     }
 
 
-defaultNavbarConfig : NavbarConfig
-defaultNavbarConfig =
-    { paddingX = 16
-    , paddingY = 8
-    , menubarPaddingX = 8
-    , menubarPaddingY = 8
-    , brandFontSize = 20
-    , brandPaddingY = 4 -- ?
-    , togglerPaddingX = 12
-    , togglerPaddingY = 4
-    , togglerBorderRadius = 4
+defaultInputConfig : ThemeColor -> InputConfig
+defaultInputConfig themeColor =
+    { fontColor = bootstrapColors.gray600
+    , fontSize = defaultFontSize SizeDefault
+    , paddingX = 12
+    , paddingY = 6
+    , borderRadius = 4
+    , borderColor = bootstrapColors.gray400
+    , focusedBorderColor = (themeColor >> lighten 0.25) Primary
     }
 
 
@@ -388,15 +405,17 @@ defaultNavConfig =
     }
 
 
-defaultInputConfig : ThemeColor -> InputConfig
-defaultInputConfig themeColor =
-    { fontColor = bootstrapColors.gray600
-    , fontSize = defaultFontSize SizeDefault
-    , paddingX = 12
-    , paddingY = 6
-    , borderRadius = 4
-    , borderColor = bootstrapColors.gray400
-    , focusedBorderColor = (themeColor >> lighten 0.25) Primary
+defaultNavbarConfig : NavbarConfig
+defaultNavbarConfig =
+    { paddingX = 16
+    , paddingY = 8
+    , menubarPaddingX = 8
+    , menubarPaddingY = 8
+    , brandFontSize = 20
+    , brandPaddingY = 4 -- ?
+    , togglerPaddingX = 12
+    , togglerPaddingY = 4
+    , togglerBorderRadius = 4
     }
 
 
@@ -448,30 +467,11 @@ defaultPaginationConfig themeColor =
     }
 
 
-defaultContainerConfig : ContainerConfig
-defaultContainerConfig =
-    { jumbotronBackgroundColor = bootstrapColors.gray200
-    , backgroundColor = bootstrapColors.white
-    , borderColor = bootstrapColors.gray200
-    , borderWidth = 0
-    , borderRadius = 4
-    , jumbotronPadding =
-        \deviceClass ->
-            case deviceClass of
-                Phone ->
-                    { x = 16, y = 32 }
-
-                _ ->
-                    { x = 32, y = 64 }
-    , containerPadding = { x = 15, y = 0 }
-    }
-
-
 defaultTableConfig : TableConfig
 defaultTableConfig =
     { color = bootstrapColors.gray900
     , backgroundColor = bootstrapColors.white
-    , accentBackground = alterColor 0.05 bootstrapColors.black 
+    , accentBackground = alterColor 0.05 bootstrapColors.black
     , borderColor = bootstrapColors.gray300
     , borderWidth = 1
     , headColor = bootstrapColors.gray700

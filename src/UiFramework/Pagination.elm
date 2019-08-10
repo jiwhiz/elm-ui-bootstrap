@@ -5,13 +5,14 @@ module UiFramework.Pagination exposing
     , default
     , view
     , withExtraAttrs
+    , withItemLabel
     , withItems
     , withLarge
     , withSmall
     , withStringLabels
     )
 
-import Element exposing (Attribute, Device, Element, el, fill, height, paddingXY, pointer, row, spacing, text, width)
+import Element exposing (Attribute, Device, Element, el, fill, height, paddingXY, pointer, row, text, width)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
@@ -25,7 +26,7 @@ import UiFramework.Types exposing (Role(..), Size(..))
 
 type alias PaginationState =
     { numberOfSlices : Int
-    , currentSliceNumber : Int -- start from 1
+    , currentSliceNumber : Int -- start from 0
     }
 
 
@@ -34,7 +35,6 @@ type alias Context context =
         | device : Device
         , themeConfig : ThemeConfig
         , parentRole : Maybe Role
-        , state : PaginationState
     }
 
 
@@ -54,6 +54,7 @@ type alias Options msg =
     , ellipsis : Icon.Icon
     , size : Size
     , items : List Item
+    , itemLabel : Int -> Element msg
     , attributes : List (Attribute msg)
     }
 
@@ -111,6 +112,11 @@ withItems items (Pagination options) =
     Pagination { options | items = items }
 
 
+withItemLabel : (Int -> Element msg) -> Pagination context msg -> Pagination context msg
+withItemLabel itemLabel (Pagination options) =
+    Pagination { options | itemLabel = itemLabel }
+
+
 {-| Pagination Item type
 -}
 type Item
@@ -132,6 +138,7 @@ default selectedMsg =
         , ellipsis = FontAwesome.Solid.ellipsisH
         , size = SizeDefault
         , items = []
+        , itemLabel = \i -> text <| String.fromInt (i + 1)
         , attributes = []
         }
 
@@ -140,8 +147,8 @@ default selectedMsg =
 -- Rendering the pagination
 
 
-view : Pagination context msg -> UiElement context msg
-view (Pagination options) =
+view : PaginationState -> Pagination context msg -> UiElement context msg
+view state (Pagination options) =
     Internal.fromElement
         (\context ->
             let
@@ -176,16 +183,16 @@ view (Pagination options) =
                         config.borderColor
 
                 firstDisabled =
-                    context.state.currentSliceNumber == 1
+                    state.currentSliceNumber == 0
 
                 previousDisabled =
-                    context.state.currentSliceNumber == 1
+                    state.currentSliceNumber == 0
 
                 nextDisabled =
-                    context.state.currentSliceNumber == context.state.numberOfSlices
+                    state.currentSliceNumber == state.numberOfSlices - 1
 
                 lastDisabled =
-                    context.state.currentSliceNumber == context.state.numberOfSlices
+                    state.currentSliceNumber == state.numberOfSlices - 1
 
                 commonAttrs disabled =
                     [ height fill
@@ -231,7 +238,7 @@ view (Pagination options) =
                             text labels.first
                     )
                     firstDisabled
-                    1
+                    0
                 , linkItem
                     (Border.rounded 0 :: commonAttrs previousDisabled)
                     (case options.labels of
@@ -242,9 +249,9 @@ view (Pagination options) =
                             text labels.previous
                     )
                     previousDisabled
-                    (context.state.currentSliceNumber - 1)
+                    (state.currentSliceNumber - 1)
                 ]
-                    ++ List.map (renderItem context options) options.items
+                    ++ List.map (renderItem state context options) options.items
                     ++ [ linkItem
                             (Border.rounded 0 :: commonAttrs nextDisabled)
                             (case options.labels of
@@ -255,7 +262,7 @@ view (Pagination options) =
                                     text labels.next
                             )
                             nextDisabled
-                            (context.state.currentSliceNumber + 1)
+                            (state.currentSliceNumber + 1)
                        , linkItem
                             (Border.roundEach
                                 { topRight = config.borderRadius options.size
@@ -273,13 +280,13 @@ view (Pagination options) =
                                     text labels.last
                             )
                             lastDisabled
-                            context.state.numberOfSlices
+                            (state.numberOfSlices - 1)
                        ]
         )
 
 
-renderItem : Context context -> Options msg -> Item -> Element msg
-renderItem context options item =
+renderItem : PaginationState -> Context context -> Options msg -> Item -> Element msg
+renderItem state context options item =
     let
         config =
             context.themeConfig.paginationConfig
@@ -294,7 +301,7 @@ renderItem context options item =
         NumberItem index ->
             let
                 ( color, borderColor, bgColor ) =
-                    if index == context.state.currentSliceNumber then
+                    if index == state.currentSliceNumber then
                         ( config.activeColor, config.activeBackgroundColor, config.activeBackgroundColor )
 
                     else
@@ -312,7 +319,7 @@ renderItem context options item =
                 , pointer
                 ]
                 { onPress = Just <| options.selectedMsg index
-                , label = text <| String.fromInt index
+                , label = options.itemLabel index
                 }
 
         EllipsisItem ->

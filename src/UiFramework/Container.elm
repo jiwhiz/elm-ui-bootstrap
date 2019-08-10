@@ -4,7 +4,7 @@ import Element exposing (Attribute, DeviceClass(..))
 import Element.Background as Background
 import Element.Border as Border
 import UiFramework
-import UiFramework.Colors as Colors
+import UiFramework.ColorUtils exposing (transparent)
 import UiFramework.Internal as Internal
 
 
@@ -91,7 +91,7 @@ viewAttributes context options =
                 ( config.jumbotronBackgroundColor, config.jumbotronPadding context.device.class )
 
             else
-                ( Colors.transparent, config.containerPadding )
+                ( transparent, config.containerPadding )
 
         width =
             Element.fill

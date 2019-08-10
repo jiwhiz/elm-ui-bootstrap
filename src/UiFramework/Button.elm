@@ -5,6 +5,7 @@ module UiFramework.Button exposing
     , view
     , withBlock
     , withDisabled
+    , withExtraAttrs
     , withIcon
     , withLabel
     , withLarge
@@ -14,12 +15,12 @@ module UiFramework.Button exposing
     , withSmall
     )
 
-import Element exposing (Attribute, el, paddingXY, row, spacing, text, width, Color)
+import Element exposing (Attribute, Color, el, paddingXY, row, spacing, text, width)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
-import UiFramework.Colors as Colors
+import UiFramework.ColorUtils exposing (alterColor, darken, transparent)
 import UiFramework.Icon as Icon
 import UiFramework.Internal as Internal
 import UiFramework.Types exposing (Role(..), Size(..))
@@ -154,8 +155,7 @@ viewAttributes context options =
             context.themeConfig.buttonConfig
 
         btnColors =
-            buttonColors context options 
-
+            buttonColors context options
     in
     [ paddingXY (config.paddingX options.size) (config.paddingY options.size)
     , Font.center
@@ -166,54 +166,55 @@ viewAttributes context options =
     , Border.solid
     , Border.color <| btnColors.border
     , Background.color btnColors.background
-    , Element.mouseOver 
+    , Element.mouseOver
         [ Background.color btnColors.hoverBackground
-        , Font.color btnColors.hoverFont 
-        , Border.color btnColors.hoverBorder]
+        , Font.color btnColors.hoverFont
+        , Border.color btnColors.hoverBorder
+        ]
     ]
 
+
 type alias ButtonColorsConfig =
-    { background : Color 
-    , border : Color 
+    { background : Color
+    , border : Color
     , font : Color
-    , hoverBackground : Color 
-    , hoverBorder : Color 
-    , hoverFont : Color }
+    , hoverBackground : Color
+    , hoverBorder : Color
+    , hoverFont : Color
+    }
 
 
-defaultButtonColors config options =
-    { background = config.backgroundColor options.role
-    , border = config.backgroundColor options.role
-    , font = config.fontColor options.role
-    , hoverBackground = config.backgroundColor options.role |> Colors.darken 0.075
-    , hoverBorder = config.backgroundColor options.role |> Colors.darken 0.075
-    , hoverFont = config.fontColor options.role }
-
-
-buttonColors : Internal.UiContextual context -> Options msg -> ButtonColorsConfig 
+buttonColors : Internal.UiContextual context -> Options msg -> ButtonColorsConfig
 buttonColors context options =
     let
         config =
             context.themeConfig.buttonConfig
 
         defaultColors =
-            defaultButtonColors config options
+            { background = config.backgroundColor options.role
+            , border = config.backgroundColor options.role
+            , font = config.fontColor options.role
+            , hoverBackground = config.backgroundColor options.role |> darken 0.075
+            , hoverBorder = config.backgroundColor options.role |> darken 0.075
+            , hoverFont = config.fontColor options.role
+            }
     in
     if options.outlined then
-        { defaultColors 
-        | background = Colors.transparent
-        , border = config.backgroundColor options.role
-        , font = config.backgroundColor options.role
-        , hoverBackground = config.backgroundColor options.role
-        , hoverBorder = config.backgroundColor options.role
+        { defaultColors
+            | background = transparent
+            , border = config.backgroundColor options.role
+            , font = config.backgroundColor options.role
+            , hoverBackground = config.backgroundColor options.role
+            , hoverBorder = config.backgroundColor options.role
         }
 
     else if options.disabled then
-        { defaultColors 
-        | border = config.backgroundColor options.role |> Colors.alterColor 0.65
-        , background = config.backgroundColor options.role |> Colors.alterColor 0.65
-        , hoverBorder = config.backgroundColor options.role |> Colors.alterColor 0.65
-        , hoverBackground = config.backgroundColor options.role |> Colors.alterColor 0.65 }
+        { defaultColors
+            | border = config.backgroundColor options.role |> alterColor 0.65
+            , background = config.backgroundColor options.role |> alterColor 0.65
+            , hoverBorder = config.backgroundColor options.role |> alterColor 0.65
+            , hoverBackground = config.backgroundColor options.role |> alterColor 0.65
+        }
 
     else
         defaultColors

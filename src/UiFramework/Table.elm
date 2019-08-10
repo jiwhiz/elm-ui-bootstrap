@@ -19,17 +19,12 @@ import Element
         , height
         , indexedTable
         , paddingXY
-        , row
         , scrollbars
-        , spacing
-        , text
         , width
         )
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
-import Element.Input as Input
-import UiFramework.Icon as Icon
 import UiFramework.Internal as Internal
 import UiFramework.Types exposing (Role(..), Size(..))
 

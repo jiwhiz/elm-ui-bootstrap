@@ -9,11 +9,10 @@ module UiFramework.Badge exposing
     , withRole
     )
 
-import Element exposing (Attribute, el, fill, none, paddingXY, text, width)
+import Element exposing (Attribute, el, paddingXY, text, width)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
-import Element.Input as Input
 import UiFramework.Internal as Internal
 import UiFramework.Types exposing (Role(..), Size(..))
 

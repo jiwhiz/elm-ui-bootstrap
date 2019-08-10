@@ -48,7 +48,7 @@ import Form.View
 import Html
 import Html.Attributes
 import UiFramework.Button as Button
-import UiFramework.Colors exposing (getColor)
+import UiFramework.ColorUtils exposing (hexToColor)
 import UiFramework.Internal as Internal
 import UiFramework.Types exposing (Role(..))
 
@@ -304,8 +304,8 @@ section title fields =
             (el
                 [ moveUp 14
                 , moveRight 10
-                , Background.color (getColor "#000")
-                , Font.color (getColor "#fff")
+                , Background.color (hexToColor "#000")
+                , Font.color (hexToColor "#fff")
                 , padding 6
                 , width shrink
                 ]
@@ -347,7 +347,7 @@ placeholder attributes =
     Just
         (Input.placeholder []
             (el
-                [ Font.color (getColor "#6c757d")
+                [ Font.color (hexToColor "#6c757d")
                 ]
                 (text attributes.placeholder)
             )
@@ -448,7 +448,7 @@ withCommonAttrs showError error disabled onBlur themeColor attrs =
                 )
             )
         |> whenJust onBlur Events.onLoseFocus
-        |> when disabled (Background.color <| getColor "#6c757d")
+        |> when disabled (Background.color <| hexToColor "#6c757d")
 
 
 when : Bool -> Attribute msg -> List (Attribute msg) -> List (Attribute msg)
