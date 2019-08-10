@@ -1,26 +1,14 @@
-module UiFramework.ColorUtils exposing (..)
-
-{-|
-
-
-# Utilities
-
-@docs darken, desaturate, lighten, maximumContrast, saturate
-
-
-# Convertions to/from Hex
-
-@docs colorToHex, hexToColor
-
-
-# Convertions to/from Color.Color
-
-@docs fromColor, toColor
-
--}
+module UiFramework.ColorUtils exposing
+    ( alterColor
+    , colorLevel
+    , contrastTextColor
+    , darken
+    , hexToColor
+    , lighten
+    , transparent
+    )
 
 import Color
-import Color.Accessibility
 import Color.Convert
 import Color.Manipulate
 import Element
@@ -137,23 +125,6 @@ darken offset elementColor =
             toColor elementColor
     in
     fromColor <| Color.Manipulate.darken offset cl
-
-
-{-| Returns the color with the highest contrast to the base color.
--}
-maximumContrast : Element.Color -> Element.Color -> Element.Color -> Element.Color
-maximumContrast elementColor dark_ bright =
-    let
-        cl =
-            toColor elementColor
-
-        colorList =
-            [ toColor dark_, toColor bright ]
-
-        maxContrast =
-            Color.Accessibility.maximumContrast cl colorList
-    in
-    fromColor <| Maybe.withDefault (Color.rgb 0 0 0) maxContrast
 
 
 {-| Converts a string to a color.

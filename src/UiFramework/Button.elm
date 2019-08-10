@@ -5,6 +5,7 @@ module UiFramework.Button exposing
     , view
     , withBlock
     , withDisabled
+    , withExtraAttrs
     , withIcon
     , withLabel
     , withLarge
@@ -183,16 +184,6 @@ type alias ButtonColorsConfig =
     }
 
 
-defaultButtonColors config options =
-    { background = config.backgroundColor options.role
-    , border = config.backgroundColor options.role
-    , font = config.fontColor options.role
-    , hoverBackground = config.backgroundColor options.role |> darken 0.075
-    , hoverBorder = config.backgroundColor options.role |> darken 0.075
-    , hoverFont = config.fontColor options.role
-    }
-
-
 buttonColors : Internal.UiContextual context -> Options msg -> ButtonColorsConfig
 buttonColors context options =
     let
@@ -200,7 +191,13 @@ buttonColors context options =
             context.themeConfig.buttonConfig
 
         defaultColors =
-            defaultButtonColors config options
+            { background = config.backgroundColor options.role
+            , border = config.backgroundColor options.role
+            , font = config.fontColor options.role
+            , hoverBackground = config.backgroundColor options.role |> darken 0.075
+            , hoverBorder = config.backgroundColor options.role |> darken 0.075
+            , hoverFont = config.fontColor options.role
+            }
     in
     if options.outlined then
         { defaultColors

@@ -84,8 +84,8 @@ darklyThemeColor colors role =
             colors.gray800
 
 
-alertConfig : ThemeColor -> AlertConfig
-alertConfig themeColor =
+darklyAlertConfig : ThemeColor -> AlertConfig
+darklyAlertConfig themeColor =
     let
         default =
             defaultAlertConfig themeColor
@@ -101,8 +101,16 @@ alertConfig themeColor =
     }
 
 
-dropdownConfig : DropdownConfig
-dropdownConfig =
+darklyContainerConfig : ContainerConfig
+darklyContainerConfig =
+    { defaultContainerConfig
+        | backgroundColor = darklyColors.gray900
+        , jumbotronBackgroundColor = darklyColors.gray800
+    }
+
+
+darklyDropdownConfig : DropdownConfig
+darklyDropdownConfig =
     { defaultDropdownConfig
         | backgroundColor = darklyColors.gray900
         , fontColor = darklyColors.white
@@ -143,14 +151,6 @@ darklyPaginationConfig themeColor =
     }
 
 
-darklyContainerConfig : ContainerConfig
-darklyContainerConfig =
-    { defaultContainerConfig
-        | backgroundColor = darklyColors.gray900
-        , jumbotronBackgroundColor = darklyColors.gray800
-    }
-
-
 darklyTableConfig : TableConfig
 darklyTableConfig =
     { defaultTableConfig
@@ -175,10 +175,10 @@ darklyThemeConfig =
     , bodyColor = darklyColors.white
     , fontColor = \bgColor -> contrastTextColor bgColor darklyColors.gray900 darklyColors.white
     , fontConfig = defaultFontConfig
-    , alertConfig = alertConfig themeColor
+    , alertConfig = darklyAlertConfig themeColor
     , badgeConfig = defaultBadgeConfig themeColor
     , buttonConfig = defaultButtonConfig themeColor
-    , dropdownConfig = dropdownConfig
+    , dropdownConfig = darklyDropdownConfig
     , navConfig = defaultNavConfig
     , navbarConfig = defaultNavbarConfig
     , inputConfig = darklyInputConfig themeColor

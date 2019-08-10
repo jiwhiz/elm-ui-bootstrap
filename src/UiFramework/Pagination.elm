@@ -5,13 +5,14 @@ module UiFramework.Pagination exposing
     , default
     , view
     , withExtraAttrs
+    , withItemLabel
     , withItems
     , withLarge
     , withSmall
     , withStringLabels
     )
 
-import Element exposing (Attribute, Device, Element, el, fill, height, paddingXY, pointer, row, spacing, text, width)
+import Element exposing (Attribute, Device, Element, el, fill, height, paddingXY, pointer, row, text, width)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
@@ -34,7 +35,6 @@ type alias Context context =
         | device : Device
         , themeConfig : ThemeConfig
         , parentRole : Maybe Role
-        , state : PaginationState
     }
 
 
@@ -147,8 +147,8 @@ default selectedMsg =
 -- Rendering the pagination
 
 
-view : Pagination context msg -> UiElement context msg
-view (Pagination options) =
+view : PaginationState -> Pagination context msg -> UiElement context msg
+view state (Pagination options) =
     Internal.fromElement
         (\context ->
             let
@@ -183,16 +183,16 @@ view (Pagination options) =
                         config.borderColor
 
                 firstDisabled =
-                    context.state.currentSliceNumber == 0
+                    state.currentSliceNumber == 0
 
                 previousDisabled =
-                    context.state.currentSliceNumber == 0
+                    state.currentSliceNumber == 0
 
                 nextDisabled =
-                    context.state.currentSliceNumber == context.state.numberOfSlices - 1
+                    state.currentSliceNumber == state.numberOfSlices - 1
 
                 lastDisabled =
-                    context.state.currentSliceNumber == context.state.numberOfSlices - 1
+                    state.currentSliceNumber == state.numberOfSlices - 1
 
                 commonAttrs disabled =
                     [ height fill
@@ -249,9 +249,9 @@ view (Pagination options) =
                             text labels.previous
                     )
                     previousDisabled
-                    (context.state.currentSliceNumber - 1)
+                    (state.currentSliceNumber - 1)
                 ]
-                    ++ List.map (renderItem context options) options.items
+                    ++ List.map (renderItem state context options) options.items
                     ++ [ linkItem
                             (Border.rounded 0 :: commonAttrs nextDisabled)
                             (case options.labels of
@@ -262,7 +262,7 @@ view (Pagination options) =
                                     text labels.next
                             )
                             nextDisabled
-                            (context.state.currentSliceNumber + 1)
+                            (state.currentSliceNumber + 1)
                        , linkItem
                             (Border.roundEach
                                 { topRight = config.borderRadius options.size
@@ -280,13 +280,13 @@ view (Pagination options) =
                                     text labels.last
                             )
                             lastDisabled
-                            (context.state.numberOfSlices - 1)
+                            (state.numberOfSlices - 1)
                        ]
         )
 
 
-renderItem : Context context -> Options msg -> Item -> Element msg
-renderItem context options item =
+renderItem : PaginationState -> Context context -> Options msg -> Item -> Element msg
+renderItem state context options item =
     let
         config =
             context.themeConfig.paginationConfig
@@ -301,7 +301,7 @@ renderItem context options item =
         NumberItem index ->
             let
                 ( color, borderColor, bgColor ) =
-                    if index == context.state.currentSliceNumber then
+                    if index == state.currentSliceNumber then
                         ( config.activeColor, config.activeBackgroundColor, config.activeBackgroundColor )
 
                     else

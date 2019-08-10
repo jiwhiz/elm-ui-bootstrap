@@ -83,25 +83,14 @@ type alias ButtonConfig =
     }
 
 
-type alias NavbarConfig =
-    { paddingX : Int
-    , paddingY : Int
-    , menubarPaddingX : Int
-    , menubarPaddingY : Int
-    , brandFontSize : Int
-    , brandPaddingY : Int
-    , togglerPaddingX : Int
-    , togglerPaddingY : Int
-    , togglerBorderRadius : Int
-    }
-
-
-type alias NavConfig =
-    { linkPaddingX : Int
-    , linkPaddingY : Int
-    , disabledColor : Color
-    , dividerColor : Color
-    , dividerMarginY : Int
+type alias ContainerConfig =
+    { jumbotronBackgroundColor : Color
+    , backgroundColor : Color
+    , borderColor : Color
+    , borderWidth : Int
+    , borderRadius : Int
+    , jumbotronPadding : PaddingByScreenSize
+    , containerPadding : { x : Int, y : Int }
     }
 
 
@@ -129,14 +118,25 @@ type alias InputConfig =
     }
 
 
-type alias ContainerConfig =
-    { jumbotronBackgroundColor : Color
-    , backgroundColor : Color
-    , borderColor : Color
-    , borderWidth : Int
-    , borderRadius : Int
-    , jumbotronPadding : PaddingByScreenSize
-    , containerPadding : { x : Int, y : Int }
+type alias NavConfig =
+    { linkPaddingX : Int
+    , linkPaddingY : Int
+    , disabledColor : Color
+    , dividerColor : Color
+    , dividerMarginY : Int
+    }
+
+
+type alias NavbarConfig =
+    { paddingX : Int
+    , paddingY : Int
+    , menubarPaddingX : Int
+    , menubarPaddingY : Int
+    , brandFontSize : Int
+    , brandPaddingY : Int
+    , togglerPaddingX : Int
+    , togglerPaddingY : Int
+    , togglerBorderRadius : Int
     }
 
 
@@ -350,6 +350,25 @@ defaultButtonConfig themeColor =
     }
 
 
+defaultContainerConfig : ContainerConfig
+defaultContainerConfig =
+    { jumbotronBackgroundColor = bootstrapColors.gray200
+    , backgroundColor = bootstrapColors.white
+    , borderColor = bootstrapColors.gray200
+    , borderWidth = 0
+    , borderRadius = 4
+    , jumbotronPadding =
+        \deviceClass ->
+            case deviceClass of
+                Phone ->
+                    { x = 16, y = 32 }
+
+                _ ->
+                    { x = 32, y = 64 }
+    , containerPadding = { x = 15, y = 0 }
+    }
+
+
 defaultDropdownConfig : DropdownConfig
 defaultDropdownConfig =
     { paddingX = 16
@@ -364,17 +383,15 @@ defaultDropdownConfig =
     }
 
 
-defaultNavbarConfig : NavbarConfig
-defaultNavbarConfig =
-    { paddingX = 16
-    , paddingY = 8
-    , menubarPaddingX = 8
-    , menubarPaddingY = 8
-    , brandFontSize = 20
-    , brandPaddingY = 4 -- ?
-    , togglerPaddingX = 12
-    , togglerPaddingY = 4
-    , togglerBorderRadius = 4
+defaultInputConfig : ThemeColor -> InputConfig
+defaultInputConfig themeColor =
+    { fontColor = bootstrapColors.gray600
+    , fontSize = defaultFontSize SizeDefault
+    , paddingX = 12
+    , paddingY = 6
+    , borderRadius = 4
+    , borderColor = bootstrapColors.gray400
+    , focusedBorderColor = (themeColor >> lighten 0.25) Primary
     }
 
 
@@ -388,15 +405,17 @@ defaultNavConfig =
     }
 
 
-defaultInputConfig : ThemeColor -> InputConfig
-defaultInputConfig themeColor =
-    { fontColor = bootstrapColors.gray600
-    , fontSize = defaultFontSize SizeDefault
-    , paddingX = 12
-    , paddingY = 6
-    , borderRadius = 4
-    , borderColor = bootstrapColors.gray400
-    , focusedBorderColor = (themeColor >> lighten 0.25) Primary
+defaultNavbarConfig : NavbarConfig
+defaultNavbarConfig =
+    { paddingX = 16
+    , paddingY = 8
+    , menubarPaddingX = 8
+    , menubarPaddingY = 8
+    , brandFontSize = 20
+    , brandPaddingY = 4 -- ?
+    , togglerPaddingX = 12
+    , togglerPaddingY = 4
+    , togglerBorderRadius = 4
     }
 
 
@@ -445,25 +464,6 @@ defaultPaginationConfig themeColor =
     , disabledColor = bootstrapColors.gray600
     , disabledBackgroundColor = bootstrapColors.white
     , disabledBorderColor = bootstrapColors.gray300
-    }
-
-
-defaultContainerConfig : ContainerConfig
-defaultContainerConfig =
-    { jumbotronBackgroundColor = bootstrapColors.gray200
-    , backgroundColor = bootstrapColors.white
-    , borderColor = bootstrapColors.gray200
-    , borderWidth = 0
-    , borderRadius = 4
-    , jumbotronPadding =
-        \deviceClass ->
-            case deviceClass of
-                Phone ->
-                    { x = 16, y = 32 }
-
-                _ ->
-                    { x = 32, y = 64 }
-    , containerPadding = { x = 15, y = 0 }
     }
 
 

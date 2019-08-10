@@ -1,4 +1,4 @@
-module UiFramework.Container exposing (Container(..), Options, UiElement, default, defaultOptions, jumbotron, maxWidth, view, viewAttributes, withChild, withFullWidth)
+module UiFramework.Container exposing (Container(..), Options, UiElement, default, defaultOptions, jumbotron, maxWidth, simple, view, viewAttributes, withChild, withFullWidth)
 
 import Element exposing (Attribute, DeviceClass(..))
 import Element.Background as Background
