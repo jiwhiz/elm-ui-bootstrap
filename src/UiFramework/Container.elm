@@ -1,4 +1,4 @@
-module UiFramework.Container exposing (Container(..), Options, UiElement, default, defaultOptions, jumbotron, maxWidth, view, viewAttributes, withChild, withFullWidth)
+module UiFramework.Container exposing (Container(..), Options, UiElement, default, defaultOptions, jumbotron, maxWidth, simple, view, viewAttributes, withChild, withFullWidth)
 
 import Element exposing (Attribute, DeviceClass(..))
 import Element.Background as Background
@@ -58,12 +58,17 @@ default : Container context msg
 default =
     Container defaultOptions
 
+
+
 -- basically `<div class="container> child </div>`
-simple : UiElement context msg -> UiElement context msg 
+
+
+simple : UiElement context msg -> UiElement context msg
 simple child =
-    default 
+    default
         |> withChild child
         |> view
+
 
 view : Container context msg -> UiElement context msg
 view (Container options) =
