@@ -1,4 +1,4 @@
-module UiFramework.Form exposing (asStateIn, layout, setState)
+module UiFramework.ComposableForm exposing (asStateIn, layout, setState)
 
 import Element
     exposing
