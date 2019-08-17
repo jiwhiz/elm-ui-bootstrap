@@ -1,10 +1,12 @@
 module Themes.Materia exposing (materiaThemeConfig)
 
+import Element
 import Element.Font as Font
-import UiFramework.ColorUtils exposing (alterColor, contrastTextColor, darken, hexToColor, lighten, transparent)
+import UiFramework.ColorUtils exposing (alterColor, colorLevel, contrastTextColor, darken, hexToColor, lighten, transparent)
 import UiFramework.Configuration
     exposing
         ( AlertConfig
+        , BoxShadow
         , ButtonConfig
         , Colors
         , ContainerConfig
@@ -118,6 +120,8 @@ materiaButtonConfig themeColor =
 
                     SizeLarge ->
                         8
+        , withShadow = Just boxShadows
+        , borderWidth = \_ -> 0
     }
 
 
@@ -158,6 +162,34 @@ materiaNavbarConfig : NavbarConfig
 materiaNavbarConfig =
     { defaultNavbarConfig
         | paddingY = 20
+        , withShadow = Just boxShadows
+    }
+
+
+materiaAlertConfig : ThemeColor -> AlertConfig
+materiaAlertConfig themeColor =
+    let
+        default =
+            defaultAlertConfig themeColor
+    in
+    { default
+        | backgroundColor = themeColor >> colorLevel -2
+        , fontColor =
+            \role ->
+                contrastTextColor (themeColor role) bootstrapColors.gray900 bootstrapColors.white
+    }
+
+
+
+-- values from Bootswatch Materia
+
+
+boxShadows : BoxShadow
+boxShadows =
+    { offset = ( 0, 1 )
+    , size = 0
+    , blur = 4
+    , color = Element.rgba 0 0 0 0.4
     }
 
 
@@ -173,7 +205,7 @@ materiaThemeConfig =
     , bodyColor = materiaColors.gray700
     , fontColor = \bgColor -> contrastTextColor bgColor materiaColors.gray900 materiaColors.white
     , fontConfig = defaultFontConfig
-    , alertConfig = defaultAlertConfig themeColor
+    , alertConfig = materiaAlertConfig themeColor
     , badgeConfig = defaultBadgeConfig themeColor
     , buttonConfig = materiaButtonConfig themeColor
     , dropdownConfig = defaultDropdownConfig

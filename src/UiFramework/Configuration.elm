@@ -1,4 +1,4 @@
-module UiFramework.Configuration exposing (AlertConfig, BadgeConfig, ButtonConfig, Colors, ContainerConfig, DropdownConfig, FontConfig, InputConfig, NavConfig, NavbarConfig, PaginationConfig, TableConfig, ThemeColor, ThemeConfig, bootstrapColors, bootstrapThemeColor, defaultAlertConfig, defaultBadgeConfig, defaultButtonConfig, defaultContainerConfig, defaultDropdownConfig, defaultFontConfig, defaultFontSize, defaultInputConfig, defaultNavConfig, defaultNavbarConfig, defaultPaginationConfig, defaultTableConfig, defaultThemeConfig)
+module UiFramework.Configuration exposing (AlertConfig, BadgeConfig, BoxShadow, ButtonConfig, Colors, ContainerConfig, DropdownConfig, FontConfig, InputConfig, NavConfig, NavbarConfig, PaginationConfig, TableConfig, ThemeColor, ThemeConfig, bootstrapColors, bootstrapThemeColor, defaultAlertConfig, defaultBadgeConfig, defaultButtonConfig, defaultContainerConfig, defaultDropdownConfig, defaultFontConfig, defaultFontSize, defaultInputConfig, defaultNavConfig, defaultNavbarConfig, defaultPaginationConfig, defaultTableConfig, defaultThemeConfig)
 
 import Element exposing (Color, DeviceClass(..))
 import Element.Font as Font
@@ -40,6 +40,14 @@ type alias ThemeColor =
     Role -> Color
 
 
+type alias BoxShadow =
+    { offset : ( Float, Float )
+    , size : Float
+    , blur : Float
+    , color : Color
+    }
+
+
 type alias AlertConfig =
     { paddingX : Int
     , paddingY : Int
@@ -73,6 +81,7 @@ type alias ButtonConfig =
     , borderColor : ThemeColor
     , borderWidth : Size -> Int
     , borderRadius : Size -> Int
+    , withShadow : Maybe BoxShadow
     }
 
 
@@ -136,6 +145,7 @@ type alias NavbarConfig =
     , togglerPaddingX : Int
     , togglerPaddingY : Int
     , togglerBorderRadius : Int
+    , withShadow : Maybe BoxShadow
     }
 
 
@@ -349,6 +359,7 @@ defaultButtonConfig themeColor =
     , borderColor = themeColor
     , borderWidth = defaultBorderWidth
     , borderRadius = defaultBorderRadius
+    , withShadow = Nothing
     }
 
 
@@ -418,6 +429,7 @@ defaultNavbarConfig =
     , togglerPaddingX = 12
     , togglerPaddingY = 4
     , togglerBorderRadius = 4
+    , withShadow = Nothing
     }
 
 
