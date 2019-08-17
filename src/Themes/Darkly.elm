@@ -1,5 +1,6 @@
 module Themes.Darkly exposing (darklyThemeConfig)
 
+import Element.Font as Font
 import UiFramework.ColorUtils exposing (alterColor, contrastTextColor, darken, hexToColor, lighten, transparent)
 import UiFramework.Configuration
     exposing
@@ -7,6 +8,7 @@ import UiFramework.Configuration
         , Colors
         , ContainerConfig
         , DropdownConfig
+        , FontConfig
         , InputConfig
         , PaginationConfig
         , TableConfig
@@ -118,6 +120,16 @@ darklyDropdownConfig =
     }
 
 
+darklyFontConfig : FontConfig
+darklyFontConfig =
+    { defaultFontConfig
+        | fontFamily =
+            [ Font.typeface "Lato"
+            , Font.sansSerif
+            ]
+    }
+
+
 darklyInputConfig : ThemeColor -> InputConfig
 darklyInputConfig themeColor =
     let
@@ -174,7 +186,7 @@ darklyThemeConfig =
     , bodyBackground = darklyColors.gray900
     , bodyColor = darklyColors.white
     , fontColor = \bgColor -> contrastTextColor bgColor darklyColors.gray900 darklyColors.white
-    , fontConfig = defaultFontConfig
+    , fontConfig = darklyFontConfig
     , alertConfig = darklyAlertConfig themeColor
     , badgeConfig = defaultBadgeConfig themeColor
     , buttonConfig = defaultButtonConfig themeColor
