@@ -171,6 +171,17 @@ viewAttributes context options =
         , Font.color btnColors.hoverFont
         , Border.color btnColors.hoverBorder
         ]
+    , Border.shadow <|
+        case config.withShadow of
+            Nothing ->
+                { offset = ( 0, 0 )
+                , size = 0
+                , blur = 0
+                , color = Element.rgba 0 0 0 1
+                }
+
+            Just shadow ->
+                shadow
     ]
 
 

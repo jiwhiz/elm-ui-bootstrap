@@ -204,6 +204,17 @@ view { toggleMenuState, dropdownState } (Navbar options) =
                     , paddingXY navbarConfig.paddingX navbarConfig.paddingY
                     , Background.color backgroundColor
                     , Font.color fontColor
+                    , Border.shadow <|
+                        case navbarConfig.withShadow of
+                            Nothing ->
+                                { offset = ( 0, 0 )
+                                , size = 0
+                                , blur = 0
+                                , color = Element.rgba 0 0 0 1
+                                }
+
+                            Just shadow ->
+                                shadow
                     ]
 
                 brand attrs =
