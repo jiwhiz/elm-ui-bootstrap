@@ -161,7 +161,7 @@ materiaNavConfig =
 materiaNavbarConfig : NavbarConfig
 materiaNavbarConfig =
     { defaultNavbarConfig
-        | paddingY = 20
+        | paddingY = 16
         , withShadow = Just boxShadows
     }
 
