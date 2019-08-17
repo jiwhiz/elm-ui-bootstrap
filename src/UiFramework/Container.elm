@@ -1,4 +1,4 @@
-module UiFramework.Container exposing (Container(..), Options, UiElement, default, defaultOptions, jumbotron, maxWidth, simple, view, viewAttributes, withChild, withFullWidth)
+module UiFramework.Container exposing (Container(..), Options, UiElement, default, defaultOptions, jumbotron, maxWidth, simple, view, viewAttributes, withChild, withExtraAttributes, withFullWidth)
 
 import Element exposing (Attribute, DeviceClass(..))
 import Element.Background as Background
@@ -24,6 +24,7 @@ type alias Options context msg =
     { jumbotron : Bool
     , fillWidth : Bool
     , child : UiElement context msg
+    , attributes : List (Attribute msg)
     }
 
 
@@ -32,6 +33,7 @@ defaultOptions =
     { jumbotron = False
     , fillWidth = False
     , child = UiFramework.uiNone
+    , attributes = []
     }
 
 
@@ -54,6 +56,11 @@ jumbotron =
     Container { defaultOptions | jumbotron = True }
 
 
+withExtraAttributes : List (Attribute msg) -> Container context msg -> Container context msg
+withExtraAttributes attributes (Container options) =
+    Container { options | attributes = attributes }
+
+
 default : Container context msg
 default =
     Container defaultOptions
@@ -63,9 +70,10 @@ default =
 -- basically `<div class="container> child </div>`
 
 
-simple : UiElement context msg -> UiElement context msg
-simple child =
+simple : List (Attribute msg) -> UiElement context msg -> UiElement context msg
+simple attributes child =
     default
+        |> withExtraAttributes attributes
         |> withChild child
         |> view
 
@@ -110,6 +118,7 @@ viewAttributes context options =
     , Element.width width
     , Element.centerX
     ]
+        ++ options.attributes
 
 
 maxWidth : DeviceClass -> Int
