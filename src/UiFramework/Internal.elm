@@ -1,4 +1,4 @@
-module UiFramework.Internal exposing (UiContextual, WithContext, flatMap, fromElement, node, toElement, uiColumn, uiNone, uiParagraph, uiRow, uiText)
+module UiFramework.Internal exposing (UiContextual, WithContext, flatMap, fromElement, node, toElement, uiColumn, uiNone, uiParagraph, uiRow, uiText, uiWrappedRow)
 
 import Element exposing (Attribute, Device, Element)
 import UiFramework.Configuration exposing (ThemeConfig)
@@ -70,6 +70,13 @@ uiRow attrs =
     node
         (\_ ->
             Element.row attrs
+        )
+
+uiWrappedRow : List (Attribute msg) -> List (WithContext (UiContextual c) msg) -> WithContext (UiContextual c) msg
+uiWrappedRow attrs =
+    node
+        (\_ ->
+            Element.wrappedRow attrs
         )
 
 
