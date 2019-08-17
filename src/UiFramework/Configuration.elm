@@ -40,13 +40,6 @@ type alias ThemeColor =
     Role -> Color
 
 
-type alias FontConfig =
-    { typeface : String
-    , typefaceFallback : Font.Font
-    , url : String
-    }
-
-
 type alias AlertConfig =
     { paddingX : Int
     , paddingY : Int
@@ -104,6 +97,12 @@ type alias DropdownConfig =
     , borderColor : Color
     , borderWidth : Int
     , borderRadius : Int
+    }
+
+
+type alias FontConfig =
+    { fontFamily : List Font.Font
+    , fontFamilyMonospace : List Font.Font
     }
 
 
@@ -250,9 +249,12 @@ bootstrapThemeColor colors role =
 
 defaultFontConfig : FontConfig
 defaultFontConfig =
-    { typeface = "Noto Sans"
-    , typefaceFallback = Font.sansSerif
-    , url = "https://fonts.googleapis.com/css?family=Noto+Sans"
+    { fontFamily =
+        [ Font.typeface "Segoe UI"
+        , Font.sansSerif
+        ]
+    , fontFamilyMonospace =
+        [ Font.monospace ]
     }
 
 
