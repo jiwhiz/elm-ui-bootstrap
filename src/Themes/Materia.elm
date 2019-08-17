@@ -130,7 +130,6 @@ materiaFontConfig =
     { defaultFontConfig
         | fontFamily =
             [ Font.typeface "Roboto"
-            , Font.typeface "Segoe UI"
             , Font.sansSerif
             ]
     }
@@ -204,7 +203,7 @@ materiaThemeConfig =
     , bodyBackground = materiaColors.white
     , bodyColor = materiaColors.gray700
     , fontColor = \bgColor -> contrastTextColor bgColor materiaColors.gray900 materiaColors.white
-    , fontConfig = defaultFontConfig
+    , fontConfig = materiaFontConfig
     , alertConfig = materiaAlertConfig themeColor
     , badgeConfig = defaultBadgeConfig themeColor
     , buttonConfig = materiaButtonConfig themeColor
