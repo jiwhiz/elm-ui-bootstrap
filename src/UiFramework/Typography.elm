@@ -20,6 +20,11 @@ type alias UiElement context msg =
     Internal.WithContext (Internal.UiContextual context) msg
 
 
+span : List (Element.Attribute msg) -> UiElement context msg -> UiElement context msg
+span attrs =
+    textSection SizeRegular attrs
+
+
 display1 : List (Element.Attribute msg) -> UiElement context msg -> UiElement context msg
 display1 listAttr =
     heading Display1 (Font.light :: listAttr)
@@ -142,6 +147,7 @@ type FontLevel
     | SizeH5
     | SizeH6
     | SizeLead
+    | SizeRegular
     | SizeSmall
     | SizeExtraSmall
 
@@ -218,6 +224,9 @@ fontSize level =
 
         SizeLead ->
             24
+
+        SizeRegular ->
+            17
 
         SizeSmall ->
             14
