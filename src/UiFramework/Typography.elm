@@ -1,4 +1,4 @@
-module UiFramework.Typography exposing (display1, display2, display3, display4, h1, h2, h3, h4, h5, h6, textExtraSmall, textLead, textSmall)
+module UiFramework.Typography exposing (display1, display2, display3, display4, h1, h2, h3, h4, h5, h6, textExtraSmall, textLead, textSmall, span)
 
 {-|
 
