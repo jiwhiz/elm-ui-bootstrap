@@ -26,6 +26,7 @@ import UiFramework.Configuration
         , defaultNavConfig
         , defaultNavbarConfig
         , defaultPaginationConfig
+        , defaultRangeSliderConfig
         , defaultTableConfig
         )
 import UiFramework.Types exposing (Role(..), Size(..))
@@ -130,14 +131,14 @@ darklyFontConfig =
     }
 
 
-darklyInputConfig : ThemeColor -> InputConfig
-darklyInputConfig themeColor =
+darklyInputConfig : Colors -> ThemeColor -> InputConfig
+darklyInputConfig colors themeColor =
     let
         default =
-            defaultInputConfig themeColor
+            defaultInputConfig colors themeColor
     in
     { default
-        | fontColor = bootstrapColors.gray700
+        | fontColor = colors.gray700
         , borderColor = transparent
     }
 
@@ -193,8 +194,9 @@ darklyThemeConfig =
     , dropdownConfig = darklyDropdownConfig
     , navConfig = defaultNavConfig
     , navbarConfig = defaultNavbarConfig
-    , inputConfig = darklyInputConfig themeColor
+    , inputConfig = darklyInputConfig darklyColors themeColor
     , paginationConfig = darklyPaginationConfig themeColor
+    , rangeSliderConfig = defaultRangeSliderConfig darklyColors themeColor
     , containerConfig = darklyContainerConfig
     , tableConfig = darklyTableConfig
     }

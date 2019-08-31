@@ -135,17 +135,17 @@ materiaFontConfig =
     }
 
 
-materiaInputConfig : ThemeColor -> InputConfig
-materiaInputConfig themeColor =
+materiaInputConfig : Colors -> ThemeColor -> InputConfig
+materiaInputConfig colors themeColor =
     let
         default =
-            defaultInputConfig themeColor
+            defaultInputConfig colors themeColor
     in
     { default
         | paddingX = 16
         , paddingY = 0
         , borderColor = transparent
-        , borderRadius = 0
+        , borderRadius = always 0
     }
 
 
@@ -210,7 +210,7 @@ materiaThemeConfig =
     , dropdownConfig = defaultDropdownConfig
     , navConfig = materiaNavConfig
     , navbarConfig = materiaNavbarConfig
-    , inputConfig = materiaInputConfig themeColor
+    , inputConfig = materiaInputConfig materiaColors themeColor
     , paginationConfig = defaultPaginationConfig themeColor
     , containerConfig = defaultContainerConfig
     , tableConfig = defaultTableConfig
