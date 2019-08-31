@@ -1,14 +1,14 @@
-module View.Component exposing (Header, componentNavbar, section, title, viewHeader, wrappedText, code)
+module View.Component exposing (Header, code, componentNavbar, section, title, viewHeader, wrappedText)
 
 {-| Reusable view functions for each Component page
-    I need to rename this!
+I need to rename this!
 -}
 
-import Element exposing (Color, fill, height, width, Attribute)
+import Element exposing (Attribute, Color, fill, height, width)
 import Element.Background as Background
+import Element.Border as Border
 import Element.Events as Events
 import Element.Font as Font
-import Element.Border as Border
 import Routes exposing (Route(..))
 import UiFramework exposing (WithContext)
 import UiFramework.ColorUtils as ColorUtils
@@ -99,18 +99,23 @@ wrappedText str =
     UiFramework.uiParagraph []
         [ Util.text str ]
 
--- kinda like strings wrapped in tick marks 
-code : String -> WithContext c msg 
+
+
+-- kinda like strings wrapped in tick marks
+
+
+code : String -> WithContext c msg
 code str =
-    Typography.span 
+    Typography.span
         [ Util.firacode
         , Font.size 14
         , Element.padding 3
         , Border.rounded 3
-        , Background.color <| Element.rgba 0 0 0 0.04 
+        , Background.color <| Element.rgba 0 0 0 0.04
         , Element.width Element.shrink
         ]
         (Util.text str)
+
 
 routeNameList : List ( Route, String )
 routeNameList =
@@ -124,4 +129,5 @@ routeNameList =
     , ( Pagination, "Pagination" )
     , ( Table, "Table" )
     , ( Typography, "Typography" )
+    , ( Form, "Form" )
     ]

@@ -13,6 +13,7 @@ import Page.Badge as Badge
 import Page.Button as Button
 import Page.Container as Container
 import Page.Dropdown as Dropdown
+import Page.Form as Form
 import Page.GettingStarted as GettingStarted
 import Page.Home as Home
 import Page.Icon as Icon
@@ -58,6 +59,7 @@ type Page
     | PaginationPage Pagination.Model
     | TablePage Table.Model
     | TypographyPage Typography.Model
+    | FormPage Form.Model
     | NotFoundPage NotFound.Model
 
 
@@ -142,6 +144,9 @@ tabBarTitle model =
 
         TypographyPage _ ->
             "Typography"
+
+        FormPage _ ->
+            "Form"
 
         NotFoundPage _ ->
             "Not Found"
@@ -267,6 +272,10 @@ content model sharedState =
             Typography.view sharedState pageModel
                 |> Element.map TypographyMsg
 
+        FormPage pageModel ->
+            Form.view sharedState pageModel
+                |> Element.map FormMsg
+
         NotFoundPage pageModel ->
             NotFound.view sharedState pageModel
                 |> Element.map NotFoundMsg
@@ -291,6 +300,7 @@ type Msg
     | PaginationMsg Pagination.Msg
     | TableMsg Table.Msg
     | TypographyMsg Typography.Msg
+    | FormMsg Form.Msg
     | NotFoundMsg NotFound.Msg
     | SelectTheme Theme
     | ToggleDropdown
@@ -368,6 +378,10 @@ update sharedState msg model =
         ( TypographyMsg subMsg, TypographyPage subModel ) ->
             Typography.update sharedState subMsg subModel
                 |> updateWith TypographyPage TypographyMsg model
+
+        ( FormMsg subMsg, FormPage subModel ) ->
+            Form.update sharedState subMsg subModel
+                |> updateWith FormPage FormMsg model
 
         ( NotFoundMsg subMsg, NotFoundPage subModel ) ->
             NotFound.update sharedState subMsg subModel
@@ -455,6 +469,9 @@ navigateTo route sharedState model =
 
         Typography ->
             Typography.init |> initWith TypographyPage TypographyMsg model SharedState.NoUpdate
+
+        Form ->
+            Form.init |> initWith FormPage FormMsg model SharedState.NoUpdate
 
         NotFound ->
             NotFound.init |> initWith NotFoundPage NotFoundMsg model SharedState.NoUpdate

@@ -18,6 +18,7 @@ type Route
     | Pagination
     | Table
     | Typography
+    | Form
 
 
 
@@ -65,6 +66,9 @@ toUrlString route =
                 Typography ->
                     [ "typography" ]
 
+                Form ->
+                    [ "form" ]
+
                 NotFound ->
                     [ "oops" ]
     in
@@ -101,4 +105,5 @@ urlParser =
         , Url.map Table (Url.s "table")
         , Url.map Typography (Url.s "typography")
         , Url.map Alert (Url.s "alert")
+        , Url.map Form (Url.s "form")
         ]
