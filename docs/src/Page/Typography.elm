@@ -1,6 +1,6 @@
 module Page.Typography exposing (Context, Model, Msg(..), init, update, view)
 
-{-| Alert component
+{-| Typography component
 -}
 
 import Element exposing (Color, Element, fill, height, spacing, width)

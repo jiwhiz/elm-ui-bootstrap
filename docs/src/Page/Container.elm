@@ -1,6 +1,6 @@
 module Page.Container exposing (Context, Model, Msg(..), init, update, view)
 
-{-| Alert component
+{-| Container component
 -}
 
 import Element exposing (Color, Element, fill, height, spacing, width)

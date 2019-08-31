@@ -1,6 +1,6 @@
 module Page.Pagination exposing (Context, Model, Msg(..), init, update, view)
 
-{-| Alert component
+{-| Pagination component
 -}
 
 import Element exposing (Color, Element, fill, height, spacing, width)

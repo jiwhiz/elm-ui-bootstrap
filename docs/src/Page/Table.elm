@@ -1,6 +1,6 @@
 module Page.Table exposing (Context, Model, Msg(..), init, update, view)
 
-{-| Alert component
+{-| Table component
 -}
 
 import Element exposing (Color, Element, fill, height, spacing, width)

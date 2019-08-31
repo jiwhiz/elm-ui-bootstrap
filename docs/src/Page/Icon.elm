@@ -1,6 +1,6 @@
 module Page.Icon exposing (Context, Model, Msg(..), init, update, view)
 
-{-| Alert component
+{-| Icon component
 -}
 
 import Element exposing (Color, Element, fill, height, spacing, width)
