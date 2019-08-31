@@ -2,21 +2,17 @@ module Themes.Materia exposing (materiaThemeConfig)
 
 import Element
 import Element.Font as Font
-import UiFramework.ColorUtils exposing (alterColor, colorLevel, contrastTextColor, darken, hexToColor, lighten, transparent)
+import UiFramework.ColorUtils exposing (colorLevel, contrastTextColor, hexToColor, transparent)
 import UiFramework.Configuration
     exposing
         ( AlertConfig
         , BoxShadow
         , ButtonConfig
         , Colors
-        , ContainerConfig
-        , DropdownConfig
         , FontConfig
         , InputConfig
         , NavConfig
         , NavbarConfig
-        , PaginationConfig
-        , TableConfig
         , ThemeColor
         , ThemeConfig
         , bootstrapColors
@@ -26,7 +22,6 @@ import UiFramework.Configuration
         , defaultContainerConfig
         , defaultDropdownConfig
         , defaultFontConfig
-        , defaultFontSize
         , defaultInputConfig
         , defaultNavConfig
         , defaultNavbarConfig
@@ -135,17 +130,17 @@ materiaFontConfig =
     }
 
 
-materiaInputConfig : ThemeColor -> InputConfig
-materiaInputConfig themeColor =
+materiaInputConfig : Colors -> ThemeColor -> InputConfig
+materiaInputConfig colors themeColor =
     let
         default =
-            defaultInputConfig themeColor
+            defaultInputConfig colors themeColor
     in
     { default
         | paddingX = 16
         , paddingY = 0
         , borderColor = transparent
-        , borderRadius = 0
+        , borderRadius = always 0
     }
 
 
@@ -210,7 +205,7 @@ materiaThemeConfig =
     , dropdownConfig = defaultDropdownConfig
     , navConfig = materiaNavConfig
     , navbarConfig = materiaNavbarConfig
-    , inputConfig = materiaInputConfig themeColor
+    , inputConfig = materiaInputConfig materiaColors themeColor
     , paginationConfig = defaultPaginationConfig themeColor
     , containerConfig = defaultContainerConfig
     , tableConfig = defaultTableConfig

@@ -1,4 +1,4 @@
-module UiFramework.Configuration exposing (AlertConfig, BadgeConfig, BoxShadow, ButtonConfig, Colors, ContainerConfig, DropdownConfig, FontConfig, InputConfig, NavConfig, NavbarConfig, PaginationConfig, TableConfig, ThemeColor, ThemeConfig, bootstrapColors, bootstrapThemeColor, defaultAlertConfig, defaultBadgeConfig, defaultButtonConfig, defaultContainerConfig, defaultDropdownConfig, defaultFontConfig, defaultFontSize, defaultInputConfig, defaultNavConfig, defaultNavbarConfig, defaultPaginationConfig, defaultTableConfig, defaultThemeConfig)
+module UiFramework.Configuration exposing (AlertConfig, BadgeConfig, BoxShadow, ButtonConfig, Colors, ContainerConfig, DropdownConfig, FontConfig, InputConfig, NavConfig, NavbarConfig, PaginationConfig, TableConfig, ThemeColor, ThemeConfig, bootstrapColors, bootstrapThemeColor, defaultAlertConfig, defaultBadgeConfig, defaultButtonConfig, defaultContainerConfig, defaultDropdownConfig, defaultFontConfig, defaultFontSize, defaultInputConfig, defaultNavConfig, defaultNavbarConfig, defaultPaginationConfig, defaultRangeSliderConfig, defaultTableConfig, defaultThemeConfig)
 
 import Element exposing (Color, DeviceClass(..))
 import Element.Font as Font
@@ -120,9 +120,13 @@ type alias InputConfig =
     , fontSize : Int
     , paddingX : Int
     , paddingY : Int
-    , borderRadius : Int
     , borderColor : Color
+    , borderWidth : Size -> Int
+    , borderRadius : Size -> Int
     , focusedBorderColor : Color
+    , placeholderColor : Color
+    , backgroundColor : Color
+    , disabledBackgroundColor : Color
     }
 
 
@@ -169,6 +173,21 @@ type alias PaginationConfig =
     }
 
 
+type alias RangeSliderConfig =
+    { trackHeight : Int
+    , trackBackgroundColor : Color
+    , trackBorderRadius : Int
+    , trackBoxShadow : Maybe BoxShadow
+    , thumbWidth : Int
+    , thumbHeight : Int
+    , thumbBackgroundColor : Color
+    , thumbBorderRadius : Int
+    , thumbBoxShadow : Maybe BoxShadow
+    , thumbActiveBackgroundColor : Color
+    , thumbDisabledBackgroundColor : Color
+    }
+
+
 type alias TableConfig =
     { color : Color
     , backgroundColor : Color
@@ -197,6 +216,7 @@ type alias ThemeConfig =
     , navConfig : NavConfig
     , inputConfig : InputConfig
     , paginationConfig : PaginationConfig
+    , rangeSliderConfig : RangeSliderConfig
     , containerConfig : ContainerConfig
     , tableConfig : TableConfig
     }
@@ -396,15 +416,19 @@ defaultDropdownConfig =
     }
 
 
-defaultInputConfig : ThemeColor -> InputConfig
-defaultInputConfig themeColor =
-    { fontColor = bootstrapColors.gray600
+defaultInputConfig : Colors -> ThemeColor -> InputConfig
+defaultInputConfig colors themeColor =
+    { fontColor = colors.gray700
     , fontSize = defaultFontSize SizeDefault
     , paddingX = 12
-    , paddingY = 6
-    , borderRadius = 4
-    , borderColor = bootstrapColors.gray400
+    , paddingY = 10
+    , borderColor = colors.gray400
+    , borderWidth = always 1
+    , borderRadius = defaultBorderRadius
     , focusedBorderColor = (themeColor >> lighten 0.25) Primary
+    , placeholderColor = colors.gray600
+    , backgroundColor = colors.white
+    , disabledBackgroundColor = colors.gray200
     }
 
 
@@ -481,6 +505,22 @@ defaultPaginationConfig themeColor =
     }
 
 
+defaultRangeSliderConfig : Colors -> ThemeColor -> RangeSliderConfig
+defaultRangeSliderConfig colors themeColor =
+    { trackHeight = 8
+    , trackBackgroundColor = colors.gray300
+    , trackBorderRadius = 16
+    , trackBoxShadow = Nothing -- TODO add shadow
+    , thumbWidth = 16
+    , thumbHeight = 16
+    , thumbBackgroundColor = themeColor Primary
+    , thumbBorderRadius = 16
+    , thumbBoxShadow = Nothing -- TODO add shadow
+    , thumbActiveBackgroundColor = (themeColor >> lighten 0.35) Primary
+    , thumbDisabledBackgroundColor = colors.gray500
+    }
+
+
 defaultTableConfig : TableConfig
 defaultTableConfig =
     { color = bootstrapColors.gray900
@@ -513,8 +553,9 @@ defaultThemeConfig =
     , dropdownConfig = defaultDropdownConfig
     , navConfig = defaultNavConfig
     , navbarConfig = defaultNavbarConfig
-    , inputConfig = defaultInputConfig themeColor
+    , inputConfig = defaultInputConfig bootstrapColors themeColor
     , paginationConfig = defaultPaginationConfig themeColor
+    , rangeSliderConfig = defaultRangeSliderConfig bootstrapColors themeColor
     , containerConfig = defaultContainerConfig
     , tableConfig = defaultTableConfig
     }
