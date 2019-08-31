@@ -4,3 +4,8 @@ elm-stuff
 repl-temp-*
 
 .DS_Store
+
+# docs
+docs/elm-stuff/
+docs/elm.js
+docs/TODO
