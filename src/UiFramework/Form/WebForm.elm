@@ -1,18 +1,10 @@
 module UiFramework.Form.WebForm exposing (..)
 
-import Element exposing (Attribute, Color, Element, centerY, el, fill, height, none, paddingXY, shrink, spacing, text, width)
-import Element.Background as Background
-import Element.Border as Border
-import Element.Events as Events
+import Element exposing (el, fill, spacing, text, width)
 import Element.Font as Font
-import Element.Input as Input
-import Form.Error as Error exposing (Error)
-import Html
-import Html.Attributes
-import Json.Decode
+import Form.Error exposing (Error)
 import Set exposing (Set)
 import UiFramework.Button as Button
-import UiFramework.ColorUtils exposing (hexToColor)
 import UiFramework.Form.CheckboxField as CheckboxField
 import UiFramework.Form.ComposableForm as ComposableForm exposing (Form)
 import UiFramework.Form.NumberField as NumberField

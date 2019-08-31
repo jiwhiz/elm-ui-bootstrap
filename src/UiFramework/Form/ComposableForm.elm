@@ -1,22 +1,15 @@
 module UiFramework.Form.ComposableForm exposing (..)
 
-import Element exposing (Attribute, Color, Element, centerY, el, fill, height, none, paddingXY, shrink, spacing, text, width)
-import Element.Background as Background
-import Element.Border as Border
-import Element.Events as Events
-import Element.Font as Font
-import Element.Input as Input
+
 import Form.Base as Base
 import Form.Error exposing (Error)
 import Form.Field as Field
-import Set exposing (Set)
 import UiFramework.Form.CheckboxField as CheckboxField
 import UiFramework.Form.NumberField as NumberField
 import UiFramework.Form.RadioField as RadioField
 import UiFramework.Form.RangeField as RangeField
 import UiFramework.Form.SelectField as SelectField
 import UiFramework.Form.TextField as TextField
-import UiFramework.Internal as Internal
 
 
 type alias Form values output =
@@ -105,9 +98,6 @@ mapValues { value, update } form =
 mapFieldValues : (a -> b -> b) -> b -> Field a -> Field b
 mapFieldValues update values field =
     let
-        mapUpdate fn value =
-            update (fn value) values
-
         newUpdate oldValues =
             update oldValues values
     in

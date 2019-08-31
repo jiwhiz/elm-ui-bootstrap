@@ -1,15 +1,12 @@
 module UiFramework.Form.FormUtils exposing (..)
 
-import Element exposing (Attribute, Color, Element, alignBottom, el, fill, height, none, paddingXY, px, shrink, spacing, text, width)
+import Element exposing (Attribute, Color, Element, el, none, paddingXY, text)
 import Element.Background as Background
-import Element.Border as Border
 import Element.Events as Events
 import Element.Font as Font
 import Element.Input as Input
 import Form.Error as Error exposing (Error)
-import Form.Field exposing (Field)
 import Html
-import UiFramework.Configuration exposing (defaultFontSize)
 import UiFramework.Internal as Internal
 import UiFramework.Types exposing (Role(..), Size(..))
 

@@ -2,21 +2,17 @@ module Themes.Materia exposing (materiaThemeConfig)
 
 import Element
 import Element.Font as Font
-import UiFramework.ColorUtils exposing (alterColor, colorLevel, contrastTextColor, darken, hexToColor, lighten, transparent)
+import UiFramework.ColorUtils exposing (colorLevel, contrastTextColor, hexToColor, transparent)
 import UiFramework.Configuration
     exposing
         ( AlertConfig
         , BoxShadow
         , ButtonConfig
         , Colors
-        , ContainerConfig
-        , DropdownConfig
         , FontConfig
         , InputConfig
         , NavConfig
         , NavbarConfig
-        , PaginationConfig
-        , TableConfig
         , ThemeColor
         , ThemeConfig
         , bootstrapColors
@@ -26,7 +22,6 @@ import UiFramework.Configuration
         , defaultContainerConfig
         , defaultDropdownConfig
         , defaultFontConfig
-        , defaultFontSize
         , defaultInputConfig
         , defaultNavConfig
         , defaultNavbarConfig

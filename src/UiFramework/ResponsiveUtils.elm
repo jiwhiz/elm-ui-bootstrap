@@ -1,4 +1,4 @@
-module UiFramework.ResponsiveUtils exposing (..)
+module UiFramework.ResponsiveUtils exposing (classifyDevice)
 
 import Element exposing (Device, DeviceClass(..), Orientation(..))
 

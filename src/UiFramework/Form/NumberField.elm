@@ -10,18 +10,13 @@ module UiFramework.Form.NumberField exposing
     , withPlaceholder
     )
 
-import Element exposing (Attribute, Color, Element, centerY, el, fill, height, none, paddingXY, shrink, spacing, text, width)
-import Element.Background as Background
-import Element.Border as Border
-import Element.Events as Events
-import Element.Font as Font
+import Element exposing (text)
 import Element.Input as Input
 import Form.Base as Base
-import Form.Error as Error exposing (Error)
+import Form.Error exposing (Error)
 import Form.Field as Field
-import Html
 import Html.Attributes
-import UiFramework.Form.FormUtils exposing (getLabelAbove, getPlaceholder, when, whenJust, withCommonAttrs, withHtmlAttribute)
+import UiFramework.Form.FormUtils exposing (getLabelAbove, getPlaceholder, withCommonAttrs, withHtmlAttribute)
 import UiFramework.Internal as Internal
 import UiFramework.Types exposing (Role(..), Size(..))
 

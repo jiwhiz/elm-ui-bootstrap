@@ -10,19 +10,15 @@ module UiFramework.Form.TextField exposing
     , withPlaceholder
     )
 
-import Element exposing (Attribute, Color, Element, alignBottom, el, fill, height, none, paddingXY, px, shrink, spacing, text, width)
-import Element.Background as Background
+import Element exposing (Attribute, alignBottom, el, height, paddingXY, px, text, width)
 import Element.Border as Border
-import Element.Events as Events
 import Element.Font as Font
 import Element.Input as Input
 import Form.Base as Base
-import Form.Error as Error exposing (Error)
+import Form.Error exposing (Error)
 import Form.Field as Field
-import Html
-import Html.Attributes
 import UiFramework.Configuration exposing (defaultFontSize)
-import UiFramework.Form.FormUtils exposing (getLabelAbove, getPlaceholder, when, whenJust, withCommonAttrs)
+import UiFramework.Form.FormUtils exposing (getLabelAbove, getPlaceholder, whenJust, withCommonAttrs)
 import UiFramework.Internal as Internal
 import UiFramework.Types exposing (Role(..), Size(..))
 

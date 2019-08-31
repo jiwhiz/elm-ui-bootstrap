@@ -11,18 +11,14 @@ module UiFramework.Form.RangeField exposing
     , withStep
     )
 
-import Element exposing (Attribute, Color, Element, centerY, el, fill, height, none, paddingXY, px, shrink, spacing, text, width)
+import Element exposing (Attribute, centerY, el, fill, height, none, px, width)
 import Element.Background as Background
 import Element.Border as Border
-import Element.Events as Events
-import Element.Font as Font
 import Element.Input as Input
 import Form.Base as Base
-import Form.Error as Error exposing (Error)
+import Form.Error exposing (Error)
 import Form.Field as Field
-import Html
-import Html.Attributes
-import UiFramework.Form.FormUtils exposing (getLabelAbove, getPlaceholder, when, whenJust, withCommonAttrs)
+import UiFramework.Form.FormUtils exposing (getLabelAbove, withCommonAttrs)
 import UiFramework.Internal as Internal
 import UiFramework.Types exposing (Role(..), Size(..))
 
