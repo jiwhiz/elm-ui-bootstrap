@@ -1,8 +1,5 @@
 module Page.Table exposing (Context, Model, Msg(..), init, update, view)
 
-{-| Table component
--}
-
 import Element exposing (Color, Element, fill, height, spacing, width)
 import Element.Font as Font
 import Routes

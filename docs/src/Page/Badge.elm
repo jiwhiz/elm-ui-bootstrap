@@ -1,8 +1,5 @@
 module Page.Badge exposing (Context, Model, Msg(..), init, update, view)
 
-{-| Badge component
--}
-
 import Element exposing (Color, Element, fill, height, spacing, width)
 import Element.Border as Border
 import Routes
@@ -151,7 +148,6 @@ configuration =
                 [ Util.text "When configuring, we use pipelines to build up our badge, starting from the default function, "
                 , Component.code "Badge.default"
                 ]
-
             ]
         , configExampleCode
         , attributeConfigs
@@ -224,7 +220,7 @@ rolesAndLabelConfig =
         [ Component.section "Roles and Labels"
         , UiFramework.uiParagraph []
             [ Util.text "These pipeline functions bring the basic functionality to badge customization. By default, the role of a badge is the "
-            , Component.code "Primary" 
+            , Component.code "Primary"
             , Util.text " role, and the label is an empty string."
             ]
         , Badge.simple Secondary "Secondary badge!"
@@ -257,14 +253,15 @@ pillConfig =
         , width fill
         ]
         [ Component.section "Pills or no pill"
-        , UiFramework.uiParagraph [] 
+        , UiFramework.uiParagraph []
             [ Util.text "A badge can have a "
-           , Component.code "pill"
+            , Component.code "pill"
             , Util.text " config set to "
             , Component.code "True"
             , Util.text ", where the corners are more rounded. By default this is set to "
             , Component.code "False"
-            , Util.text "."]
+            , Util.text "."
+            ]
         , Badge.default
             |> Badge.withLabel "Pill Badge"
             |> Badge.withPill

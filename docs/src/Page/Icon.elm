@@ -1,8 +1,5 @@
 module Page.Icon exposing (Context, Model, Msg(..), init, update, view)
 
-{-| Icon component
--}
-
 import Element exposing (Color, Element, fill, height, spacing, width)
 import FontAwesome.Brands
 import FontAwesome.Solid

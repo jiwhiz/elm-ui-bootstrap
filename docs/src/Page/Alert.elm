@@ -1,8 +1,5 @@
 module Page.Alert exposing (Context, Model, Msg(..), init, update, view)
 
-{-| Alert component
--}
-
 import Element exposing (Color, Element, fill, height, spacing, width)
 import Element.Border as Border
 import Routes
@@ -157,7 +154,7 @@ configuration =
             [ spacing 16 ]
             [ Component.title "Configurations"
             , UiFramework.uiParagraph []
-                [Util.text "When configuring, we use pipelines to build up our badge, starting from the default function, "
+                [ Util.text "When configuring, we use pipelines to build up our badge, starting from the default function, "
                 , Component.code "Alert.default"
                 ]
             ]

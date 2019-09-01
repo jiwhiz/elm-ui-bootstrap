@@ -1,8 +1,5 @@
 module Page.Form exposing (Context, Model, Msg(..), init, update, view)
 
-{-| Form component
--}
-
 import Element exposing (Color, Element, fill, height, spacing, width)
 import Element.Border as Border
 import Routes

@@ -1,8 +1,5 @@
 module Page.Dropdown exposing (Context, Model, Msg(..), init, update, view)
 
-{-| Dropdown component
--}
-
 import Element exposing (Color, Element, fill, height, spacing, width)
 import FontAwesome.Solid
 import Routes

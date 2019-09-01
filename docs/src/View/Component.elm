@@ -1,9 +1,5 @@
 module View.Component exposing (Header, code, componentNavbar, section, title, viewHeader, wrappedText)
 
-{-| Reusable view functions for each Component page
-I need to rename this!
--}
-
 import Element exposing (Attribute, Color, fill, height, width)
 import Element.Background as Background
 import Element.Border as Border

@@ -1,8 +1,5 @@
 module Page.Button exposing (Context, Model, Msg(..), init, update, view)
 
-{-| Button component
--}
-
 import Element exposing (Color, Element, fill, height, spacing, width)
 import FontAwesome.Brands
 import Routes
@@ -146,8 +143,8 @@ configuration =
         [ UiFramework.uiColumn
             [ spacing 16 ]
             [ Component.title "Configurations"
-            , UiFramework.uiParagraph [] 
-                [Util.text "When configuring, we use pipelines to build up our button, starting from the default function, "
+            , UiFramework.uiParagraph []
+                [ Util.text "When configuring, we use pipelines to build up our button, starting from the default function, "
                 , Component.code "Button.default"
                 ]
             ]
@@ -289,9 +286,9 @@ outlineConfig =
         , Element.spacing 32
         ]
         [ Component.section "Outline"
-        , UiFramework.uiParagraph [] 
-            [Util.text "Bootstrap gives you "
-            , Component.code "Button.withOutlined" 
+        , UiFramework.uiParagraph []
+            [ Util.text "Bootstrap gives you "
+            , Component.code "Button.withOutlined"
             , Util.text ", where the background colors are removed."
             ]
         , UiFramework.uiWrappedRow
@@ -384,9 +381,11 @@ blockConfig =
         , Element.spacing 32
         ]
         [ Component.section "Block buttons"
-        , UiFramework.uiParagraph []  [Util.text "Take up the entirety of the parent container width via the "
-        , Component.code "withBlock" 
-        , Util.text " function. This option is not functional yet."]
+        , UiFramework.uiParagraph []
+            [ Util.text "Take up the entirety of the parent container width via the "
+            , Component.code "withBlock"
+            , Util.text " function. This option is not functional yet."
+            ]
         , Button.default
             |> Button.withLabel "Block Button"
             |> Button.withBlock
@@ -413,9 +412,11 @@ disableConfig =
         , Element.spacing 32
         ]
         [ Component.section "Disabled buttons"
-        , UiFramework.uiParagraph []  [Util.text "Make a button look inactive by the "
-            , Component.code "withDisabled" 
-            , Util.text " function."]
+        , UiFramework.uiParagraph []
+            [ Util.text "Make a button look inactive by the "
+            , Component.code "withDisabled"
+            , Util.text " function."
+            ]
         , UiFramework.uiWrappedRow
             [ Element.spacing 4 ]
             (List.map
@@ -466,10 +467,11 @@ iconConfig =
             , Util.text "(check out the Elm FontAwesome page for more details - "
             , Util.text "https://github.com/lattyware/elm-fontawesome/tree/3.1.0#required-css)"
             ]
-        , UiFramework.uiParagraph [] 
-            [Util.text "As of now, you cannot add a custom" 
+        , UiFramework.uiParagraph []
+            [ Util.text "As of now, you cannot add a custom"
             , Component.code "UiElement"
-            , Util.text " to a button. This means you cannot add an animated icon, for example."]
+            , Util.text " to a button. This means you cannot add an animated icon, for example."
+            ]
         , UiFramework.uiWrappedRow
             [ Element.spacing 4 ]
             [ Button.default

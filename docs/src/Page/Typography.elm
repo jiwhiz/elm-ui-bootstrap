@@ -1,8 +1,5 @@
 module Page.Typography exposing (Context, Model, Msg(..), init, update, view)
 
-{-| Typography component
--}
-
 import Element exposing (Color, Element, fill, height, spacing, width)
 import Routes
 import SharedState exposing (SharedState, SharedStateUpdate(..))

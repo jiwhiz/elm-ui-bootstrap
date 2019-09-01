@@ -1,8 +1,5 @@
 module Page.Container exposing (Context, Model, Msg(..), init, update, view)
 
-{-| Container component
--}
-
 import Element exposing (Color, Element, fill, height, spacing, width)
 import Element.Background as Background
 import Element.Border as Border

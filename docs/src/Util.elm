@@ -1,7 +1,4 @@
-module Util exposing (firacode, highlightCode, navigate, text, uiHighlightCode, flip, tupleExtend)
-
-{-| code from <https://github.com/rundis/elm-bootstrap.info/blob/master/src/Util.elm>
--}
+module Util exposing (firacode, highlightCode, navigate, text, uiHighlightCode)
 
 import Browser.Navigation as Navigation
 import Element exposing (Attribute, Element)
@@ -18,31 +15,11 @@ text str =
     UiFramework.uiText (\_ -> str)
 
 
-
-
-flip : (a -> b -> c) -> (b -> a -> c)
-flip f b a =
-    f a b
-
-
-tupleExtend : ( a, b ) -> c -> ( a, b, c )
-tupleExtend ( a, b ) c =
-    ( a, b, c )
-
-
-
--- into a UiElement
-
-
 uiHighlightCode : String -> String -> WithContext context msg
 uiHighlightCode lang =
     highlightCode lang
         >> (\elem -> \_ -> elem)
         >> UiFramework.fromElement
-
-
-
--- into an Element
 
 
 highlightCode : String -> String -> Element msg
@@ -71,4 +48,4 @@ firacode =
 
 navigate : Navigation.Key -> Routes.Route -> Cmd msg
 navigate navKey route =
-    Navigation.pushUrl navKey (Routes.toUrlString route) 
+    Navigation.pushUrl navKey (Routes.toUrlString route)

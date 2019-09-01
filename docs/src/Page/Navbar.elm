@@ -1,8 +1,5 @@
 module Page.Navbar exposing (Context, Model, Msg(..), init, update, view)
 
-{-| Navbar component
--}
-
 import Element exposing (Color, Element, fill, height, spacing, width)
 import FontAwesome.Solid
 import Routes
