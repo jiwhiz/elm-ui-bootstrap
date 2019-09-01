@@ -74,7 +74,7 @@ view sharedState model =
                     , height fill
                     ]
                   <|
-                    componentNavbar NavigateTo Routes.Alert
+                    componentNavbar NavigateTo Routes.Form
                 , Container.simple [ width <| Element.fillPortion 6 ] <| content
                 ]
         ]
