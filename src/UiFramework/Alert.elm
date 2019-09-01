@@ -99,7 +99,7 @@ view (Alert options) =
         )
 
 
-viewAttributes : Internal.UiContextual context -> Options context mag -> List (Attribute msg)
+viewAttributes : Internal.UiContextual context -> Options context msg -> List (Attribute msg)
 viewAttributes context options =
     let
         config =
@@ -116,6 +116,7 @@ viewAttributes context options =
     , Border.color <| config.borderColor options.role
     , Background.color <| config.backgroundColor options.role
     ]
+        ++ options.attributes
 
 
 

@@ -1,4 +1,4 @@
-module UiFramework.Container exposing (Container(..), Options, UiElement, default, defaultOptions, jumbotron, maxWidth, simple, view, viewAttributes, withChild, withExtraAttributes, withFullWidth)
+module UiFramework.Container exposing (Container(..), Options, UiElement, default, defaultOptions, jumbotron, maxWidth, simple, view, viewAttributes, withChild, withExtraAttrs, withFullWidth)
 
 import Element exposing (Attribute, DeviceClass(..))
 import Element.Background as Background
@@ -56,8 +56,8 @@ jumbotron =
     Container { defaultOptions | jumbotron = True }
 
 
-withExtraAttributes : List (Attribute msg) -> Container context msg -> Container context msg
-withExtraAttributes attributes (Container options) =
+withExtraAttrs : List (Attribute msg) -> Container context msg -> Container context msg
+withExtraAttrs attributes (Container options) =
     Container { options | attributes = attributes }
 
 
@@ -73,7 +73,7 @@ default =
 simple : List (Attribute msg) -> UiElement context msg -> UiElement context msg
 simple attributes child =
     default
-        |> withExtraAttributes attributes
+        |> withExtraAttrs attributes
         |> withChild child
         |> view
 

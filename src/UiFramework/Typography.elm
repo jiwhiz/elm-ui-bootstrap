@@ -1,4 +1,4 @@
-module UiFramework.Typography exposing (display1, display2, display3, display4, h1, h2, h3, h4, h5, h6, textExtraSmall, textLead, textSmall)
+module UiFramework.Typography exposing (display1, display2, display3, display4, h1, h2, h3, h4, h5, h6, textExtraSmall, textLead, textSmall, span)
 
 {-|
 
@@ -18,6 +18,11 @@ import UiFramework.Types exposing (Role(..))
 
 type alias UiElement context msg =
     Internal.WithContext (Internal.UiContextual context) msg
+
+
+span : List (Element.Attribute msg) -> UiElement context msg -> UiElement context msg
+span attrs =
+    textSection SizeRegular attrs
 
 
 display1 : List (Element.Attribute msg) -> UiElement context msg -> UiElement context msg
@@ -142,6 +147,7 @@ type FontLevel
     | SizeH5
     | SizeH6
     | SizeLead
+    | SizeRegular
     | SizeSmall
     | SizeExtraSmall
 
@@ -218,6 +224,9 @@ fontSize level =
 
         SizeLead ->
             24
+
+        SizeRegular ->
+            17
 
         SizeSmall ->
             14

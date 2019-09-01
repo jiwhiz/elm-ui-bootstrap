@@ -85,7 +85,7 @@ view (Badge options) =
         )
 
 
-viewAttributes : Internal.UiContextual context -> Options mag -> List (Attribute msg)
+viewAttributes : Internal.UiContextual context -> Options msg -> List (Attribute msg)
 viewAttributes context options =
     let
         config =
@@ -107,3 +107,4 @@ viewAttributes context options =
     , Border.width 0
     , Background.color <| config.backgroundColor options.role
     ]
+        ++ options.attributes
