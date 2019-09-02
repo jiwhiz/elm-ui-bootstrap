@@ -22,7 +22,7 @@ withCommonAttrs :
 withCommonAttrs showError error disabled onBlur context attrs =
     let
         themeColor =
-            context.themeConfig.themeColor
+            context.themeConfig.globalConfig.themeColor
 
         config =
             context.themeConfig.inputConfig

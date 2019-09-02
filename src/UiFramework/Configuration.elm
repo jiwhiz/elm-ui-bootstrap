@@ -1,4 +1,37 @@
-module UiFramework.Configuration exposing (AlertConfig, BadgeConfig, BoxShadow, ButtonConfig, Colors, ContainerConfig, DropdownConfig, FontConfig, InputConfig, NavConfig, NavbarConfig, PaginationConfig, TableConfig, ThemeColor, ThemeConfig, bootstrapColors, bootstrapThemeColor, defaultAlertConfig, defaultBadgeConfig, defaultButtonConfig, defaultContainerConfig, defaultDropdownConfig, defaultFontConfig, defaultFontSize, defaultInputConfig, defaultNavConfig, defaultNavbarConfig, defaultPaginationConfig, defaultRangeSliderConfig, defaultTableConfig, defaultThemeConfig)
+module UiFramework.Configuration exposing
+    ( AlertConfig
+    , BadgeConfig
+    , BoxShadow
+    , ButtonConfig
+    , Colors
+    , ContainerConfig
+    , DropdownConfig
+    , FontConfig
+    , GlobalConfig
+    , InputConfig
+    , NavConfig
+    , NavbarConfig
+    , PaginationConfig
+    , TableConfig
+    , ThemeColor
+    , ThemeConfig
+    , bootstrapColors
+    , bootstrapThemeColor
+    , defaultAlertConfig
+    , defaultBadgeConfig
+    , defaultButtonConfig
+    , defaultContainerConfig
+    , defaultDropdownConfig
+    , defaultFontConfig
+    , defaultFontSize
+    , defaultInputConfig
+    , defaultNavConfig
+    , defaultNavbarConfig
+    , defaultPaginationConfig
+    , defaultRangeSliderConfig
+    , defaultTableConfig
+    , defaultThemeConfig
+    )
 
 import Element exposing (Color, DeviceClass(..))
 import Element.Font as Font

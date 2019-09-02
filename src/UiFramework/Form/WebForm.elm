@@ -136,7 +136,7 @@ view state (WebForm options) =
         formError =
             case state.status of
                 Error error ->
-                    Internal.fromElement (\context -> el [ Font.color (context.themeConfig.themeColor Danger) ] (text error))
+                    Internal.fromElement (\context -> el [ Font.color (context.themeConfig.globalConfig.themeColor Danger) ] (text error))
 
                 _ ->
                     Internal.uiNone

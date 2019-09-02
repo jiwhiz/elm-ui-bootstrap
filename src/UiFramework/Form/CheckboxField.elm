@@ -84,6 +84,6 @@ view { onChange, onBlur, value, disabled, error, showError, attributes } =
                 , label =
                     getLabelRight (showError && error /= Nothing)
                         options.label
-                        context.themeConfig.themeColor
+                        context.themeConfig.globalConfig.themeColor
                 }
         )

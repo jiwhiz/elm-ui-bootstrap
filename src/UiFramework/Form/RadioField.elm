@@ -90,7 +90,7 @@ view { onChange, onBlur, disabled, value, error, showError, attributes } =
                 )
                 { onChange = onChange
                 , selected = Just value
-                , label = getLabelAbove (showError && error /= Nothing) options.label context.themeConfig.themeColor
+                , label = getLabelAbove (showError && error /= Nothing) options.label context.themeConfig.globalConfig.themeColor
                 , options =
                     List.map
                         (\( val, name ) ->

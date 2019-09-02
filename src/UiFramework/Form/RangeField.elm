@@ -107,7 +107,7 @@ view { onChange, onBlur, disabled, value, error, showError, attributes } =
                     |> withCommonAttrs showError error disabled onBlur context
                 )
                 { onChange = onChange
-                , label = getLabelAbove (showError && error /= Nothing) options.label context.themeConfig.themeColor
+                , label = getLabelAbove (showError && error /= Nothing) options.label context.themeConfig.globalConfig.themeColor
                 , min = options.min
                 , max = options.max
                 , step = options.step

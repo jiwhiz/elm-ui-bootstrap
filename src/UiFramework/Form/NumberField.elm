@@ -127,6 +127,6 @@ view { onChange, onBlur, disabled, value, error, showError, attributes } =
                 { onChange = onChange
                 , text = value
                 , placeholder = getPlaceholder context options.placeholder
-                , label = getLabelAbove (showError && error /= Nothing) options.label context.themeConfig.themeColor
+                , label = getLabelAbove (showError && error /= Nothing) options.label context.themeConfig.globalConfig.themeColor
                 }
         )

@@ -9,6 +9,7 @@ import UiFramework.Configuration
         , ContainerConfig
         , DropdownConfig
         , FontConfig
+        , GlobalConfig
         , InputConfig
         , PaginationConfig
         , TableConfig
@@ -131,6 +132,17 @@ darklyFontConfig =
     }
 
 
+darklyGlobalConfig : GlobalConfig
+darklyGlobalConfig =
+    { colors = darklyColors
+    , themeColor = darklyThemeColor darklyColors
+    , bodyBackground = darklyColors.gray900
+    , bodyColor = darklyColors.white
+    , fontColor = \bgColor -> contrastTextColor bgColor darklyColors.gray900 darklyColors.white
+    , fontConfig = darklyFontConfig
+    }
+
+
 darklyInputConfig : Colors -> ThemeColor -> InputConfig
 darklyInputConfig colors themeColor =
     let
@@ -182,21 +194,16 @@ darklyThemeConfig =
         themeColor =
             darklyThemeColor darklyColors
     in
-    { colors = darklyColors
-    , themeColor = themeColor
-    , bodyBackground = darklyColors.gray900
-    , bodyColor = darklyColors.white
-    , fontColor = \bgColor -> contrastTextColor bgColor darklyColors.gray900 darklyColors.white
-    , fontConfig = darklyFontConfig
-    , alertConfig = darklyAlertConfig themeColor
+    { alertConfig = darklyAlertConfig themeColor
     , badgeConfig = defaultBadgeConfig themeColor
     , buttonConfig = defaultButtonConfig themeColor
+    , containerConfig = darklyContainerConfig
     , dropdownConfig = darklyDropdownConfig
-    , navConfig = defaultNavConfig
-    , navbarConfig = defaultNavbarConfig
+    , globalConfig = darklyGlobalConfig
     , inputConfig = darklyInputConfig darklyColors themeColor
+    , navbarConfig = defaultNavbarConfig
+    , navConfig = defaultNavConfig
     , paginationConfig = darklyPaginationConfig themeColor
     , rangeSliderConfig = defaultRangeSliderConfig darklyColors themeColor
-    , containerConfig = darklyContainerConfig
     , tableConfig = darklyTableConfig
     }

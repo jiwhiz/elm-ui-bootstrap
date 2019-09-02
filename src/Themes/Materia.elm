@@ -10,6 +10,7 @@ import UiFramework.Configuration
         , ButtonConfig
         , Colors
         , FontConfig
+        , GlobalConfig
         , InputConfig
         , NavConfig
         , NavbarConfig
@@ -26,6 +27,7 @@ import UiFramework.Configuration
         , defaultNavConfig
         , defaultNavbarConfig
         , defaultPaginationConfig
+        , defaultRangeSliderConfig
         , defaultTableConfig
         )
 import UiFramework.Types exposing (Role(..), Size(..))
@@ -130,6 +132,17 @@ materiaFontConfig =
     }
 
 
+materiaGlobalConfig : GlobalConfig
+materiaGlobalConfig =
+    { colors = materiaColors
+    , themeColor = materiaThemeColor materiaColors
+    , bodyBackground = materiaColors.white
+    , bodyColor = materiaColors.gray700
+    , fontColor = \bgColor -> contrastTextColor bgColor materiaColors.gray900 materiaColors.white
+    , fontConfig = materiaFontConfig
+    }
+
+
 materiaInputConfig : Colors -> ThemeColor -> InputConfig
 materiaInputConfig colors themeColor =
     let
@@ -193,20 +206,16 @@ materiaThemeConfig =
         themeColor =
             materiaThemeColor materiaColors
     in
-    { colors = materiaColors
-    , themeColor = themeColor
-    , bodyBackground = materiaColors.white
-    , bodyColor = materiaColors.gray700
-    , fontColor = \bgColor -> contrastTextColor bgColor materiaColors.gray900 materiaColors.white
-    , fontConfig = materiaFontConfig
-    , alertConfig = materiaAlertConfig themeColor
+    { alertConfig = materiaAlertConfig themeColor
     , badgeConfig = defaultBadgeConfig themeColor
     , buttonConfig = materiaButtonConfig themeColor
-    , dropdownConfig = defaultDropdownConfig
-    , navConfig = materiaNavConfig
-    , navbarConfig = materiaNavbarConfig
-    , inputConfig = materiaInputConfig materiaColors themeColor
-    , paginationConfig = defaultPaginationConfig themeColor
     , containerConfig = defaultContainerConfig
+    , dropdownConfig = defaultDropdownConfig
+    , globalConfig = materiaGlobalConfig
+    , inputConfig = materiaInputConfig materiaColors themeColor
+    , navbarConfig = materiaNavbarConfig
+    , navConfig = materiaNavConfig
+    , paginationConfig = defaultPaginationConfig themeColor
+    , rangeSliderConfig = defaultRangeSliderConfig materiaColors themeColor
     , tableConfig = defaultTableConfig
     }

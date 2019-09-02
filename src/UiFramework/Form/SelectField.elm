@@ -11,7 +11,6 @@ module UiFramework.Form.SelectField exposing
     )
 
 import Element exposing (paddingXY, spacing, text)
-
 import Element.Input as Input
 import Form.Base as Base
 import Form.Error exposing (Error)
@@ -100,7 +99,7 @@ view { onChange, onBlur, disabled, value, error, showError, attributes } =
                 )
                 { onChange = onChange
                 , selected = Just value
-                , label = getLabelAbove (showError && error /= Nothing) options.label context.themeConfig.themeColor
+                , label = getLabelAbove (showError && error /= Nothing) options.label context.themeConfig.globalConfig.themeColor
                 , options =
                     List.map
                         (\( val, name ) ->
