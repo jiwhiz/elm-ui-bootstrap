@@ -293,15 +293,11 @@ bigBorderContainer =
 
 
 type Msg
-    = NoOp
-    | NavigateTo Routes.Route
+    = NavigateTo Routes.Route
 
 
 update : SharedState -> Msg -> Model -> ( Model, Cmd Msg, SharedStateUpdate )
 update sharedState msg model =
     case msg of
-        NoOp ->
-            ( model, Cmd.none, NoUpdate )
-
         NavigateTo route ->
             ( model, Util.navigate sharedState.navKey route, NoUpdate )

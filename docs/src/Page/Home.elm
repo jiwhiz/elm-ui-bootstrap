@@ -176,8 +176,7 @@ learnMoreButton =
 
 
 type Msg
-    = NoOp
-    | NavigateTo Route
+    = NavigateTo Route
 
 
 update : SharedState -> Msg -> Model -> ( Model, Cmd Msg, SharedStateUpdate )
@@ -185,6 +184,3 @@ update sharedState msg model =
     case msg of
         NavigateTo route ->
             ( model, Util.navigate sharedState.navKey route, SharedState.NoUpdate )
-
-        NoOp ->
-            ( model, Cmd.none, SharedState.NoUpdate )
