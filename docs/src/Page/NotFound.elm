@@ -17,7 +17,7 @@ import UiFramework.Typography as Typography
 
 
 type alias UiElement msg =
-    WithContext Context msg
+    WithContext {} msg
 
 
 
@@ -33,19 +33,11 @@ init =
     ( {}, Cmd.none )
 
 
-
--- Context
-
-
-type alias Context =
-    {}
-
-
-toContext : SharedState -> UiContextual Context
+toContext : SharedState -> UiContextual {}
 toContext sharedState =
     { device = sharedState.device
     , parentRole = Nothing
-    , themeConfig = SharedState.getThemeConfig sharedState.theme
+    , themeConfig = sharedState.themeConfig
     }
 
 
@@ -60,15 +52,8 @@ text str =
 
 view : SharedState -> Model -> Element Msg
 view sharedState model =
-    let
-        context =
-            { device = sharedState.device
-            , parentRole = Nothing
-            , themeConfig = SharedState.getThemeConfig sharedState.theme
-            }
-    in
     Container.simple [] sadness
-        |> toElement context
+        |> toElement (toContext sharedState)
 
 
 sadness : UiElement Msg

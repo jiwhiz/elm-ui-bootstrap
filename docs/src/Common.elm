@@ -1,4 +1,4 @@
-module View.Component exposing (Header, code, componentNavbar, section, title, viewHeader, wrappedText)
+module Common exposing (Header, code, componentNavbar, section, title, viewHeader, wrappedText)
 
 import Element exposing (Attribute, Color, fill, height, width)
 import Element.Background as Background
@@ -19,7 +19,7 @@ type alias Header =
     }
 
 
-viewHeader : Header -> WithContext { c | purpleColor : Color } msg
+viewHeader : Header -> WithContext c msg
 viewHeader pageContent =
     let
         jumbotronContent =
@@ -40,7 +40,7 @@ viewHeader pageContent =
             Container.jumbotron
                 |> Container.withFullWidth
                 |> Container.withChild (Container.simple [] jumbotronContent)
-                |> Container.withExtraAttrs [ Background.color context.purpleColor ]
+                |> Container.withExtraAttrs [ Background.color context.themeConfig.globalConfig.colors.purple ]
                 |> Container.view
         )
 

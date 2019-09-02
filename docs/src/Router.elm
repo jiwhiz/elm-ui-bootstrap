@@ -24,7 +24,7 @@ import Page.Table as Table
 import Page.Typography as Typography
 import Ports
 import Routes exposing (Route(..))
-import SharedState exposing (SharedState, SharedStateUpdate, Theme(..))
+import SharedState exposing (SharedState, SharedStateUpdate)
 import Task
 import UiFramework exposing (WithContext, toElement)
 import UiFramework.Navbar
@@ -155,22 +155,22 @@ tabBarTitle model =
 view : (Msg -> msg) -> Model -> SharedState -> Html msg
 view toMsg model sharedState =
     let
-        themeConfig =
-            SharedState.getThemeConfig sharedState.theme
+        globalConfig =
+            sharedState.themeConfig.globalConfig
     in
     Element.el
         [ Element.width Element.fill
         , Element.height Element.fill
-        , Background.color themeConfig.globalConfig.bodyBackground
-        , Font.color <| themeConfig.globalConfig.fontColor themeConfig.globalConfig.bodyBackground
+        , Background.color globalConfig.bodyBackground
+        , Font.color <| globalConfig.fontColor globalConfig.bodyBackground
         , Element.paddingXY 0 50
-        , Font.family themeConfig.globalConfig.fontConfig.fontFamily
+        , Font.family globalConfig.fontConfig.fontFamily
         , Font.size 16 -- idk why I have to add this here. Somehow it automatically makes it 20??
         ]
         (content model sharedState)
         |> Element.layout
             [ Element.inFront <| navbar model sharedState
-            , Font.family themeConfig.globalConfig.fontConfig.fontFamily
+            , Font.family globalConfig.fontConfig.fontFamily
             ]
         |> Html.map toMsg
 
@@ -185,7 +185,7 @@ navbar model sharedState =
 
         context =
             { device = sharedState.device
-            , themeConfig = SharedState.getThemeConfig sharedState.theme
+            , themeConfig = sharedState.themeConfig
             , parentRole = Nothing
             }
 
@@ -302,7 +302,6 @@ type Msg
     | TypographyMsg Typography.Msg
     | FormMsg Form.Msg
     | NotFoundMsg NotFound.Msg
-    | SelectTheme Theme
     | ToggleDropdown
     | ToggleMenu
     | NoOp
@@ -386,12 +385,6 @@ update sharedState msg model =
         ( NotFoundMsg subMsg, NotFoundPage subModel ) ->
             NotFound.update sharedState subMsg subModel
                 |> updateWith NotFoundPage NotFoundMsg model
-
-        ( SelectTheme theme, _ ) ->
-            ( { model | dropdownMenuState = AllClosed }
-            , Cmd.none
-            , SharedState.UpdateTheme theme
-            )
 
         ( ToggleDropdown, _ ) ->
             let

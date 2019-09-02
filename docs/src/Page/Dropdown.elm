@@ -1,5 +1,6 @@
 module Page.Dropdown exposing (Context, Model, Msg(..), init, update, view)
 
+import Common exposing (code, componentNavbar, section, title, viewHeader, wrappedText)
 import Element exposing (Color, Element, fill, height, spacing, width)
 import FontAwesome.Solid
 import Routes
@@ -10,11 +11,6 @@ import UiFramework.Dropdown as Dropdown
 import UiFramework.Types exposing (Role(..))
 import UiFramework.Typography as Typography
 import Util
-import View.Component as Component exposing (componentNavbar, viewHeader)
-
-
-
--- UIFRAMEWORK TYPE
 
 
 type alias UiElement msg =
@@ -36,13 +32,8 @@ init =
     )
 
 
-
--- Context
-
-
 type alias Context =
-    { purpleColor : Color
-    , simpleDropdownState : Bool
+    { simpleDropdownState : Bool
     }
 
 
@@ -50,8 +41,7 @@ toContext : Model -> SharedState -> UiContextual Context
 toContext model sharedState =
     { device = sharedState.device
     , parentRole = Nothing
-    , themeConfig = SharedState.getThemeConfig sharedState.theme
-    , purpleColor = sharedState.purpleColor
+    , themeConfig = sharedState.themeConfig
     , simpleDropdownState = model.simpleDropdownState
     }
 
@@ -102,8 +92,8 @@ basicExample =
                 [ width fill
                 , Element.spacing 32
                 ]
-                [ Component.title "Basic Example"
-                , Component.wrappedText "The implementation of Dropdowns closely align with Navbars and Paginations. Dropdowns need a state to dictate their actions, though here, that state is fully up the the developer to choose. For this simple demo I've made that state a boolean."
+                [ title "Basic Example"
+                , wrappedText "The implementation of Dropdowns closely align with Navbars and Paginations. Dropdowns need a state to dictate their actions, though here, that state is fully up the the developer to choose. For this simple demo I've made that state a boolean."
                 , Dropdown.default ToggleSimpleDropdown True
                     |> Dropdown.withTitle "Static Dropdown"
                     |> Dropdown.withIcon FontAwesome.Solid.appleAlt
@@ -115,7 +105,7 @@ basicExample =
                             |> Dropdown.withMenuTitle "With Icon"
                         ]
                     |> Dropdown.view context.simpleDropdownState
-                , Component.wrappedText "The code below is greatly simplified from the actual implementation of the UiFramework, but serves as a way to showcase how to get the types working."
+                , wrappedText "The code below is greatly simplified from the actual implementation of the UiFramework, but serves as a way to showcase how to get the types working."
                 , basicExampleCode
                 ]
         )

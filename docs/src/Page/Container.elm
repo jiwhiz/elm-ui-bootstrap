@@ -1,5 +1,6 @@
-module Page.Container exposing (Context, Model, Msg(..), init, update, view)
+module Page.Container exposing (Model, Msg(..), init, update, view)
 
+import Common exposing (code, componentNavbar, section, title, viewHeader, wrappedText)
 import Element exposing (Color, Element, fill, height, spacing, width)
 import Element.Background as Background
 import Element.Border as Border
@@ -10,15 +11,10 @@ import UiFramework.Container as Container
 import UiFramework.Types exposing (Role(..))
 import UiFramework.Typography as Typography
 import Util
-import View.Component as Component exposing (componentNavbar, viewHeader)
-
-
-
--- UIFRAMEWORK TYPE
 
 
 type alias UiElement msg =
-    WithContext Context msg
+    WithContext {} msg
 
 
 
@@ -34,20 +30,11 @@ init =
     ( {}, Cmd.none )
 
 
-
--- Context
-
-
-type alias Context =
-    { purpleColor : Color }
-
-
-toContext : SharedState -> UiContextual Context
+toContext : SharedState -> UiContextual {}
 toContext sharedState =
     { device = sharedState.device
     , parentRole = Nothing
-    , themeConfig = SharedState.getThemeConfig sharedState.theme
-    , purpleColor = sharedState.purpleColor
+    , themeConfig = sharedState.themeConfig
     }
 
 
@@ -96,12 +83,12 @@ basicExample =
         [ width fill
         , Element.spacing 32
         ]
-        [ Component.title "Basic Example"
-        , Component.wrappedText "Default containers are responsive, with fixed max-widths that change at each breakpoint. Imo, containers are dwarved by the uiColumn and uiRow elements, and are not really used anywhere other than being a top-level parent element that dictates the width of the content."
+        [ title "Basic Example"
+        , wrappedText "Default containers are responsive, with fixed max-widths that change at each breakpoint. Imo, containers are dwarved by the uiColumn and uiRow elements, and are not really used anywhere other than being a top-level parent element that dictates the width of the content."
         , UiFramework.flatMap
             (\context ->
                 Container.simple
-                    [ Background.color context.purpleColor
+                    [ Background.color context.themeConfig.globalConfig.colors.purple
                     , Element.height (Element.px 20)
                     ]
                     UiFramework.uiNone
@@ -132,8 +119,8 @@ configuration =
         ]
         [ UiFramework.uiColumn
             [ spacing 16 ]
-            [ Component.title "Configurations"
-            , Component.wrappedText "Custom containers are often built using pipelines starting from the default container function."
+            [ title "Configurations"
+            , wrappedText "Custom containers are often built using pipelines starting from the default container function."
             ]
         , configExampleCode
         , fullWidthConfig
@@ -167,8 +154,8 @@ childConfig =
         [ width fill
         , Element.spacing 32
         ]
-        [ Component.section "Children"
-        , Component.wrappedText "Containers can only hold 1 child element, since uiRow and uiColumn are used to hold multiple children."
+        [ section "Children"
+        , wrappedText "Containers can only hold 1 child element, since uiRow and uiColumn are used to hold multiple children."
         , Container.default
             |> Container.withChild (Util.text "Hello")
             |> Container.view
@@ -192,8 +179,8 @@ fullWidthConfig =
         [ spacing 16
         , width fill
         ]
-        [ Component.section "Using fullWidth"
-        , Component.wrappedText "This function is similar to Bootstrap's .container-fluid class, where instead of  a max-width property that changes based on the screen width, it always fills the width of the parent element."
+        [ section "Using fullWidth"
+        , wrappedText "This function is similar to Bootstrap's .container-fluid class, where instead of  a max-width property that changes based on the screen width, it always fills the width of the parent element."
         , Container.default
             |> Container.withFullWidth
             |> Container.withExtraAttrs
@@ -225,8 +212,8 @@ jumbotronConfig =
         [ spacing 16
         , width fill
         ]
-        [ Component.section "Jumbotron"
-        , Component.wrappedText "Jumbotrons highlight content by changing a background. That's really all it does."
+        [ section "Jumbotron"
+        , wrappedText "Jumbotrons highlight content by changing a background. That's really all it does."
         , Container.jumbotron
             |> Container.withFullWidth
             |> Container.withChild
@@ -271,8 +258,8 @@ attributeConfigs =
         [ spacing 16
         , width fill
         ]
-        [ Component.section "Adding extra attributes"
-        , Component.wrappedText "Using Elm-Ui, we can modify our containers."
+        [ section "Adding extra attributes"
+        , wrappedText "Using Elm-Ui, we can modify our containers."
         , Container.default
             |> Container.withExtraAttrs
                 [ Border.width 5

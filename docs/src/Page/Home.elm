@@ -1,5 +1,6 @@
 module Page.Home exposing (Model, Msg(..), init, update, view)
 
+import Common exposing (code, componentNavbar, section, title, viewHeader, wrappedText)
 import Element exposing (Color, Element)
 import Element.Background as Background
 import Element.Font as Font
@@ -10,7 +11,6 @@ import UiFramework.Button as Button
 import UiFramework.Container as Container
 import UiFramework.Typography as Typography
 import Util
-import View.Component as Component
 
 
 
@@ -18,7 +18,7 @@ import View.Component as Component
 
 
 type alias UiElement msg =
-    WithContext Context msg
+    WithContext {} msg
 
 
 
@@ -36,20 +36,11 @@ init =
     )
 
 
-
--- Context
-
-
-type alias Context =
-    { purpleColor : Color }
-
-
-toContext : SharedState -> UiContextual Context
+toContext : SharedState -> UiContextual {}
 toContext sharedState =
     { device = sharedState.device
     , parentRole = Nothing
-    , themeConfig = SharedState.getThemeConfig sharedState.theme
-    , purpleColor = sharedState.purpleColor
+    , themeConfig = sharedState.themeConfig
     }
 
 
@@ -95,7 +86,7 @@ header =
             Container.jumbotron
                 |> Container.withFullWidth
                 |> Container.withChild (Container.simple [] jumbotronContent)
-                |> Container.withExtraAttrs [ Background.color context.purpleColor ]
+                |> Container.withExtraAttrs [ Background.color context.themeConfig.globalConfig.colors.purple ]
                 |> Container.view
         )
 
@@ -125,10 +116,10 @@ description =
             ]
             [ Typography.h1
                 [ Element.width Element.fill, Font.center ]
-                (Component.wrappedText "Responsive, Scalable, and Composable Projects on the Web")
+                (wrappedText "Responsive, Scalable, and Composable Projects on the Web")
             , Typography.textLead
                 [ Element.width Element.fill, Font.center ]
-                (Component.wrappedText "Elm Ui Bootstrap is better than Elm Bootstrap lol")
+                (wrappedText "Elm Ui Bootstrap is better than Elm Bootstrap lol")
             , UiFramework.uiRow
                 [ Element.width Element.fill
                 , Element.paddingXY 0 64
@@ -142,7 +133,7 @@ description =
                     [ Typography.h4
                         []
                         (text "Getting Started")
-                    , Component.wrappedText "Get to know the basics of the Context architecture, and how to use it to greatly simplify your code. Download the starter application (which is not yet finished) and start fiddling around with the code with elm-live."
+                    , wrappedText "Get to know the basics of the Context architecture, and how to use it to greatly simplify your code. Download the starter application (which is not yet finished) and start fiddling around with the code with elm-live."
                     , getStartedButton
                     ]
                 , UiFramework.uiColumn
@@ -153,7 +144,7 @@ description =
                     [ Typography.h4
                         []
                         (text "Documentation")
-                    , Component.wrappedText "Learn the components of the UiFramework, and understand the modularity and type safe API through clear explanations and code examples. "
+                    , wrappedText "Learn the components of the UiFramework, and understand the modularity and type safe API through clear explanations and code examples. "
                     , learnMoreButton
                     ]
                 ]

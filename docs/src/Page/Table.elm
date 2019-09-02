@@ -1,5 +1,6 @@
-module Page.Table exposing (Context, Model, Msg(..), init, update, view)
+module Page.Table exposing (Model, Msg(..), init, update, view)
 
+import Common exposing (code, componentNavbar, section, title, viewHeader, wrappedText)
 import Element exposing (Color, Element, fill, height, spacing, width)
 import Element.Font as Font
 import Routes
@@ -10,7 +11,6 @@ import UiFramework.Table as Table
 import UiFramework.Types exposing (Role(..))
 import UiFramework.Typography as Typography
 import Util
-import View.Component as Component exposing (componentNavbar, viewHeader)
 
 
 
@@ -18,7 +18,7 @@ import View.Component as Component exposing (componentNavbar, viewHeader)
 
 
 type alias UiElement msg =
-    WithContext Context msg
+    WithContext {} msg
 
 
 
@@ -34,20 +34,11 @@ init =
     ( {}, Cmd.none )
 
 
-
--- Context
-
-
-type alias Context =
-    { purpleColor : Color }
-
-
-toContext : SharedState -> UiContextual Context
+toContext : SharedState -> UiContextual {}
 toContext sharedState =
     { device = sharedState.device
     , parentRole = Nothing
-    , themeConfig = SharedState.getThemeConfig sharedState.theme
-    , purpleColor = sharedState.purpleColor
+    , themeConfig = sharedState.themeConfig
     }
 
 
@@ -96,8 +87,8 @@ basicExample =
         [ width fill
         , Element.spacing 32
         ]
-        [ Component.title "Basic Example"
-        , Component.wrappedText "The table module does not have a \"Table.default\" function - you must build up from the Table.simpleTable. Nevertheless, here is a basic example with hardcoded data."
+        [ title "Basic Example"
+        , wrappedText "The table module does not have a \"Table.default\" function - you must build up from the Table.simpleTable. Nevertheless, here is a basic example with hardcoded data."
         , Table.simpleTable
             |> Table.withColumns tableColumn
             |> Table.view information
@@ -164,8 +155,8 @@ styles =
         [ width fill
         , Element.spacing 32
         ]
-        [ Component.title "Styles"
-        , Component.wrappedText "There are a variety of styling configurations one can choose from when making a table."
+        [ title "Styles"
+        , wrappedText "There are a variety of styling configurations one can choose from when making a table."
         , stripedConfig
         , borderConfig
         , compactConfig
@@ -178,8 +169,8 @@ stripedConfig =
         [ width fill
         , Element.spacing 32
         ]
-        [ Component.section "Striped tables"
-        , Component.wrappedText "Tables can be striped with little extra code. So far, all tables are striped though lol."
+        [ section "Striped tables"
+        , wrappedText "Tables can be striped with little extra code. So far, all tables are striped though lol."
         , Table.simpleTable
             |> Table.withColumns tableColumn
             |> Table.withStriped
@@ -205,14 +196,14 @@ borderConfig =
         [ width fill
         , Element.spacing 32
         ]
-        [ Component.section "Bordered and Borderless"
-        , Component.wrappedText "Table borders can be configured. Below is a borderless one."
+        [ section "Bordered and Borderless"
+        , wrappedText "Table borders can be configured. Below is a borderless one."
         , Table.simpleTable
             |> Table.withBorderless
             |> Table.withColumns tableColumn
             |> Table.view information
         , borderLessCode
-        , Component.wrappedText "And below is one with all borders."
+        , wrappedText "And below is one with all borders."
         , Table.simpleTable
             |> Table.withBordered
             |> Table.withColumns tableColumn
@@ -249,7 +240,7 @@ compactConfig =
         [ width fill
         , Element.spacing 32
         ]
-        [ Component.section "Compact tables"
+        [ section "Compact tables"
         , Table.simpleTable
             |> Table.withCompact
             |> Table.withColumns tableColumn

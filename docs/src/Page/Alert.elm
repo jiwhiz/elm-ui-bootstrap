@@ -1,5 +1,6 @@
-module Page.Alert exposing (Context, Model, Msg(..), init, update, view)
+module Page.Alert exposing (Model, Msg(..), init, update, view)
 
+import Common exposing (code, componentNavbar, section, title, viewHeader, wrappedText)
 import Element exposing (Color, Element, fill, height, spacing, width)
 import Element.Border as Border
 import Routes
@@ -11,15 +12,10 @@ import UiFramework.Container as Container
 import UiFramework.Types exposing (Role(..))
 import UiFramework.Typography as Typography
 import Util
-import View.Component as Component exposing (componentNavbar, viewHeader)
-
-
-
--- UIFRAMEWORK TYPE
 
 
 type alias UiElement msg =
-    WithContext Context msg
+    WithContext {} msg
 
 
 
@@ -35,20 +31,11 @@ init =
     ( {}, Cmd.none )
 
 
-
--- Context
-
-
-type alias Context =
-    { purpleColor : Color }
-
-
-toContext : SharedState -> UiContextual Context
+toContext : SharedState -> UiContextual {}
 toContext sharedState =
     { device = sharedState.device
     , parentRole = Nothing
-    , themeConfig = SharedState.getThemeConfig sharedState.theme
-    , purpleColor = sharedState.purpleColor
+    , themeConfig = sharedState.themeConfig
     }
 
 
@@ -97,8 +84,8 @@ basicExample =
         [ spacing 16
         , width fill
         ]
-        [ Component.title "Basic Example"
-        , Component.wrappedText "Alerts are available in 8 different roles and are available for any length of text"
+        [ title "Basic Example"
+        , wrappedText "Alerts are available in 8 different roles and are available for any length of text"
         , UiFramework.uiColumn
             [ Element.spacing 8
             , Element.width Element.fill
@@ -152,10 +139,10 @@ configuration =
         ]
         [ UiFramework.uiColumn
             [ spacing 16 ]
-            [ Component.title "Configurations"
+            [ title "Configurations"
             , UiFramework.uiParagraph []
                 [ Util.text "When configuring, we use pipelines to build up our badge, starting from the default function, "
-                , Component.code "Alert.default"
+                , code "Alert.default"
                 ]
             ]
         , configExampleCode
@@ -192,8 +179,8 @@ sizeConfigs =
         [ spacing 16
         , width fill
         ]
-        [ Component.section "Sizing"
-        , Component.wrappedText "There are three sizes available to alerts."
+        [ section "Sizing"
+        , wrappedText "There are three sizes available to alerts."
         , UiFramework.uiColumn
             [ Element.spacing 8
             , width fill
@@ -248,7 +235,7 @@ roleConfigs =
         [ spacing 16
         , width fill
         ]
-        [ Component.section "Roles"
+        [ section "Roles"
         , UiFramework.uiColumn
             [ Element.spacing 8
             , width fill
@@ -301,10 +288,10 @@ childConfigs =
         [ spacing 16
         , width fill
         ]
-        [ Component.section "Child elements"
+        [ section "Child elements"
         , UiFramework.uiParagraph []
             [ Util.text "Alerts allow any "
-            , Component.code "UiElement"
+            , code "UiElement"
             , Util.text " node to be a child"
             ]
         , Alert.simple Success <|
@@ -354,8 +341,8 @@ attributeConfigs =
         [ spacing 16
         , width fill
         ]
-        [ Component.section "Adding extra attributes"
-        , Component.wrappedText "Using Elm-Ui's styling, we can modify our alerts how we choose."
+        [ section "Adding extra attributes"
+        , wrappedText "Using Elm-Ui's styling, we can modify our alerts how we choose."
         , Alert.default
             |> Alert.withChild (Util.text "This alert has a thicc border")
             |> Alert.withExtraAttrs

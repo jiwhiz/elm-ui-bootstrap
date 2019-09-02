@@ -1,5 +1,6 @@
-module Page.Icon exposing (Context, Model, Msg(..), init, update, view)
+module Page.Icon exposing (Model, Msg(..), init, update, view)
 
+import Common exposing (code, componentNavbar, section, title, viewHeader, wrappedText)
 import Element exposing (Color, Element, fill, height, spacing, width)
 import FontAwesome.Brands
 import FontAwesome.Solid
@@ -13,7 +14,6 @@ import UiFramework.Navbar as Navbar
 import UiFramework.Types exposing (Role(..))
 import UiFramework.Typography as Typography
 import Util
-import View.Component as Component exposing (componentNavbar, viewHeader)
 
 
 
@@ -21,7 +21,7 @@ import View.Component as Component exposing (componentNavbar, viewHeader)
 
 
 type alias UiElement msg =
-    WithContext Context msg
+    WithContext {} msg
 
 
 
@@ -37,20 +37,11 @@ init =
     ( {}, Cmd.none )
 
 
-
--- Context
-
-
-type alias Context =
-    { purpleColor : Color }
-
-
-toContext : SharedState -> UiContextual Context
+toContext : SharedState -> UiContextual {}
 toContext sharedState =
     { device = sharedState.device
     , parentRole = Nothing
-    , themeConfig = SharedState.getThemeConfig sharedState.theme
-    , purpleColor = sharedState.purpleColor
+    , themeConfig = sharedState.themeConfig
     }
 
 
@@ -100,8 +91,8 @@ basicExample =
         [ width fill
         , Element.spacing 32
         ]
-        [ Component.title "Basic Example"
-        , Component.wrappedText "Basic icons are rendered with Lattyware's Elm FontAwesome module. It is converted to an Element type (from Elm ui), though unfortunately the conversion from the Element type to the UiElement type seems a bit weird."
+        [ title "Basic Example"
+        , wrappedText "Basic icons are rendered with Lattyware's Elm FontAwesome module. It is converted to an Element type (from Elm ui), though unfortunately the conversion from the Element type to the UiElement type seems a bit weird."
         , UiFramework.fromElement (\_ -> Icon.view FontAwesome.Solid.cog)
         , basicExampleCode
         ]
@@ -126,8 +117,8 @@ gettingStarted =
         [ width fill
         , Element.spacing 32
         ]
-        [ Component.title "Getting Started"
-        , Component.wrappedText "A stylesheet needs to be added in order for the icons to render properly, though. the FontAwesome.Styles.css is a nice Html function you can easily put in your code (after rendering it from a UiElement type) to easily add in all the necessary styles. Here is an example:"
+        [ title "Getting Started"
+        , wrappedText "A stylesheet needs to be added in order for the icons to render properly, though. the FontAwesome.Styles.css is a nice Html function you can easily put in your code (after rendering it from a UiElement type) to easily add in all the necessary styles. Here is an example:"
         , gettingStartedCode
         ]
 
@@ -160,8 +151,8 @@ realLifeUses =
         [ width fill
         , Element.spacing 32
         ]
-        [ Component.title "Using Icons"
-        , Component.wrappedText "Using icons may seem rather painful by itself, but they are easily implemented in Navbars and Buttons, for example."
+        [ title "Using Icons"
+        , wrappedText "Using icons may seem rather painful by itself, but they are easily implemented in Navbars and Buttons, for example."
         , UiFramework.uiRow
             [ spacing 8 ]
             [ Button.default

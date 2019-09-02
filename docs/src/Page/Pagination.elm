@@ -1,5 +1,6 @@
-module Page.Pagination exposing (Context, Model, Msg(..), init, update, view)
+module Page.Pagination exposing (Model, Msg(..), init, update, view)
 
+import Common exposing (code, componentNavbar, section, title, viewHeader, wrappedText)
 import Element exposing (Color, Element, fill, height, spacing, width)
 import Element.Font as Font
 import Routes
@@ -10,7 +11,6 @@ import UiFramework.Pagination as Pagination exposing (PaginationState)
 import UiFramework.Types exposing (Role(..))
 import UiFramework.Typography as Typography
 import Util
-import View.Component as Component exposing (componentNavbar, viewHeader)
 
 
 
@@ -45,8 +45,7 @@ init =
 
 
 type alias Context =
-    { purpleColor : Color
-    , paginationState : PaginationState
+    { paginationState : PaginationState
     }
 
 
@@ -54,8 +53,7 @@ toContext : Model -> SharedState -> UiContextual Context
 toContext model sharedState =
     { device = sharedState.device
     , parentRole = Nothing
-    , themeConfig = SharedState.getThemeConfig sharedState.theme
-    , purpleColor = sharedState.purpleColor
+    , themeConfig = sharedState.themeConfig
     , paginationState = model.paginationState
     }
 
@@ -105,9 +103,9 @@ basicExample =
         [ width fill
         , Element.spacing 32
         ]
-        [ Component.title "Basic Example"
-        , Component.wrappedText "Paginations need states and boilerplate code to handle its responsive behaviour, but for now, let's make a simple static pagination. A basic example of that would look like this."
-        , Component.wrappedText "Note that you still need to import the FontAwesome stylesheet into your code, as the buttons rely on their icons."
+        [ title "Basic Example"
+        , wrappedText "Paginations need states and boilerplate code to handle its responsive behaviour, but for now, let's make a simple static pagination. A basic example of that would look like this."
+        , wrappedText "Note that you still need to import the FontAwesome stylesheet into your code, as the buttons rely on their icons."
         , Pagination.default (\_ -> NoOp)
             |> Pagination.withItems
                 [ Pagination.NumberItem 0
@@ -161,8 +159,8 @@ responsiveExample =
                 [ width fill
                 , Element.spacing 32
                 ]
-                [ Component.title "Responsive Example"
-                , Component.wrappedText "A responsive pagination only needs the pagination state to calculate everything. Below is an example of one."
+                [ title "Responsive Example"
+                , wrappedText "A responsive pagination only needs the pagination state to calculate everything. Below is an example of one."
                 , let
                     state =
                         context.paginationState
@@ -208,9 +206,9 @@ responsiveExample =
                                 , paginationElement
                                 ]
                        )
-                , Component.wrappedText "Paginations need the full model-view-update architecture to function, so here's a complete code set to deal with a simple responsive pagination."
+                , wrappedText "Paginations need the full model-view-update architecture to function, so here's a complete code set to deal with a simple responsive pagination."
                 , responsiveExampleCode
-                , Component.wrappedText "Because of the flags, you'll also need to configure an index.html file. Below is the setup you can use yourself."
+                , wrappedText "Because of the flags, you'll also need to configure an index.html file. Below is the setup you can use yourself."
                 , basicHtmlCode
                 ]
         )

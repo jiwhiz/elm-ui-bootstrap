@@ -1,5 +1,6 @@
-module Page.Typography exposing (Context, Model, Msg(..), init, update, view)
+module Page.Typography exposing (Model, Msg(..), init, update, view)
 
+import Common exposing (code, componentNavbar, section, title, viewHeader, wrappedText)
 import Element exposing (Color, Element, fill, height, spacing, width)
 import Routes
 import SharedState exposing (SharedState, SharedStateUpdate(..))
@@ -8,7 +9,6 @@ import UiFramework.Container as Container
 import UiFramework.Types exposing (Role(..))
 import UiFramework.Typography as Typography
 import Util
-import View.Component as Component exposing (componentNavbar, viewHeader)
 
 
 
@@ -16,7 +16,7 @@ import View.Component as Component exposing (componentNavbar, viewHeader)
 
 
 type alias UiElement msg =
-    WithContext Context msg
+    WithContext {} msg
 
 
 
@@ -32,20 +32,11 @@ init =
     ( {}, Cmd.none )
 
 
-
--- Context
-
-
-type alias Context =
-    { purpleColor : Color }
-
-
-toContext : SharedState -> UiContextual Context
+toContext : SharedState -> UiContextual {}
 toContext sharedState =
     { device = sharedState.device
     , parentRole = Nothing
-    , themeConfig = SharedState.getThemeConfig sharedState.theme
-    , purpleColor = sharedState.purpleColor
+    , themeConfig = sharedState.themeConfig
     }
 
 
@@ -94,8 +85,8 @@ headers =
         [ width fill
         , Element.spacing 32
         ]
-        [ Component.title "Headers"
-        , Component.section "Displays - or Very Large Headers"
+        [ title "Headers"
+        , section "Displays - or Very Large Headers"
         , UiFramework.uiColumn
             [ spacing 16 ]
             [ Typography.display1 [] (Util.text "Display1")
@@ -104,7 +95,7 @@ headers =
             , Typography.display4 [] (Util.text "Display4")
             ]
         , displayCode
-        , Component.section "Headers - the Regular H1's"
+        , section "Headers - the Regular H1's"
         , UiFramework.uiColumn
             [ spacing 16 ]
             [ Typography.h1 [] (Util.text "H1")
@@ -162,7 +153,7 @@ text =
         [ width fill
         , Element.spacing 32
         ]
-        [ Component.title "Text blocks"
+        [ title "Text blocks"
         , UiFramework.uiColumn
             [ spacing 16 ]
             [ Typography.textLead [] (Util.text "Text Lead - Use me below titles!")

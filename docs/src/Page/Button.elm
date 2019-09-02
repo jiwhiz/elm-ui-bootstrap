@@ -1,5 +1,6 @@
-module Page.Button exposing (Context, Model, Msg(..), init, update, view)
+module Page.Button exposing (Model, Msg(..), init, update, view)
 
+import Common exposing (code, componentNavbar, section, title, viewHeader, wrappedText)
 import Element exposing (Color, Element, fill, height, spacing, width)
 import FontAwesome.Brands
 import Routes
@@ -9,15 +10,10 @@ import UiFramework.Button as Button
 import UiFramework.Container as Container
 import UiFramework.Types exposing (Role(..))
 import Util
-import View.Component as Component exposing (componentNavbar, viewHeader)
-
-
-
--- UIFRAMEWORK TYPE
 
 
 type alias UiElement msg =
-    WithContext Context msg
+    WithContext {} msg
 
 
 
@@ -33,20 +29,11 @@ init =
     ( {}, Cmd.none )
 
 
-
--- Context
-
-
-type alias Context =
-    { purpleColor : Color }
-
-
-toContext : SharedState -> UiContextual Context
+toContext : SharedState -> UiContextual {}
 toContext sharedState =
     { device = sharedState.device
     , parentRole = Nothing
-    , themeConfig = SharedState.getThemeConfig sharedState.theme
-    , purpleColor = sharedState.purpleColor
+    , themeConfig = sharedState.themeConfig
     }
 
 
@@ -110,8 +97,8 @@ basicExample =
         [ width fill
         , Element.spacing 32
         ]
-        [ Component.title "Basic Example"
-        , Component.wrappedText "Default buttons take in a message to trigger when clicked, and a string for the label. Icons are optional, and can be added through configuration."
+        [ title "Basic Example"
+        , wrappedText "Default buttons take in a message to trigger when clicked, and a string for the label. Icons are optional, and can be added through configuration."
         , UiFramework.uiWrappedRow
             [ Element.spacing 4 ]
             [ Button.simple NoOp "Do Something" ]
@@ -142,10 +129,10 @@ configuration =
         ]
         [ UiFramework.uiColumn
             [ spacing 16 ]
-            [ Component.title "Configurations"
+            [ title "Configurations"
             , UiFramework.uiParagraph []
                 [ Util.text "When configuring, we use pipelines to build up our button, starting from the default function, "
-                , Component.code "Button.default"
+                , code "Button.default"
                 ]
             ]
         , configExampleCode
@@ -199,8 +186,8 @@ roleConfig =
         [ width fill
         , Element.spacing 32
         ]
-        [ Component.section "Roles"
-        , Component.wrappedText "There are 6 roles for a button, as well as a Light and Dark role. By default it is the Primary role"
+        [ section "Roles"
+        , wrappedText "There are 6 roles for a button, as well as a Light and Dark role. By default it is the Primary role"
         , UiFramework.uiWrappedRow
             [ Element.spacing 4 ]
             (List.map
@@ -252,8 +239,8 @@ basicFunctionalityConfig =
         [ width fill
         , Element.spacing 32
         ]
-        [ Component.section "withMessage and withLabel"
-        , Component.wrappedText "These provide the same functionality as Button.simple. By default, every button has a label of an empty string and Nothing for a message."
+        [ section "withMessage and withLabel"
+        , wrappedText "These provide the same functionality as Button.simple. By default, every button has a label of an empty string and Nothing for a message."
         , Button.simple NoOp "Button"
         , basicFunctionalityConfigCode
         ]
@@ -285,10 +272,10 @@ outlineConfig =
         [ width fill
         , Element.spacing 32
         ]
-        [ Component.section "Outline"
+        [ section "Outline"
         , UiFramework.uiParagraph []
             [ Util.text "Bootstrap gives you "
-            , Component.code "Button.withOutlined"
+            , code "Button.withOutlined"
             , Util.text ", where the background colors are removed."
             ]
         , UiFramework.uiWrappedRow
@@ -333,8 +320,8 @@ sizeConfig =
         [ width fill
         , Element.spacing 32
         ]
-        [ Component.section "Sizes"
-        , Component.wrappedText "Large and small buttons differ in font and padding size."
+        [ section "Sizes"
+        , wrappedText "Large and small buttons differ in font and padding size."
         , UiFramework.uiWrappedRow
             [ Element.spacing 4 ]
             [ Button.default
@@ -380,10 +367,10 @@ blockConfig =
         [ width fill
         , Element.spacing 32
         ]
-        [ Component.section "Block buttons"
+        [ section "Block buttons"
         , UiFramework.uiParagraph []
             [ Util.text "Take up the entirety of the parent container width via the "
-            , Component.code "withBlock"
+            , code "withBlock"
             , Util.text " function. This option is not functional yet."
             ]
         , Button.default
@@ -411,10 +398,10 @@ disableConfig =
         [ width fill
         , Element.spacing 32
         ]
-        [ Component.section "Disabled buttons"
+        [ section "Disabled buttons"
         , UiFramework.uiParagraph []
             [ Util.text "Make a button look inactive by the "
-            , Component.code "withDisabled"
+            , code "withDisabled"
             , Util.text " function."
             ]
         , UiFramework.uiWrappedRow
@@ -459,8 +446,8 @@ iconConfig =
         [ width fill
         , Element.spacing 32
         ]
-        [ Component.section "Buttons with Icons"
-        , Component.wrappedText "Though used primarily with navbars, buttons with icons can serve other uses as well."
+        [ section "Buttons with Icons"
+        , wrappedText "Though used primarily with navbars, buttons with icons can serve other uses as well."
         , UiFramework.uiParagraph []
             [ Util.text "Note that you'll have to "
             , Util.text "include the required CSS in your website "
@@ -469,7 +456,7 @@ iconConfig =
             ]
         , UiFramework.uiParagraph []
             [ Util.text "As of now, you cannot add a custom"
-            , Component.code "UiElement"
+            , code "UiElement"
             , Util.text " to a button. This means you cannot add an animated icon, for example."
             ]
         , UiFramework.uiWrappedRow

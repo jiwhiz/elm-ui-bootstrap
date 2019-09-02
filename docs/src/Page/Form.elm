@@ -1,5 +1,6 @@
-module Page.Form exposing (Context, Model, Msg(..), init, update, view)
+module Page.Form exposing (Model, Msg(..), init, update, view)
 
+import Common exposing (code, componentNavbar, section, title, viewHeader, wrappedText)
 import Element exposing (Color, Element, fill, height, spacing, width)
 import Element.Border as Border
 import Routes
@@ -9,15 +10,10 @@ import UiFramework.Container as Container
 import UiFramework.Types exposing (Role(..))
 import UiFramework.Typography as Typography
 import Util
-import View.Component as Component exposing (componentNavbar, viewHeader)
-
-
-
--- UIFRAMEWORK TYPE
 
 
 type alias UiElement msg =
-    WithContext Context msg
+    WithContext {} msg
 
 
 
@@ -33,20 +29,11 @@ init =
     ( {}, Cmd.none )
 
 
-
--- Context
-
-
-type alias Context =
-    { purpleColor : Color }
-
-
-toContext : SharedState -> UiContextual Context
+toContext : SharedState -> UiContextual {}
 toContext sharedState =
     { device = sharedState.device
     , parentRole = Nothing
-    , themeConfig = SharedState.getThemeConfig sharedState.theme
-    , purpleColor = sharedState.purpleColor
+    , themeConfig = sharedState.themeConfig
     }
 
 
@@ -95,8 +82,8 @@ basicExample =
         [ spacing 16
         , width fill
         ]
-        [ Component.title "Basic Example"
-        , Component.wrappedText "Coming soon!"
+        [ title "Basic Example"
+        , wrappedText "Coming soon!"
         ]
 
 
@@ -108,7 +95,7 @@ configuration =
         ]
         [ UiFramework.uiColumn
             [ spacing 16 ]
-            [ Component.title "Configurations"
+            [ title "Configurations"
             , UiFramework.uiParagraph []
                 [ Util.text "Coming soon!" ]
             ]

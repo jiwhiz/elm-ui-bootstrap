@@ -1,5 +1,6 @@
-module Page.Navbar exposing (Context, Model, Msg(..), init, update, view)
+module Page.Navbar exposing (Model, Msg(..), init, update, view)
 
+import Common exposing (code, componentNavbar, section, title, viewHeader, wrappedText)
 import Element exposing (Color, Element, fill, height, spacing, width)
 import FontAwesome.Solid
 import Routes
@@ -11,7 +12,6 @@ import UiFramework.Navbar as Navbar
 import UiFramework.Types exposing (Role(..))
 import UiFramework.Typography as Typography
 import Util
-import View.Component as Component exposing (componentNavbar, viewHeader)
 
 
 
@@ -48,8 +48,7 @@ init =
 
 
 type alias Context =
-    { purpleColor : Color
-    , complexNavTheme : Role
+    { complexNavTheme : Role
     , complexNavState : Navbar.NavbarState ComplexDropdownState
     }
 
@@ -58,8 +57,7 @@ toContext : Model -> SharedState -> UiContextual Context
 toContext model sharedState =
     { device = sharedState.device
     , parentRole = Nothing
-    , themeConfig = SharedState.getThemeConfig sharedState.theme
-    , purpleColor = sharedState.purpleColor
+    , themeConfig = sharedState.themeConfig
     , complexNavTheme = model.complexNavTheme
     , complexNavState =
         { toggleMenuState = model.complexNavMenuState
@@ -117,8 +115,8 @@ basicExample =
         [ width fill
         , Element.spacing 32
         ]
-        [ Component.title "Basic Example"
-        , Component.wrappedText "Navbars are easy to create, but need some wiring to set up, as it requires states to handle the responsive behaviour."
+        [ title "Basic Example"
+        , wrappedText "Navbars are easy to create, but need some wiring to set up, as it requires states to handle the responsive behaviour."
         , Navbar.default NoOp
             |> Navbar.withBrand (Element.text "Navbar")
             |> Navbar.withMenuItems
@@ -136,7 +134,7 @@ basicExample =
                 ]
             |> Navbar.view { toggleMenuState = False, dropdownState = NoDropdowns }
         , basicExampleCode
-        , Component.wrappedText "Because of the flags, you'll also need to configure an index.html file. Below is a simple setup you can use yourself."
+        , wrappedText "Because of the flags, you'll also need to configure an index.html file. Below is a simple setup you can use yourself."
         , basicHtmlCode
         ]
 
@@ -336,8 +334,8 @@ complexExample =
                 [ width fill
                 , Element.spacing 32
                 ]
-                [ Component.title "Customization"
-                , Component.wrappedText "Navbars at the moment are pretty rigid, but there is a small amount of customization you can do. You can use Roles defined in UiFramework.Types to change the background color, and add dropdowns. In this navbar, we have a dropdown where we can change the background color based on three roles."
+                [ title "Customization"
+                , wrappedText "Navbars at the moment are pretty rigid, but there is a small amount of customization you can do. You can use Roles defined in UiFramework.Types to change the background color, and add dropdowns. In this navbar, we have a dropdown where we can change the background color based on three roles."
                 , Navbar.default ToggleComplexNav
                     |> Navbar.withBackground context.complexNavTheme
                     |> Navbar.withBrand (Element.text "Navbar")
@@ -362,7 +360,7 @@ complexExample =
                             |> Navbar.DropdownItem
                         ]
                     |> Navbar.view context.complexNavState
-                , Component.wrappedText "Below is the code you'll have to change in order to implement this new navbar."
+                , wrappedText "Below is the code you'll have to change in order to implement this new navbar."
                 , complexNavbarCode
                 ]
         )
