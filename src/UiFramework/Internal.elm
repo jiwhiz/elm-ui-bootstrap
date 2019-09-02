@@ -1,4 +1,18 @@
-module UiFramework.Internal exposing (UiContextual, WithContext, flatMap, fromElement, node, toElement, uiColumn, uiNone, uiParagraph, uiRow, uiText, uiWrappedRow)
+module UiFramework.Internal exposing
+    ( UiContextual
+    , WithContext
+    , flatMap
+    , fromElement
+    , node
+    , toElement
+    , uiColumn
+    , uiContextualText
+    , uiNone
+    , uiParagraph
+    , uiRow
+    , uiText
+    , uiWrappedRow
+    )
 
 import Element exposing (Attribute, Device, Element)
 import UiFramework.Configuration exposing (ThemeConfig)
@@ -60,8 +74,13 @@ uiNone =
     Leaf <| \_ -> Element.none
 
 
-uiText : (UiContextual c -> String) -> WithContext (UiContextual c) msg
-uiText f =
+uiText : String -> WithContext (UiContextual c) msg
+uiText string =
+    Leaf <| \context -> Element.text string
+
+
+uiContextualText : (UiContextual c -> String) -> WithContext (UiContextual c) msg
+uiContextualText f =
     Leaf <| \context -> Element.text <| f context
 
 
@@ -71,6 +90,7 @@ uiRow attrs =
         (\_ ->
             Element.row attrs
         )
+
 
 uiWrappedRow : List (Attribute msg) -> List (WithContext (UiContextual c) msg) -> WithContext (UiContextual c) msg
 uiWrappedRow attrs =

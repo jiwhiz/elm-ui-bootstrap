@@ -1,4 +1,17 @@
-module UiFramework exposing (UiContextual, WithContext, flatMap, fromElement, toElement, uiColumn, uiNone, uiParagraph, uiRow, uiText, uiWrappedRow)
+module UiFramework exposing
+    ( UiContextual
+    , WithContext
+    , flatMap
+    , fromElement
+    , toElement
+    , uiColumn
+    , uiContextualText
+    , uiNone
+    , uiParagraph
+    , uiRow
+    , uiText
+    , uiWrappedRow
+    )
 
 import Element exposing (Attribute, Element)
 import UiFramework.Internal as Internal
@@ -34,14 +47,20 @@ uiNone =
 
 {-| Text node.
 -}
-uiText : (UiContextual c -> String) -> WithContext c msg
+uiText : String -> WithContext c msg
 uiText =
     Internal.uiText
+
+
+uiContextualText : (UiContextual c -> String) -> WithContext c msg
+uiContextualText =
+    Internal.uiContextualText
 
 
 uiRow : List (Attribute msg) -> List (WithContext c msg) -> WithContext c msg
 uiRow =
     Internal.uiRow
+
 
 uiWrappedRow : List (Attribute msg) -> List (WithContext c msg) -> WithContext c msg
 uiWrappedRow =
