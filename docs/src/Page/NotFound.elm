@@ -87,7 +87,7 @@ icon : UiElement Msg
 icon =
     (\context ->
         Element.el
-            [ Font.color <| context.themeConfig.themeColor Secondary ]
+            [ Font.color <| context.themeConfig.globalConfig.themeColor Secondary ]
             (Icon.view FontAwesome.Solid.frown)
     )
         |> fromElement

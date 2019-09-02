@@ -188,16 +188,19 @@ view { toggleMenuState, dropdownState } (Navbar options) =
                 navbarConfig =
                     context.themeConfig.navbarConfig
 
+                globalConfig =
+                    context.themeConfig.globalConfig
+
                 backgroundColor =
                     case options.backgroundColor of
                         Roled role ->
-                            context.themeConfig.themeColor role
+                            globalConfig.themeColor role
 
                         Custom color ->
                             color
 
                 fontColor =
-                    context.themeConfig.fontColor backgroundColor
+                    globalConfig.fontColor backgroundColor
 
                 headerAttrs =
                     [ width fill

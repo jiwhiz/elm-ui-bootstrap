@@ -115,6 +115,16 @@ type alias FontConfig =
     }
 
 
+type alias GlobalConfig =
+    { colors : Colors
+    , themeColor : ThemeColor
+    , bodyBackground : Color
+    , bodyColor : Color
+    , fontConfig : FontConfig
+    , fontColor : Color -> Color
+    }
+
+
 type alias InputConfig =
     { fontColor : Color
     , fontSize : Int
@@ -202,19 +212,14 @@ type alias TableConfig =
 
 
 type alias ThemeConfig =
-    { colors : Colors
-    , themeColor : ThemeColor
-    , bodyBackground : Color
-    , bodyColor : Color
-    , fontConfig : FontConfig
-    , fontColor : Color -> Color
-    , alertConfig : AlertConfig
+    { alertConfig : AlertConfig
     , badgeConfig : BadgeConfig
     , buttonConfig : ButtonConfig
     , dropdownConfig : DropdownConfig
+    , globalConfig : GlobalConfig
+    , inputConfig : InputConfig
     , navbarConfig : NavbarConfig
     , navConfig : NavConfig
-    , inputConfig : InputConfig
     , paginationConfig : PaginationConfig
     , rangeSliderConfig : RangeSliderConfig
     , containerConfig : ContainerConfig
@@ -416,6 +421,17 @@ defaultDropdownConfig =
     }
 
 
+defaultGlobalConfig : GlobalConfig
+defaultGlobalConfig =
+    { colors = bootstrapColors
+    , themeColor = bootstrapThemeColor bootstrapColors
+    , bodyBackground = bootstrapColors.white
+    , bodyColor = bootstrapColors.gray900
+    , fontColor = \bgColor -> contrastTextColor bgColor bootstrapColors.gray900 bootstrapColors.white
+    , fontConfig = defaultFontConfig
+    }
+
+
 defaultInputConfig : Colors -> ThemeColor -> InputConfig
 defaultInputConfig colors themeColor =
     { fontColor = colors.gray700
@@ -541,21 +557,16 @@ defaultThemeConfig =
         themeColor =
             bootstrapThemeColor bootstrapColors
     in
-    { colors = bootstrapColors
-    , themeColor = themeColor
-    , bodyBackground = bootstrapColors.white
-    , bodyColor = bootstrapColors.gray900
-    , fontColor = \bgColor -> contrastTextColor bgColor bootstrapColors.gray900 bootstrapColors.white
-    , fontConfig = defaultFontConfig
-    , alertConfig = defaultAlertConfig themeColor
+    { alertConfig = defaultAlertConfig themeColor
     , badgeConfig = defaultBadgeConfig themeColor
     , buttonConfig = defaultButtonConfig themeColor
+    , containerConfig = defaultContainerConfig
     , dropdownConfig = defaultDropdownConfig
-    , navConfig = defaultNavConfig
-    , navbarConfig = defaultNavbarConfig
+    , globalConfig = defaultGlobalConfig
     , inputConfig = defaultInputConfig bootstrapColors themeColor
+    , navbarConfig = defaultNavbarConfig
+    , navConfig = defaultNavConfig
     , paginationConfig = defaultPaginationConfig themeColor
     , rangeSliderConfig = defaultRangeSliderConfig bootstrapColors themeColor
-    , containerConfig = defaultContainerConfig
     , tableConfig = defaultTableConfig
     }

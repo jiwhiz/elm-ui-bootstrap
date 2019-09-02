@@ -161,16 +161,16 @@ view toMsg model sharedState =
     Element.el
         [ Element.width Element.fill
         , Element.height Element.fill
-        , Background.color themeConfig.bodyBackground
-        , Font.color <| themeConfig.fontColor themeConfig.bodyBackground
+        , Background.color themeConfig.globalConfig.bodyBackground
+        , Font.color <| themeConfig.globalConfig.fontColor themeConfig.globalConfig.bodyBackground
         , Element.paddingXY 0 50
-        , Font.family themeConfig.fontConfig.fontFamily
+        , Font.family themeConfig.globalConfig.fontConfig.fontFamily
         , Font.size 16 -- idk why I have to add this here. Somehow it automatically makes it 20??
         ]
         (content model sharedState)
         |> Element.layout
             [ Element.inFront <| navbar model sharedState
-            , Font.family themeConfig.fontConfig.fontFamily
+            , Font.family themeConfig.globalConfig.fontConfig.fontFamily
             ]
         |> Html.map toMsg
 
