@@ -1,7 +1,7 @@
 module Router exposing (DropdownMenuState(..), Model, Msg(..), Page(..), init, initWith, navigateTo, update, updateWith, viewApplication)
 
 import Browser exposing (UrlRequest(..))
-import Browser.Navigation as Nav
+import Browser.Navigation as Navigation
 import Element exposing (Element)
 import Element.Background as Background
 import Element.Events as Events
@@ -30,7 +30,6 @@ import UiFramework exposing (WithContext, toElement)
 import UiFramework.Navbar
 import UiFramework.Types exposing (Role(..))
 import Url
-import Util
 
 
 
@@ -40,7 +39,7 @@ import Util
 type alias Model =
     { route : Routes.Route
     , currentPage : Page
-    , navKey : Nav.Key
+    , navKey : Navigation.Key
     , dropdownMenuState : DropdownMenuState
     , toggleMenuState : Bool
     }
@@ -72,7 +71,7 @@ type DropdownMenuState
 -- init with the NotFoundPage, but send a command where we look at the Url and change the page
 
 
-init : Url.Url -> Nav.Key -> ( Model, Cmd Msg )
+init : Url.Url -> Navigation.Key -> ( Model, Cmd Msg )
 init url key =
     let
         currentRoute =
@@ -326,7 +325,7 @@ update sharedState msg model =
         ( NavigateTo route, _ ) ->
             -- changes url
             ( model
-            , Util.navigate sharedState.navKey route
+            , Navigation.pushUrl sharedState.navKey (Routes.toUrlString route)
             , SharedState.NoUpdate
             )
 

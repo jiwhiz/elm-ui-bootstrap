@@ -1,16 +1,27 @@
-module Common exposing (Header, code, componentNavbar, section, title, viewHeader, wrappedText)
+module Common exposing
+    ( Header
+    , code
+    , componentNavbar
+    , highlightCode
+    , section
+    , title
+    , viewHeader
+    , wrappedText
+    )
 
 import Element exposing (Attribute, Color, fill, height, width)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Events as Events
 import Element.Font as Font
+import Html
+import Html.Attributes as Attr
+import Markdown
 import Routes exposing (Route(..))
 import UiFramework exposing (WithContext)
 import UiFramework.ColorUtils as ColorUtils
 import UiFramework.Container as Container
 import UiFramework.Typography as Typography
-import Util
 
 
 type alias Header =
@@ -30,9 +41,9 @@ viewHeader pageContent =
                 , Font.color (Element.rgb 1 1 1)
                 ]
                 [ Typography.display3 [] <|
-                    UiFramework.uiParagraph [] [ Util.text pageContent.title ]
+                    UiFramework.uiParagraph [] [ UiFramework.uiText pageContent.title ]
                 , UiFramework.uiParagraph []
-                    [ Typography.textLead [] <| Util.text pageContent.description ]
+                    [ Typography.textLead [] <| UiFramework.uiText pageContent.description ]
                 ]
     in
     UiFramework.flatMap
@@ -53,7 +64,7 @@ componentNavbar navigateToMsg route =
         List.map
             (\( r, name ) ->
                 if r == route then
-                    Typography.textSmall [ Element.pointer, Element.padding 8 ] (Util.text name)
+                    Typography.textSmall [ Element.pointer, Element.padding 8 ] (UiFramework.uiText name)
 
                 else
                     Typography.textSmall
@@ -63,7 +74,7 @@ componentNavbar navigateToMsg route =
                         , Events.onClick (navigateToMsg r)
                         , Element.padding 8
                         ]
-                        (Util.text name)
+                        (UiFramework.uiText name)
             )
             routeNameList
 
@@ -74,7 +85,7 @@ componentNavbar navigateToMsg route =
 
 title : String -> WithContext c msg
 title str =
-    Typography.display4 [ Font.size 48 ] (Util.text str)
+    Typography.display4 [ Font.size 48 ] (UiFramework.uiText str)
 
 
 
@@ -83,17 +94,17 @@ title str =
 
 section : String -> WithContext c msg
 section str =
-    Typography.h1 [] (Util.text str)
+    Typography.h1 [] (UiFramework.uiText str)
 
 
 
--- basically a Util.text wrapped in a uiParagraph
+-- basically a  UiFramework.uiText wrapped in a uiParagraph
 
 
 wrappedText : String -> WithContext c msg
 wrappedText str =
     UiFramework.uiParagraph []
-        [ Util.text str ]
+        [ UiFramework.uiText str ]
 
 
 
@@ -103,14 +114,45 @@ wrappedText str =
 code : String -> WithContext c msg
 code str =
     Typography.span
-        [ Util.firacode
+        [ firacode
         , Font.size 14
         , Element.padding 3
         , Border.rounded 3
         , Background.color <| Element.rgba 0 0 0 0.04
         , Element.width Element.shrink
         ]
-        (Util.text str)
+        (UiFramework.uiText str)
+
+
+firacode : Attribute msg
+firacode =
+    Font.family
+        [ Font.typeface "Fira Code"
+        , Font.serif
+        ]
+
+
+
+-- uiHighlightCode : String -> String -> WithContext context msg
+-- uiHighlightCode lang =
+--     markdownCode lang
+--         >> (\elem -> \_ -> elem)
+--         >> UiFramework.fromElement
+
+
+highlightCode : String -> String -> WithContext context msg
+highlightCode languageStr codeStr =
+    UiFramework.fromElement
+        (\_ ->
+            Markdown.toHtml
+                []
+                ("```" ++ languageStr ++ codeStr ++ "```")
+                |> List.singleton
+                |> Html.div
+                    [ Attr.style "width" "100%"
+                    ]
+                |> Element.html
+        )
 
 
 routeNameList : List ( Route, String )

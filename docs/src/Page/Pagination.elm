@@ -1,7 +1,8 @@
 module Page.Pagination exposing (Model, Msg(..), init, update, view)
 
-import Common exposing (code, componentNavbar, section, title, viewHeader, wrappedText)
-import Element exposing (Color, Element, fill, height, spacing, width)
+import Browser.Navigation as Navigation
+import Common exposing (code, componentNavbar, highlightCode, section, title, viewHeader, wrappedText)
+import Element
 import Element.Font as Font
 import Routes
 import SharedState exposing (SharedState, SharedStateUpdate(..))
@@ -10,7 +11,6 @@ import UiFramework.Container as Container
 import UiFramework.Pagination as Pagination exposing (PaginationState)
 import UiFramework.Types exposing (Role(..))
 import UiFramework.Typography as Typography
-import Util
 
 
 
@@ -62,10 +62,12 @@ toContext model sharedState =
 -- VIEW
 
 
-view : SharedState -> Model -> Element Msg
+view : SharedState -> Model -> Element.Element Msg
 view sharedState model =
     UiFramework.uiColumn
-        [ width fill, height fill ]
+        [ Element.width Element.fill
+        , Element.height Element.fill
+        ]
         [ viewHeader
             { title = "Pagination"
             , description = "False routing"
@@ -73,14 +75,14 @@ view sharedState model =
         , Container.simple
             [ Element.paddingXY 0 64 ]
           <|
-            UiFramework.uiRow [ width fill ]
+            UiFramework.uiRow [ Element.width Element.fill ]
                 [ Container.simple
-                    [ width <| Element.fillPortion 1
-                    , height fill
+                    [ Element.width <| Element.fillPortion 1
+                    , Element.height Element.fill
                     ]
                   <|
                     componentNavbar NavigateTo Routes.Pagination
-                , Container.simple [ width <| Element.fillPortion 6 ] <| content
+                , Container.simple [ Element.width <| Element.fillPortion 6 ] <| content
                 ]
         ]
         |> UiFramework.toElement (toContext model sharedState)
@@ -89,8 +91,8 @@ view sharedState model =
 content : UiElement Msg
 content =
     UiFramework.uiColumn
-        [ width fill
-        , spacing 64
+        [ Element.width Element.fill
+        , Element.spacing 64
         ]
         [ basicExample
         , responsiveExample
@@ -100,7 +102,7 @@ content =
 basicExample : UiElement Msg
 basicExample =
     UiFramework.uiColumn
-        [ width fill
+        [ Element.width Element.fill
         , Element.spacing 32
         ]
         [ title "Basic Example"
@@ -125,7 +127,8 @@ basicExample =
 
 basicExampleCode : UiElement Msg
 basicExampleCode =
-    """
+    Common.highlightCode "elm"
+        """
 import Element
 import UiFramework.Pagination as Pagination
 
@@ -147,8 +150,8 @@ staticPagination =
         |> Pagination.view 
             { currentSliceNumber = 0 -- starts from 0
             , numberOfSlices = 10
-            }"""
-        |> Util.uiHighlightCode "elm"
+            }
+"""
 
 
 responsiveExample : UiElement Msg
@@ -156,7 +159,7 @@ responsiveExample =
     UiFramework.flatMap
         (\context ->
             UiFramework.uiColumn
-                [ width fill
+                [ Element.width Element.fill
                 , Element.spacing 32
                 ]
                 [ title "Responsive Example"
@@ -200,8 +203,8 @@ responsiveExample =
                                 ]
                                 [ UiFramework.uiParagraph
                                     [ Font.center ]
-                                    [ Util.text "Currently on slice #"
-                                    , Util.text <| String.fromInt (state.currentSliceNumber + 1)
+                                    [ UiFramework.uiText "Currently on slice #"
+                                    , UiFramework.uiText <| String.fromInt (state.currentSliceNumber + 1)
                                     ]
                                 , paginationElement
                                 ]
@@ -216,7 +219,8 @@ responsiveExample =
 
 responsiveExampleCode : UiElement Msg
 responsiveExampleCode =
-    """
+    Common.highlightCode "elm"
+        """
 import Browser
 import Browser.Events
 import Element exposing (Device)
@@ -380,13 +384,14 @@ subscriptions _ =
     Browser.Events.onResize
         (\\x y ->
             WindowSizeChange (WindowSize x y)
-        )"""
-        |> Util.uiHighlightCode "elm"
+        )
+"""
 
 
 basicHtmlCode : UiElement Msg
 basicHtmlCode =
-    """
+    Common.highlightCode "html"
+        """
 <!DOCTYPE html>
 <html>
 
@@ -412,8 +417,8 @@ basicHtmlCode =
     </script>
 </body>
 
-</html>"""
-        |> Util.uiHighlightCode "html"
+</html>
+"""
 
 
 
@@ -433,7 +438,7 @@ update sharedState msg model =
             ( model, Cmd.none, NoUpdate )
 
         NavigateTo route ->
-            ( model, Util.navigate sharedState.navKey route, NoUpdate )
+            ( model, Navigation.pushUrl sharedState.navKey (Routes.toUrlString route), NoUpdate )
 
         PaginationMsg int ->
             ( { model | paginationState = updatePaginationSlice int model.paginationState }

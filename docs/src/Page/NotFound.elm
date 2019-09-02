@@ -1,6 +1,6 @@
 module Page.NotFound exposing (Model, Msg(..), init, update, view)
 
-import Element exposing (Element)
+import Element
 import Element.Font as Font
 import FontAwesome.Solid
 import Routes exposing (Route)
@@ -45,12 +45,7 @@ toContext sharedState =
 -- VIEW
 
 
-text : String -> UiElement Msg
-text str =
-    UiFramework.uiText (\_ -> str)
-
-
-view : SharedState -> Model -> Element Msg
+view : SharedState -> Model -> Element.Element Msg
 view sharedState model =
     Container.simple [] sadness
         |> toElement (toContext sharedState)
@@ -64,7 +59,7 @@ sadness =
         , Element.padding 40
         ]
         [ Typography.display1 [ Element.centerX ] icon
-        , Typography.textLead [] (text "We cannot find the page :(")
+        , Typography.textLead [] (UiFramework.uiText "We cannot find the page :(")
         ]
 
 

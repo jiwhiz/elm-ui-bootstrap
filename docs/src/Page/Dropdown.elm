@@ -1,7 +1,8 @@
 module Page.Dropdown exposing (Context, Model, Msg(..), init, update, view)
 
-import Common exposing (code, componentNavbar, section, title, viewHeader, wrappedText)
-import Element exposing (Color, Element, fill, height, spacing, width)
+import Browser.Navigation as Navigation
+import Common exposing (code, componentNavbar, highlightCode, section, title, viewHeader, wrappedText)
+import Element
 import FontAwesome.Solid
 import Routes
 import SharedState exposing (SharedState, SharedStateUpdate(..))
@@ -10,7 +11,6 @@ import UiFramework.Container as Container
 import UiFramework.Dropdown as Dropdown
 import UiFramework.Types exposing (Role(..))
 import UiFramework.Typography as Typography
-import Util
 
 
 type alias UiElement msg =
@@ -50,10 +50,12 @@ toContext model sharedState =
 -- VIEW
 
 
-view : SharedState -> Model -> Element Msg
+view : SharedState -> Model -> Element.Element Msg
 view sharedState model =
     UiFramework.uiColumn
-        [ width fill, height fill ]
+        [ Element.width Element.fill
+        , Element.height Element.fill
+        ]
         [ viewHeader
             { title = "Dropdown"
             , description = "Flexible components for almost any navigational sections."
@@ -61,14 +63,14 @@ view sharedState model =
         , Container.simple
             [ Element.paddingXY 0 64 ]
           <|
-            UiFramework.uiRow [ width fill ]
+            UiFramework.uiRow [ Element.width Element.fill ]
                 [ Container.simple
-                    [ width <| Element.fillPortion 1
-                    , height fill
+                    [ Element.width <| Element.fillPortion 1
+                    , Element.height Element.fill
                     ]
                   <|
                     componentNavbar NavigateTo Routes.Dropdown
-                , Container.simple [ width <| Element.fillPortion 6 ] <| content
+                , Container.simple [ Element.width <| Element.fillPortion 6 ] <| content
                 ]
         ]
         |> UiFramework.toElement (toContext model sharedState)
@@ -77,8 +79,8 @@ view sharedState model =
 content : UiElement Msg
 content =
     UiFramework.uiColumn
-        [ width fill
-        , spacing 64
+        [ Element.width Element.fill
+        , Element.spacing 64
         ]
         [ basicExample
         ]
@@ -89,7 +91,7 @@ basicExample =
     UiFramework.flatMap
         (\context ->
             UiFramework.uiColumn
-                [ width fill
+                [ Element.width Element.fill
                 , Element.spacing 32
                 ]
                 [ title "Basic Example"
@@ -113,7 +115,8 @@ basicExample =
 
 basicExampleCode : UiElement Msg
 basicExampleCode =
-    """
+    Common.highlightCode "elm"
+        """
 import Element
 import UiFramework
 import UiFramework.Button as Button
@@ -155,8 +158,8 @@ simpleDropdown model =
                 |> Dropdown.withMenuTitle "With Icon"
             ]
         -- when model == True, the dropdown will show.
-        |> Dropdown.view model"""
-        |> Util.uiHighlightCode "elm"
+        |> Dropdown.view model
+"""
 
 
 
@@ -176,7 +179,7 @@ update sharedState msg model =
             ( model, Cmd.none, NoUpdate )
 
         NavigateTo route ->
-            ( model, Util.navigate sharedState.navKey route, NoUpdate )
+            ( model, Navigation.pushUrl sharedState.navKey (Routes.toUrlString route), NoUpdate )
 
         ToggleSimpleDropdown ->
             ( { model | simpleDropdownState = not model.simpleDropdownState }, Cmd.none, NoUpdate )

@@ -1,7 +1,8 @@
 module Page.Form exposing (Model, Msg(..), init, update, view)
 
-import Common exposing (code, componentNavbar, section, title, viewHeader, wrappedText)
-import Element exposing (Color, Element, fill, height, spacing, width)
+import Browser.Navigation as Navigation
+import Common exposing (code, componentNavbar, highlightCode, section, title, viewHeader, wrappedText)
+import Element
 import Element.Border as Border
 import Routes
 import SharedState exposing (SharedState, SharedStateUpdate(..))
@@ -9,7 +10,6 @@ import UiFramework exposing (UiContextual, WithContext, toElement)
 import UiFramework.Container as Container
 import UiFramework.Types exposing (Role(..))
 import UiFramework.Typography as Typography
-import Util
 
 
 type alias UiElement msg =
@@ -41,10 +41,12 @@ toContext sharedState =
 -- VIEW
 
 
-view : SharedState -> Model -> Element Msg
+view : SharedState -> Model -> Element.Element Msg
 view sharedState model =
     UiFramework.uiColumn
-        [ width fill, height fill ]
+        [ Element.width Element.fill
+        , Element.height Element.fill
+        ]
         [ viewHeader
             { title = "Forms"
             , description = "They're Difficult"
@@ -52,14 +54,14 @@ view sharedState model =
         , Container.simple
             [ Element.paddingXY 0 64 ]
           <|
-            UiFramework.uiRow [ width fill ]
+            UiFramework.uiRow [ Element.width Element.fill ]
                 [ Container.simple
-                    [ width <| Element.fillPortion 1
-                    , height fill
+                    [ Element.width <| Element.fillPortion 1
+                    , Element.height Element.fill
                     ]
                   <|
                     componentNavbar NavigateTo Routes.Form
-                , Container.simple [ width <| Element.fillPortion 6 ] <| content
+                , Container.simple [ Element.width <| Element.fillPortion 6 ] <| content
                 ]
         ]
         |> UiFramework.toElement (toContext sharedState)
@@ -68,8 +70,8 @@ view sharedState model =
 content : UiElement Msg
 content =
     UiFramework.uiColumn
-        [ width fill
-        , spacing 64
+        [ Element.width Element.fill
+        , Element.spacing 64
         ]
         [ basicExample
         , configuration
@@ -79,8 +81,8 @@ content =
 basicExample : UiElement Msg
 basicExample =
     UiFramework.uiColumn
-        [ spacing 16
-        , width fill
+        [ Element.spacing 16
+        , Element.width Element.fill
         ]
         [ title "Basic Example"
         , wrappedText "Coming soon!"
@@ -90,14 +92,14 @@ basicExample =
 configuration : UiElement Msg
 configuration =
     UiFramework.uiColumn
-        [ spacing 48
-        , width fill
+        [ Element.spacing 48
+        , Element.width Element.fill
         ]
         [ UiFramework.uiColumn
-            [ spacing 16 ]
+            [ Element.spacing 16 ]
             [ title "Configurations"
             , UiFramework.uiParagraph []
-                [ Util.text "Coming soon!" ]
+                [ UiFramework.uiText "Coming soon!" ]
             ]
         ]
 
@@ -114,4 +116,4 @@ update : SharedState -> Msg -> Model -> ( Model, Cmd Msg, SharedStateUpdate )
 update sharedState msg model =
     case msg of
         NavigateTo route ->
-            ( model, Util.navigate sharedState.navKey route, NoUpdate )
+            ( model, Navigation.pushUrl sharedState.navKey (Routes.toUrlString route), NoUpdate )

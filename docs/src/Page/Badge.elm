@@ -1,7 +1,8 @@
 module Page.Badge exposing (Model, Msg(..), init, update, view)
 
-import Common exposing (code, componentNavbar, section, title, viewHeader, wrappedText)
-import Element exposing (Color, Element, fill, height, spacing, width)
+import Browser.Navigation as Navigation
+import Common exposing (code, componentNavbar, highlightCode, section, title, viewHeader, wrappedText)
+import Element
 import Element.Border as Border
 import Routes
 import SharedState exposing (SharedState, SharedStateUpdate(..))
@@ -9,7 +10,6 @@ import UiFramework exposing (UiContextual, WithContext, toElement)
 import UiFramework.Badge as Badge
 import UiFramework.Container as Container
 import UiFramework.Types exposing (Role(..))
-import Util
 
 
 type alias UiElement msg =
@@ -41,10 +41,12 @@ toContext sharedState =
 -- VIEW
 
 
-view : SharedState -> Model -> Element Msg
+view : SharedState -> Model -> Element.Element Msg
 view sharedState model =
     UiFramework.uiColumn
-        [ width fill, height fill ]
+        [ Element.width Element.fill
+        , Element.height Element.fill
+        ]
         [ viewHeader
             { title = "Badge"
             , description = "Nerfed alerts"
@@ -52,14 +54,14 @@ view sharedState model =
         , Container.simple
             [ Element.paddingXY 0 64 ]
           <|
-            UiFramework.uiRow [ width fill ]
+            UiFramework.uiRow [ Element.width Element.fill ]
                 [ Container.simple
-                    [ width <| Element.fillPortion 1
-                    , height fill
+                    [ Element.width <| Element.fillPortion 1
+                    , Element.height Element.fill
                     ]
                   <|
                     componentNavbar NavigateTo Routes.Badge
-                , Container.simple [ width <| Element.fillPortion 6 ] <| content
+                , Container.simple [ Element.width <| Element.fillPortion 6 ] <| content
                 ]
         ]
         |> UiFramework.toElement (toContext sharedState)
@@ -68,7 +70,7 @@ view sharedState model =
 content : UiElement Msg
 content =
     UiFramework.uiColumn
-        [ width fill
+        [ Element.width Element.fill
         , Element.spacing 64
         ]
         [ basicExample
@@ -79,8 +81,8 @@ content =
 basicExample : UiElement Msg
 basicExample =
     UiFramework.uiColumn
-        [ spacing 16
-        , width fill
+        [ Element.spacing 16
+        , Element.width Element.fill
         ]
         [ title "Basic Example"
         , wrappedText "A basic badge consists of a role and a string"
@@ -100,7 +102,8 @@ basicExample =
 
 basicExampleCode : UiElement Msg
 basicExampleCode =
-    """
+    Common.highlightCode "elm"
+        """
 import UiFramework
 import UiFramework.Badge as Badge
 import UiFramework.Types exposing (Role(..))
@@ -118,21 +121,21 @@ UiFramework.uiColumn
     , Badge.simple Danger "Danger badge!"
     , Badge.simple Light "Light badge!"
     , Badge.simple Dark "Dark badge!"
-    ]"""
-        |> Util.uiHighlightCode "elm"
+    ]
+"""
 
 
 configuration : UiElement Msg
 configuration =
     UiFramework.uiColumn
-        [ spacing 48
-        , width fill
+        [ Element.spacing 48
+        , Element.width Element.fill
         ]
         [ UiFramework.uiColumn
-            [ spacing 16 ]
+            [ Element.spacing 16 ]
             [ title "Configurations"
             , UiFramework.uiParagraph []
-                [ Util.text "When configuring, we use pipelines to build up our badge, starting from the default function, "
+                [ UiFramework.uiText "When configuring, we use pipelines to build up our badge, starting from the default function, "
                 , code "Badge.default"
                 ]
             ]
@@ -145,7 +148,8 @@ configuration =
 
 configExampleCode : UiElement Msg
 configExampleCode =
-    """
+    Common.highlightCode "elm"
+        """
 -- an example showing all the configurations availablt at the moment
 
 
@@ -155,15 +159,15 @@ customBadge =
         |> Badge.label "Custom Badge"
         |> Badge.withPill
         |> Badge.withExtraAttrs []
-        |> Badge.view"""
-        |> Util.uiHighlightCode "elm"
+        |> Badge.view
+"""
 
 
 attributeConfigs : UiElement Msg
 attributeConfigs =
     UiFramework.uiColumn
-        [ spacing 16
-        , width fill
+        [ Element.spacing 16
+        , Element.width Element.fill
         ]
         [ section "Adding extra attributes"
         , wrappedText "Using Elm-Ui, we can modify our badges."
@@ -180,7 +184,8 @@ attributeConfigs =
 
 attributeConfigCode : UiElement Msg
 attributeConfigCode =
-    """
+    Common.highlightCode "elm"
+        """
 import Element.Border as Border
 
 text : String -> WithContext context msg
@@ -194,21 +199,21 @@ bigBorderBadge =
             [ Border.width 5
             , Border.color <| Element.rgb 0 0 0
             ]
-        |> Badge.view"""
-        |> Util.uiHighlightCode "elm"
+        |> Badge.view
+"""
 
 
 rolesAndLabelConfig : UiElement Msg
 rolesAndLabelConfig =
     UiFramework.uiColumn
-        [ spacing 16
-        , width fill
+        [ Element.spacing 16
+        , Element.width Element.fill
         ]
         [ section "Roles and Labels"
         , UiFramework.uiParagraph []
-            [ Util.text "These pipeline functions bring the basic functionality to badge customization. By default, the role of a badge is the "
+            [ UiFramework.uiText "These pipeline functions bring the basic functionality to badge customization. By default, the role of a badge is the "
             , code "Primary"
-            , Util.text " role, and the label is an empty string."
+            , UiFramework.uiText " role, and the label is an empty string."
             ]
         , Badge.simple Secondary "Secondary badge!"
         , rolesAndLabelsConfigCode
@@ -217,7 +222,8 @@ rolesAndLabelConfig =
 
 rolesAndLabelsConfigCode : UiElement Msg
 rolesAndLabelsConfigCode =
-    """
+    Common.highlightCode "elm"
+        """
 simpleButton =
     Badge.simple Secondary "Secondary badge!"
 
@@ -229,25 +235,25 @@ simpleButton =
     Badge.default 
         |> Badge.withRole Secondary 
         |> Badge.withLabel "Secondary Badge!"
-        |> Badge.view"""
-        |> Util.uiHighlightCode "elm"
+        |> Badge.view
+"""
 
 
 pillConfig : UiElement Msg
 pillConfig =
     UiFramework.uiColumn
-        [ spacing 16
-        , width fill
+        [ Element.spacing 16
+        , Element.width Element.fill
         ]
         [ section "Pills or no pill"
         , UiFramework.uiParagraph []
-            [ Util.text "A badge can have a "
+            [ UiFramework.uiText "A badge can have a "
             , code "pill"
-            , Util.text " config set to "
+            , UiFramework.uiText " config set to "
             , code "True"
-            , Util.text ", where the corners are more rounded. By default this is set to "
+            , UiFramework.uiText ", where the corners are more rounded. By default this is set to "
             , code "False"
-            , Util.text "."
+            , UiFramework.uiText "."
             ]
         , Badge.default
             |> Badge.withLabel "Pill Badge"
@@ -259,13 +265,14 @@ pillConfig =
 
 pillConfigCode : UiElement Msg
 pillConfigCode =
-    """
+    Common.highlightCode "elm"
+        """
 pillBadge =
     Badge.default
         |> Badge.withLabel "Pill Badge"
         |> Badge.withPill
-        |> Badge.view"""
-        |> Util.uiHighlightCode "elm"
+        |> Badge.view
+"""
 
 
 rolesAndNames : List ( Role, String )
@@ -293,4 +300,4 @@ update : SharedState -> Msg -> Model -> ( Model, Cmd Msg, SharedStateUpdate )
 update sharedState msg model =
     case msg of
         NavigateTo route ->
-            ( model, Util.navigate sharedState.navKey route, NoUpdate )
+            ( model, Navigation.pushUrl sharedState.navKey (Routes.toUrlString route), NoUpdate )

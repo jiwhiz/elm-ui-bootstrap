@@ -1,7 +1,8 @@
 module Page.Icon exposing (Model, Msg(..), init, update, view)
 
-import Common exposing (code, componentNavbar, section, title, viewHeader, wrappedText)
-import Element exposing (Color, Element, fill, height, spacing, width)
+import Browser.Navigation as Navigation
+import Common exposing (code, componentNavbar, highlightCode, section, title, viewHeader, wrappedText)
+import Element
 import FontAwesome.Brands
 import FontAwesome.Solid
 import Routes
@@ -13,7 +14,6 @@ import UiFramework.Icon as Icon
 import UiFramework.Navbar as Navbar
 import UiFramework.Types exposing (Role(..))
 import UiFramework.Typography as Typography
-import Util
 
 
 
@@ -49,10 +49,10 @@ toContext sharedState =
 -- VIEW
 
 
-view : SharedState -> Model -> Element Msg
+view : SharedState -> Model -> Element.Element Msg
 view sharedState model =
     UiFramework.uiColumn
-        [ width fill, height fill ]
+        [ Element.width Element.fill, Element.height Element.fill ]
         [ viewHeader
             { title = "Icon"
             , description = "FontAwesome 5 Icons with Bootstrap"
@@ -60,14 +60,14 @@ view sharedState model =
         , Container.simple
             [ Element.paddingXY 0 64 ]
           <|
-            UiFramework.uiRow [ width fill ]
+            UiFramework.uiRow [ Element.width Element.fill ]
                 [ Container.simple
-                    [ width <| Element.fillPortion 1
-                    , height fill
+                    [ Element.width <| Element.fillPortion 1
+                    , Element.height Element.fill
                     ]
                   <|
                     componentNavbar NavigateTo Routes.Icon
-                , Container.simple [ width <| Element.fillPortion 6 ] <| content
+                , Container.simple [ Element.width <| Element.fillPortion 6 ] <| content
                 ]
         ]
         |> UiFramework.toElement (toContext sharedState)
@@ -76,7 +76,7 @@ view sharedState model =
 content : UiElement Msg
 content =
     UiFramework.uiColumn
-        [ width fill
+        [ Element.width Element.fill
         , Element.spacing 64
         ]
         [ basicExample
@@ -88,7 +88,7 @@ content =
 basicExample : UiElement Msg
 basicExample =
     UiFramework.uiColumn
-        [ width fill
+        [ Element.width Element.fill
         , Element.spacing 32
         ]
         [ title "Basic Example"
@@ -100,21 +100,22 @@ basicExample =
 
 basicExampleCode : UiElement Msg
 basicExampleCode =
-    """
+    Common.highlightCode "elm"
+        """
 import UiFramework
 import UiFramework.Icon as Icon
 import FontAwesome.Solid as Solid
 
 
 cogIcon =
-    UiFramework.fromElement (\\_ -> Icon.view FontAwesome.Solid.cog)"""
-        |> Util.uiHighlightCode "elm"
+    UiFramework.fromElement (\\_ -> Icon.view FontAwesome.Solid.cog)
+"""
 
 
 gettingStarted : UiElement Msg
 gettingStarted =
     UiFramework.uiColumn
-        [ width fill
+        [ Element.width Element.fill
         , Element.spacing 32
         ]
         [ title "Getting Started"
@@ -125,7 +126,8 @@ gettingStarted =
 
 gettingStartedCode : UiElement Msg
 gettingStartedCode =
-    """
+    Common.highlightCode "elm"
+        """
 import Browser
 import FontAwesome.Styles
 
@@ -137,8 +139,8 @@ viewApplication model sharedState =
         [ FontAwesome.Styles.css
         , view model sharedState
         ]
-    }"""
-        |> Util.uiHighlightCode "elm"
+    }
+"""
 
 
 type DropdownState
@@ -148,13 +150,13 @@ type DropdownState
 realLifeUses : UiElement Msg
 realLifeUses =
     UiFramework.uiColumn
-        [ width fill
+        [ Element.width Element.fill
         , Element.spacing 32
         ]
         [ title "Using Icons"
         , wrappedText "Using icons may seem rather painful by itself, but they are easily implemented in Navbars and Buttons, for example."
         , UiFramework.uiRow
-            [ spacing 8 ]
+            [ Element.spacing 8 ]
             [ Button.default
                 |> Button.withLabel "Github"
                 |> Button.withIcon FontAwesome.Brands.github
@@ -186,7 +188,8 @@ realLifeUses =
 
 iconButtonCode : UiElement Msg
 iconButtonCode =
-    """
+    Common.highlightCode "elm"
+        """
 import FontAwesome.Brands
 import FontAwesome.Solid
 import UiFramework.Button as Button
@@ -204,13 +207,14 @@ iconButtons =
             |> Button.withIcon FontAwesome.Solid.check
             |> Button.withRole Success
             |> Button.view 
-        ]"""
-        |> Util.uiHighlightCode "elm"
+        ]
+"""
 
 
 iconNavbarCode : UiElement Msg
 iconNavbarCode =
-    """
+    Common.highlightCode "elm"
+        """
 import UiFramework.Navbar as Navbar
 
 
@@ -235,8 +239,8 @@ Navbar.default NoOp
             |> Navbar.withMenuIcon FontAwesome.Solid.addressBook
             |> Navbar.withMenuTitle "Contact"
         ]
-    |> Navbar.view {toggleMenuState = False, dropdownState = AllDown}"""
-        |> Util.uiHighlightCode "elm"
+    |> Navbar.view {toggleMenuState = False, dropdownState = AllDown}
+"""
 
 
 
@@ -255,4 +259,4 @@ update sharedState msg model =
             ( model, Cmd.none, NoUpdate )
 
         NavigateTo route ->
-            ( model, Util.navigate sharedState.navKey route, NoUpdate )
+            ( model, Navigation.pushUrl sharedState.navKey (Routes.toUrlString route), NoUpdate )

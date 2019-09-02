@@ -1,7 +1,8 @@
 module Page.Button exposing (Model, Msg(..), init, update, view)
 
-import Common exposing (code, componentNavbar, section, title, viewHeader, wrappedText)
-import Element exposing (Color, Element, fill, height, spacing, width)
+import Browser.Navigation as Navigation
+import Common exposing (code, componentNavbar, highlightCode, section, title, viewHeader, wrappedText)
+import Element
 import FontAwesome.Brands
 import Routes
 import SharedState exposing (SharedState, SharedStateUpdate(..))
@@ -9,7 +10,6 @@ import UiFramework exposing (UiContextual, WithContext, toElement)
 import UiFramework.Button as Button
 import UiFramework.Container as Container
 import UiFramework.Types exposing (Role(..))
-import Util
 
 
 type alias UiElement msg =
@@ -41,10 +41,12 @@ toContext sharedState =
 -- VIEW
 
 
-view : SharedState -> Model -> Element Msg
+view : SharedState -> Model -> Element.Element Msg
 view sharedState model =
     UiFramework.uiColumn
-        [ width fill, height fill ]
+        [ Element.width Element.fill
+        , Element.height Element.fill
+        ]
         [ viewHeader
             { title = "Buttons"
             , description = "Click Click Click Click Click Click Click Click Click Click"
@@ -52,14 +54,14 @@ view sharedState model =
         , Container.simple
             [ Element.paddingXY 0 64 ]
           <|
-            UiFramework.uiRow [ width fill ]
+            UiFramework.uiRow [ Element.width Element.fill ]
                 [ Container.simple
-                    [ width <| Element.fillPortion 1
-                    , height fill
+                    [ Element.width <| Element.fillPortion 1
+                    , Element.height Element.fill
                     ]
                   <|
                     componentNavbar NavigateTo Routes.Button
-                , Container.simple [ width <| Element.fillPortion 6 ] content
+                , Container.simple [ Element.width <| Element.fillPortion 6 ] content
                 ]
         ]
         |> UiFramework.toElement (toContext sharedState)
@@ -68,33 +70,18 @@ view sharedState model =
 content : UiElement Msg
 content =
     UiFramework.uiColumn
-        [ width fill
-        , spacing 64
+        [ Element.width Element.fill
+        , Element.spacing 64
         ]
         [ basicExample
         , configuration
         ]
 
 
-
-{--
-    UiFramework.uiColumn
-        [ width fill
-        , Element.spacing 64
-        ]
-        [ basicButtons
-        , buttonRoles
-        , buttonRolesCode
-        , Typography.h1 [] (Util.text "Module Code")
-        , moduleCode
-        ]
---}
-
-
 basicExample : UiElement Msg
 basicExample =
     UiFramework.uiColumn
-        [ width fill
+        [ Element.width Element.fill
         , Element.spacing 32
         ]
         [ title "Basic Example"
@@ -108,7 +95,8 @@ basicExample =
 
 basicExampleCode : UiElement Msg
 basicExampleCode =
-    """
+    Common.highlightCode "elm"
+        """
 import Element
 import UiFramework
 import UiFramework.Button as Button
@@ -117,21 +105,21 @@ type Msg
     = DoSomething
 
 importantButton =
-    Button.simple DoSomething "Do something\""""
-        |> Util.uiHighlightCode "elm"
+    Button.simple DoSomething "Do something"
+"""
 
 
 configuration : UiElement Msg
 configuration =
     UiFramework.uiColumn
-        [ spacing 48
-        , width fill
+        [ Element.spacing 48
+        , Element.width Element.fill
         ]
         [ UiFramework.uiColumn
-            [ spacing 16 ]
+            [ Element.spacing 16 ]
             [ title "Configurations"
             , UiFramework.uiParagraph []
-                [ Util.text "When configuring, we use pipelines to build up our button, starting from the default function, "
+                [ UiFramework.uiText "When configuring, we use pipelines to build up our button, starting from the default function, "
                 , code "Button.default"
                 ]
             ]
@@ -148,7 +136,8 @@ configuration =
 
 configExampleCode : UiElement Msg
 configExampleCode =
-    """
+    Common.highlightCode "elm"
+        """
 import FontAwesome.Solid
 import UiFramework.Types exposing (Role(..))
 
@@ -176,14 +165,14 @@ customButton =
         |> Button.withMessage (Just DoSomething)
         |> Button.withIcon FontAwesome.Solid.angleDoubleRight
         |> Button.withLabel "Button with Icon"
-        |> Button.view"""
-        |> Util.uiHighlightCode "elm"
+        |> Button.view
+"""
 
 
 roleConfig : UiElement Msg
 roleConfig =
     UiFramework.uiColumn
-        [ width fill
+        [ Element.width Element.fill
         , Element.spacing 32
         ]
         [ section "Roles"
@@ -205,7 +194,8 @@ roleConfig =
 
 roleConfigCode : UiElement Msg
 roleConfigCode =
-    """
+    Common.highlightCode "elm"
+        """
 {-| All the roles are:
   - Primary
   - Secondary
@@ -229,14 +219,14 @@ buttons =
             |> Button.withRole Secondary
             |> Button.view
         ...
-        ]"""
-        |> Util.uiHighlightCode "elm"
+        ]
+"""
 
 
 basicFunctionalityConfig : UiElement Msg
 basicFunctionalityConfig =
     UiFramework.uiColumn
-        [ width fill
+        [ Element.width Element.fill
         , Element.spacing 32
         ]
         [ section "withMessage and withLabel"
@@ -248,7 +238,8 @@ basicFunctionalityConfig =
 
 basicFunctionalityConfigCode : UiElement Msg
 basicFunctionalityConfigCode =
-    """
+    Common.highlightCode "elm"
+        """
 type Msg 
     = DoSomething 
 
@@ -262,21 +253,21 @@ basicButton =
 basicButton =
     Button.default 
         |> Button.withMessage (Just DoSomething)
-        |> Button.withLabel "Button\""""
-        |> Util.uiHighlightCode "elm"
+        |> Button.withLabel "Button"
+"""
 
 
 outlineConfig : UiElement Msg
 outlineConfig =
     UiFramework.uiColumn
-        [ width fill
+        [ Element.width Element.fill
         , Element.spacing 32
         ]
         [ section "Outline"
         , UiFramework.uiParagraph []
-            [ Util.text "Bootstrap gives you "
+            [ UiFramework.uiText "Bootstrap gives you "
             , code "Button.withOutlined"
-            , Util.text ", where the background colors are removed."
+            , UiFramework.uiText ", where the background colors are removed."
             ]
         , UiFramework.uiWrappedRow
             [ Element.spacing 4 ]
@@ -296,7 +287,8 @@ outlineConfig =
 
 outlineConfigCode : UiElement Msg
 outlineConfigCode =
-    """
+    Common.highlightCode "elm"
+        """
 outlinedButtons =
     UiFramework.uiRow 
         [ Element.spacing 4 ] 
@@ -310,14 +302,14 @@ outlinedButtons =
             |> Button.withOutlined
             |> Button.view
         ...
-        ]"""
-        |> Util.uiHighlightCode "elm"
+        ]
+"""
 
 
 sizeConfig : UiElement Msg
 sizeConfig =
     UiFramework.uiColumn
-        [ width fill
+        [ Element.width Element.fill
         , Element.spacing 32
         ]
         [ section "Sizes"
@@ -342,7 +334,8 @@ sizeConfig =
 
 sizeConfigCode : UiElement Msg
 sizeConfigCode =
-    """
+    Common.highlightCode "elm"
+        """
 buttonSizes =
     UiFramework.uiWrappedRow
         [ Element.spacing 4 ]
@@ -357,21 +350,21 @@ buttonSizes =
             |> Button.withLabel "Small Button"
             |> Button.withSmall
             |> Button.view
-        ]"""
-        |> Util.uiHighlightCode "elm"
+        ]
+"""
 
 
 blockConfig : UiElement Msg
 blockConfig =
     UiFramework.uiColumn
-        [ width fill
+        [ Element.width Element.fill
         , Element.spacing 32
         ]
         [ section "Block buttons"
         , UiFramework.uiParagraph []
-            [ Util.text "Take up the entirety of the parent container width via the "
+            [ UiFramework.uiText "Take up the entirety of the parent container width via the "
             , code "withBlock"
-            , Util.text " function. This option is not functional yet."
+            , UiFramework.uiText " function. This option is not functional yet."
             ]
         , Button.default
             |> Button.withLabel "Block Button"
@@ -383,26 +376,27 @@ blockConfig =
 
 blockConfigCode : UiElement Msg
 blockConfigCode =
-    """
+    Common.highlightCode "elm"
+        """
 blockButton =
     Button.default
         |> Button.withLabel "Block Button"
         |> Button.withBlock
-        |> Button.view"""
-        |> Util.uiHighlightCode "elm"
+        |> Button.view
+"""
 
 
 disableConfig : UiElement Msg
 disableConfig =
     UiFramework.uiColumn
-        [ width fill
+        [ Element.width Element.fill
         , Element.spacing 32
         ]
         [ section "Disabled buttons"
         , UiFramework.uiParagraph []
-            [ Util.text "Make a button look inactive by the "
+            [ UiFramework.uiText "Make a button look inactive by the "
             , code "withDisabled"
-            , Util.text " function."
+            , UiFramework.uiText " function."
             ]
         , UiFramework.uiWrappedRow
             [ Element.spacing 4 ]
@@ -422,7 +416,8 @@ disableConfig =
 
 disableConfigCode : UiElement Msg
 disableConfigCode =
-    """
+    Common.highlightCode "elm"
+        """
 buttonSizes =
     UiFramework.uiWrappedRow
         [ Element.spacing 4 ]
@@ -436,28 +431,28 @@ buttonSizes =
             |> Button.withDisabled
             |> Button.view
         ...
-        ]"""
-        |> Util.uiHighlightCode "elm"
+        ]
+"""
 
 
 iconConfig : UiElement Msg
 iconConfig =
     UiFramework.uiColumn
-        [ width fill
+        [ Element.width Element.fill
         , Element.spacing 32
         ]
         [ section "Buttons with Icons"
         , wrappedText "Though used primarily with navbars, buttons with icons can serve other uses as well."
         , UiFramework.uiParagraph []
-            [ Util.text "Note that you'll have to "
-            , Util.text "include the required CSS in your website "
-            , Util.text "(check out the Elm FontAwesome page for more details - "
-            , Util.text "https://github.com/lattyware/elm-fontawesome/tree/3.1.0#required-css)"
+            [ UiFramework.uiText "Note that you'll have to "
+            , UiFramework.uiText "include the required CSS in your website "
+            , UiFramework.uiText "(check out the Elm FontAwesome page for more details - "
+            , UiFramework.uiText "https://github.com/lattyware/elm-fontawesome/tree/3.1.0#required-css)"
             ]
         , UiFramework.uiParagraph []
-            [ Util.text "As of now, you cannot add a custom"
+            [ UiFramework.uiText "As of now, you cannot add a custom"
             , code "UiElement"
-            , Util.text " to a button. This means you cannot add an animated icon, for example."
+            , UiFramework.uiText " to a button. This means you cannot add an animated icon, for example."
             ]
         , UiFramework.uiWrappedRow
             [ Element.spacing 4 ]
@@ -472,7 +467,8 @@ iconConfig =
 
 iconConfigCode : UiElement Msg
 iconConfigCode =
-    """
+    Common.highlightCode "elm"
+        """
 import FontAwesome.Brands
 
 buttonSizes =
@@ -482,8 +478,8 @@ buttonSizes =
             |> Button.withLabel "Github"
             |> Button.withIcon FontAwesome.Brands.github
             |> Button.view
-        ]"""
-        |> Util.uiHighlightCode "elm"
+        ]
+"""
 
 
 rolesAndNames : List ( Role, String )
@@ -515,4 +511,4 @@ update sharedState msg model =
             ( model, Cmd.none, NoUpdate )
 
         NavigateTo route ->
-            ( model, Util.navigate sharedState.navKey route, NoUpdate )
+            ( model, Navigation.pushUrl sharedState.navKey (Routes.toUrlString route), NoUpdate )

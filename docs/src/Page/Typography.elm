@@ -1,14 +1,14 @@
 module Page.Typography exposing (Model, Msg(..), init, update, view)
 
-import Common exposing (code, componentNavbar, section, title, viewHeader, wrappedText)
-import Element exposing (Color, Element, fill, height, spacing, width)
+import Browser.Navigation as Navigation
+import Common exposing (code, componentNavbar, highlightCode, section, title, viewHeader, wrappedText)
+import Element
 import Routes
 import SharedState exposing (SharedState, SharedStateUpdate(..))
 import UiFramework exposing (UiContextual, WithContext, toElement)
 import UiFramework.Container as Container
 import UiFramework.Types exposing (Role(..))
 import UiFramework.Typography as Typography
-import Util
 
 
 
@@ -44,10 +44,12 @@ toContext sharedState =
 -- VIEW
 
 
-view : SharedState -> Model -> Element Msg
+view : SharedState -> Model -> Element.Element Msg
 view sharedState model =
     UiFramework.uiColumn
-        [ width fill, height fill ]
+        [ Element.width Element.fill
+        , Element.height Element.fill
+        ]
         [ viewHeader
             { title = "Typography"
             , description = "Our competitor is r/PenmanshipPorn"
@@ -55,14 +57,14 @@ view sharedState model =
         , Container.simple
             [ Element.paddingXY 0 64 ]
           <|
-            UiFramework.uiRow [ width fill ]
+            UiFramework.uiRow [ Element.width Element.fill ]
                 [ Container.simple
-                    [ width <| Element.fillPortion 1
-                    , height fill
+                    [ Element.width <| Element.fillPortion 1
+                    , Element.height Element.fill
                     ]
                   <|
                     componentNavbar NavigateTo Routes.Typography
-                , Container.simple [ width <| Element.fillPortion 6 ] <| content
+                , Container.simple [ Element.width <| Element.fillPortion 6 ] <| content
                 ]
         ]
         |> UiFramework.toElement (toContext sharedState)
@@ -71,8 +73,8 @@ view sharedState model =
 content : UiElement Msg
 content =
     UiFramework.uiColumn
-        [ width fill
-        , spacing 64
+        [ Element.width Element.fill
+        , Element.spacing 64
         ]
         [ headers
         , text
@@ -82,28 +84,28 @@ content =
 headers : UiElement Msg
 headers =
     UiFramework.uiColumn
-        [ width fill
+        [ Element.width Element.fill
         , Element.spacing 32
         ]
         [ title "Headers"
         , section "Displays - or Very Large Headers"
         , UiFramework.uiColumn
-            [ spacing 16 ]
-            [ Typography.display1 [] (Util.text "Display1")
-            , Typography.display2 [] (Util.text "Display2")
-            , Typography.display3 [] (Util.text "Display3")
-            , Typography.display4 [] (Util.text "Display4")
+            [ Element.spacing 16 ]
+            [ Typography.display1 [] (UiFramework.uiText "Display1")
+            , Typography.display2 [] (UiFramework.uiText "Display2")
+            , Typography.display3 [] (UiFramework.uiText "Display3")
+            , Typography.display4 [] (UiFramework.uiText "Display4")
             ]
         , displayCode
         , section "Headers - the Regular H1's"
         , UiFramework.uiColumn
-            [ spacing 16 ]
-            [ Typography.h1 [] (Util.text "H1")
-            , Typography.h2 [] (Util.text "H2")
-            , Typography.h3 [] (Util.text "H3")
-            , Typography.h4 [] (Util.text "H4")
-            , Typography.h5 [] (Util.text "H4")
-            , Typography.h6 [] (Util.text "H4")
+            [ Element.spacing 16 ]
+            [ Typography.h1 [] (UiFramework.uiText "H1")
+            , Typography.h2 [] (UiFramework.uiText "H2")
+            , Typography.h3 [] (UiFramework.uiText "H3")
+            , Typography.h4 [] (UiFramework.uiText "H4")
+            , Typography.h5 [] (UiFramework.uiText "H4")
+            , Typography.h6 [] (UiFramework.uiText "H4")
             ]
         , headerCode
         ]
@@ -111,7 +113,8 @@ headers =
 
 displayCode : UiElement Msg
 displayCode =
-    """
+    Common.highlightCode "elm"
+        """
 import UiFramework
 import UiFramework.Typography as Typography
 
@@ -127,13 +130,14 @@ displayExamples =
         , Typography.display2 [] (text "Display2")
         , Typography.display3 [] (text "Display3")
         , Typography.display4 [] (text "Display4")
-        ]"""
-        |> Util.uiHighlightCode "elm"
+        ]
+"""
 
 
 headerCode : UiElement Msg
 headerCode =
-    """
+    Common.highlightCode "elm"
+        """
 headerExamples = 
     UiFramework.uiColumn 
         [ spacing 16 ]
@@ -143,23 +147,23 @@ headerExamples =
         , Typography.h4 [] (text "H4")
         , Typography.h5 [] (text "H4")
         , Typography.h6 [] (text "H4")
-        ]"""
-        |> Util.uiHighlightCode "elm"
+        ]
+"""
 
 
 text : UiElement Msg
 text =
     UiFramework.uiColumn
-        [ width fill
+        [ Element.width Element.fill
         , Element.spacing 32
         ]
         [ title "Text blocks"
         , UiFramework.uiColumn
-            [ spacing 16 ]
-            [ Typography.textLead [] (Util.text "Text Lead - Use me below titles!")
-            , UiFramework.uiParagraph [] [ Util.text "Regular text!" ]
-            , Typography.textSmall [] (Util.text "Small text!")
-            , Typography.textExtraSmall [] (Util.text "Super small text!")
+            [ Element.spacing 16 ]
+            [ Typography.textLead [] (UiFramework.uiText "Text Lead - Use me below titles!")
+            , UiFramework.uiParagraph [] [ UiFramework.uiText "Regular text!" ]
+            , Typography.textSmall [] (UiFramework.uiText "Small text!")
+            , Typography.textExtraSmall [] (UiFramework.uiText "Super small text!")
             ]
         , textCode
         ]
@@ -167,7 +171,8 @@ text =
 
 textCode : UiElement Msg
 textCode =
-    """
+    Common.highlightCode "elm"
+        """
 text : String -> WithContext context msg
 text str =
     UiFramework.uiText (\\_ -> str)
@@ -180,8 +185,8 @@ textExamples =
         , UiFramework.uiParagraph [] [text "Regular text!"]
         , Typography.textSmall [] (text "Small text!")
         , Typography.textExtraSmall [] (text "Super small text!")
-        ]"""
-        |> Util.uiHighlightCode "elm"
+        ]
+"""
 
 
 
@@ -196,4 +201,4 @@ update : SharedState -> Msg -> Model -> ( Model, Cmd Msg, SharedStateUpdate )
 update sharedState msg model =
     case msg of
         NavigateTo route ->
-            ( model, Util.navigate sharedState.navKey route, NoUpdate )
+            ( model, Navigation.pushUrl sharedState.navKey (Routes.toUrlString route), NoUpdate )

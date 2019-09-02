@@ -1,7 +1,8 @@
 module Page.Container exposing (Model, Msg(..), init, update, view)
 
-import Common exposing (code, componentNavbar, section, title, viewHeader, wrappedText)
-import Element exposing (Color, Element, fill, height, spacing, width)
+import Browser.Navigation as Navigation
+import Common exposing (code, componentNavbar, highlightCode, section, title, viewHeader, wrappedText)
+import Element
 import Element.Background as Background
 import Element.Border as Border
 import Routes
@@ -10,7 +11,6 @@ import UiFramework exposing (UiContextual, WithContext, toElement)
 import UiFramework.Container as Container
 import UiFramework.Types exposing (Role(..))
 import UiFramework.Typography as Typography
-import Util
 
 
 type alias UiElement msg =
@@ -42,10 +42,12 @@ toContext sharedState =
 -- VIEW
 
 
-view : SharedState -> Model -> Element Msg
+view : SharedState -> Model -> Element.Element Msg
 view sharedState model =
     UiFramework.uiColumn
-        [ width fill, height fill ]
+        [ Element.width Element.fill
+        , Element.height Element.fill
+        ]
         [ viewHeader
             { title = "Container"
             , description = "Basic layout elements that contain 1 child"
@@ -53,14 +55,14 @@ view sharedState model =
         , Container.simple
             [ Element.paddingXY 0 64 ]
           <|
-            UiFramework.uiRow [ width fill ]
+            UiFramework.uiRow [ Element.width Element.fill ]
                 [ Container.simple
-                    [ width <| Element.fillPortion 1
-                    , height fill
+                    [ Element.width <| Element.fillPortion 1
+                    , Element.height Element.fill
                     ]
                   <|
                     componentNavbar NavigateTo Routes.Container
-                , Container.simple [ width <| Element.fillPortion 6 ] <| content
+                , Container.simple [ Element.width <| Element.fillPortion 6 ] <| content
                 ]
         ]
         |> UiFramework.toElement (toContext sharedState)
@@ -69,8 +71,8 @@ view sharedState model =
 content : UiElement Msg
 content =
     UiFramework.uiColumn
-        [ width fill
-        , spacing 64
+        [ Element.width Element.fill
+        , Element.spacing 64
         ]
         [ basicExample
         , configuration
@@ -80,7 +82,7 @@ content =
 basicExample : UiElement Msg
 basicExample =
     UiFramework.uiColumn
-        [ width fill
+        [ Element.width Element.fill
         , Element.spacing 32
         ]
         [ title "Basic Example"
@@ -99,7 +101,8 @@ basicExample =
 
 basicExampleCode : UiElement Msg
 basicExampleCode =
-    """
+    Common.highlightCode "elm"
+        """
 import Element
 import UiFramework
 import UiFramework.Container as Container
@@ -107,18 +110,18 @@ import UiFramework.Container as Container
 
 content =
     Container.simple [] 
-        // child element here"""
-        |> Util.uiHighlightCode "elm"
+        // child element here
+"""
 
 
 configuration : UiElement Msg
 configuration =
     UiFramework.uiColumn
-        [ spacing 48
-        , width fill
+        [ Element.spacing 48
+        , Element.width Element.fill
         ]
         [ UiFramework.uiColumn
-            [ spacing 16 ]
+            [ Element.spacing 16 ]
             [ title "Configurations"
             , wrappedText "Custom containers are often built using pipelines starting from the default container function."
             ]
@@ -132,32 +135,32 @@ configuration =
 
 configExampleCode : UiElement Msg
 configExampleCode =
-    """
+    Common.highlightCode "elm"
+        """
 
 -- an example showing all the configurations available at the moment
 
 
-
-customButton =
+customContainer =
     Container.default
         |> Container.withFullWidth
         |> Container.jumbotron
         |> Container.withExtraAttrs []
         |> Container.withChild UiFramework.uiNone
-        |> Container.view"""
-        |> Util.uiHighlightCode "elm"
+        |> Container.view
+"""
 
 
 childConfig : UiElement Msg
 childConfig =
     UiFramework.uiColumn
-        [ width fill
+        [ Element.width Element.fill
         , Element.spacing 32
         ]
         [ section "Children"
         , wrappedText "Containers can only hold 1 child element, since uiRow and uiColumn are used to hold multiple children."
         , Container.default
-            |> Container.withChild (Util.text "Hello")
+            |> Container.withChild (UiFramework.uiText "Hello")
             |> Container.view
         , childConfigCode
         ]
@@ -165,26 +168,27 @@ childConfig =
 
 childConfigCode : UiElement Msg
 childConfigCode =
-    """
+    Common.highlightCode "elm"
+        """
 simpleContainer =
     Container.default 
-            |> Container.withChild (Util.text "Hello! World")
-            |> Container.view"""
-        |> Util.uiHighlightCode "elm"
+            |> Container.withChild ( UiFramework.uiText "Hello! World")
+            |> Container.view
+"""
 
 
 fullWidthConfig : UiElement Msg
 fullWidthConfig =
     UiFramework.uiColumn
-        [ spacing 16
-        , width fill
+        [ Element.spacing 16
+        , Element.width Element.fill
         ]
         [ section "Using fullWidth"
         , wrappedText "This function is similar to Bootstrap's .container-fluid class, where instead of  a max-width property that changes based on the screen width, it always fills the width of the parent element."
         , Container.default
             |> Container.withFullWidth
             |> Container.withExtraAttrs
-                [ Border.width 5
+                [ Border.width 1
                 , Border.color <| Element.rgb 0 0 0
                 , Element.height (Element.px 40)
                 ]
@@ -195,22 +199,20 @@ fullWidthConfig =
 
 fullWidthConfigCode : UiElement Msg
 fullWidthConfigCode =
-    """
-import Element.Border as Border
-
-
+    Common.highlightCode "elm"
+        """
 bigBorderContainer =
     Container.default
         |> Container.withFullWidth
-        |> Container.view"""
-        |> Util.uiHighlightCode "elm"
+        |> Container.view
+"""
 
 
 jumbotronConfig : UiElement Msg
 jumbotronConfig =
     UiFramework.uiColumn
-        [ spacing 16
-        , width fill
+        [ Element.spacing 16
+        , Element.width Element.fill
         ]
         [ section "Jumbotron"
         , wrappedText "Jumbotrons highlight content by changing a background. That's really all it does."
@@ -218,8 +220,8 @@ jumbotronConfig =
             |> Container.withFullWidth
             |> Container.withChild
                 (UiFramework.uiColumn []
-                    [ Typography.display4 [] (Util.text "Jumbotron")
-                    , Typography.textLead [] (Util.text "grab attention with these backgrounds.")
+                    [ Typography.display4 [] (UiFramework.uiText "Jumbotron")
+                    , Typography.textLead [] (UiFramework.uiText "grab attention with these backgrounds.")
                     ]
                 )
             |> Container.view
@@ -229,14 +231,9 @@ jumbotronConfig =
 
 jumbotronConfigCode : UiElement Msg
 jumbotronConfigCode =
-    """
+    Common.highlightCode "elm"
+        """
 import UiFramework.Typography as Typography
-
-
-text : String -> WithContext context msg
-text str =
-    UiFramework.uiText (\\_ -> str)
-
 
 
 getViewerAttention =
@@ -244,19 +241,19 @@ getViewerAttention =
         |> Container.withFullWidth
         |> Container.withChild 
             (UiFramework.uiColumn []
-                [ Typography.display4 [] (text "Jumbotron")
-                , Typography.textLead [] (text "Grab attention with these backgrounds.")
+                [ Typography.display4 [] (UiFramework.uiText "Jumbotron")
+                , Typography.textLead [] (UiFramework.uiText "Grab attention with these backgrounds.")
                 ]
             )
-        |> Container.view"""
-        |> Util.uiHighlightCode "elm"
+        |> Container.view
+"""
 
 
 attributeConfigs : UiElement Msg
 attributeConfigs =
     UiFramework.uiColumn
-        [ spacing 16
-        , width fill
+        [ Element.spacing 16
+        , Element.width Element.fill
         ]
         [ section "Adding extra attributes"
         , wrappedText "Using Elm-Ui, we can modify our containers."
@@ -273,7 +270,8 @@ attributeConfigs =
 
 attributeConfigCode : UiElement Msg
 attributeConfigCode =
-    """
+    Common.highlightCode "elm"
+        """
 import Element.Border as Border
 
 
@@ -284,8 +282,8 @@ bigBorderContainer =
             , Border.color <| Element.rgb 0 0 0
             , Element.height (Element.px 40)
             ]
-        |> Container.view"""
-        |> Util.uiHighlightCode "elm"
+        |> Container.view
+"""
 
 
 
@@ -300,4 +298,4 @@ update : SharedState -> Msg -> Model -> ( Model, Cmd Msg, SharedStateUpdate )
 update sharedState msg model =
     case msg of
         NavigateTo route ->
-            ( model, Util.navigate sharedState.navKey route, NoUpdate )
+            ( model, Navigation.pushUrl sharedState.navKey (Routes.toUrlString route), NoUpdate )

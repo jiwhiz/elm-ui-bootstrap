@@ -1,7 +1,8 @@
 module Page.Table exposing (Model, Msg(..), init, update, view)
 
-import Common exposing (code, componentNavbar, section, title, viewHeader, wrappedText)
-import Element exposing (Color, Element, fill, height, spacing, width)
+import Browser.Navigation as Navigation
+import Common exposing (code, componentNavbar, highlightCode, section, title, viewHeader, wrappedText)
+import Element
 import Element.Font as Font
 import Routes
 import SharedState exposing (SharedState, SharedStateUpdate(..))
@@ -10,7 +11,6 @@ import UiFramework.Container as Container
 import UiFramework.Table as Table
 import UiFramework.Types exposing (Role(..))
 import UiFramework.Typography as Typography
-import Util
 
 
 
@@ -46,10 +46,12 @@ toContext sharedState =
 -- VIEW
 
 
-view : SharedState -> Model -> Element Msg
+view : SharedState -> Model -> Element.Element Msg
 view sharedState model =
     UiFramework.uiColumn
-        [ width fill, height fill ]
+        [ Element.width Element.fill
+        , Element.height Element.fill
+        ]
         [ viewHeader
             { title = "Table"
             , description = "Displaying stuff"
@@ -57,14 +59,14 @@ view sharedState model =
         , Container.simple
             [ Element.paddingXY 0 64 ]
           <|
-            UiFramework.uiRow [ width fill ]
+            UiFramework.uiRow [ Element.width Element.fill ]
                 [ Container.simple
-                    [ width <| Element.fillPortion 1
-                    , height fill
+                    [ Element.width <| Element.fillPortion 1
+                    , Element.height Element.fill
                     ]
                   <|
                     componentNavbar NavigateTo Routes.Table
-                , Container.simple [ width <| Element.fillPortion 6 ] <| content
+                , Container.simple [ Element.width <| Element.fillPortion 6 ] <| content
                 ]
         ]
         |> UiFramework.toElement (toContext sharedState)
@@ -73,8 +75,8 @@ view sharedState model =
 content : UiElement Msg
 content =
     UiFramework.uiColumn
-        [ width fill
-        , spacing 64
+        [ Element.width Element.fill
+        , Element.spacing 64
         ]
         [ basicExample
         , styles
@@ -84,7 +86,7 @@ content =
 basicExample : UiElement Msg
 basicExample =
     UiFramework.uiColumn
-        [ width fill
+        [ Element.width Element.fill
         , Element.spacing 32
         ]
         [ title "Basic Example"
@@ -98,7 +100,8 @@ basicExample =
 
 basicExampleCode : UiElement Msg
 basicExampleCode =
-    """
+    Common.highlightCode "elm"
+        """
 import UiFramework.Table as Table
 
 
@@ -133,26 +136,26 @@ information =
 
 
 tableColumn =
-    [ { head = Util.text "Role"
-        , viewData = \\data -> UiFramework.uiParagraph [ Font.bold ] [ Util.text data.role ]
+    [ { head =  UiFramework.uiText "Role"
+        , viewData = \\data -> UiFramework.uiParagraph [ Font.bold ] [  UiFramework.uiText data.role ]
         }
-    , { head = Util.text "Column 1"
-        , viewData = \\data -> UiFramework.uiParagraph [] [ Util.text data.column1 ]
+    , { head =  UiFramework.uiText "Column 1"
+        , viewData = \\data -> UiFramework.uiParagraph [] [  UiFramework.uiText data.column1 ]
         }
-    , { head = Util.text "Column 2"
-        , viewData = \\data -> UiFramework.uiParagraph [] [ Util.text data.column2 ]
+    , { head =  UiFramework.uiText "Column 2"
+        , viewData = \\data -> UiFramework.uiParagraph [] [  UiFramework.uiText data.column2 ]
         }
-    , { head = Util.text "Column 3"
-        , viewData = \\data -> UiFramework.uiParagraph [] [ Util.text data.column3 ]
+    , { head =  UiFramework.uiText "Column 3"
+        , viewData = \\data -> UiFramework.uiParagraph [] [  UiFramework.uiText data.column3 ]
         }
-    ]"""
-        |> Util.uiHighlightCode "elm"
+    ]
+"""
 
 
 styles : UiElement Msg
 styles =
     UiFramework.uiColumn
-        [ width fill
+        [ Element.width Element.fill
         , Element.spacing 32
         ]
         [ title "Styles"
@@ -166,7 +169,7 @@ styles =
 stripedConfig : UiElement Msg
 stripedConfig =
     UiFramework.uiColumn
-        [ width fill
+        [ Element.width Element.fill
         , Element.spacing 32
         ]
         [ section "Striped tables"
@@ -181,19 +184,20 @@ stripedConfig =
 
 stripedConfigCode : UiElement Msg
 stripedConfigCode =
-    """
+    Common.highlightCode "elm"
+        """
 simpleTable =
     Table.simpleTable
         |> Table.withStriped
         |> Table.withColumns tableColumn
-        |> Table.view information"""
-        |> Util.uiHighlightCode "elm"
+        |> Table.view information
+"""
 
 
 borderConfig : UiElement Msg
 borderConfig =
     UiFramework.uiColumn
-        [ width fill
+        [ Element.width Element.fill
         , Element.spacing 32
         ]
         [ section "Bordered and Borderless"
@@ -214,30 +218,32 @@ borderConfig =
 
 borderLessCode : UiElement Msg
 borderLessCode =
-    """
+    Common.highlightCode "elm"
+        """
 simpleTable =
     Table.simpleTable
         |> Table.withBorderless
         |> Table.withColumns tableColumn
-        |> Table.view information"""
-        |> Util.uiHighlightCode "elm"
+        |> Table.view information
+"""
 
 
 borderedCode : UiElement Msg
 borderedCode =
-    """
+    Common.highlightCode "elm"
+        """
 simpleTable =
     Table.simpleTable
         |> Table.withBordered
         |> Table.withColumns tableColumn
-        |> Table.view information"""
-        |> Util.uiHighlightCode "elm"
+        |> Table.view information
+"""
 
 
 compactConfig : UiElement Msg
 compactConfig =
     UiFramework.uiColumn
-        [ width fill
+        [ Element.width Element.fill
         , Element.spacing 32
         ]
         [ section "Compact tables"
@@ -251,13 +257,14 @@ compactConfig =
 
 compactConfigCode : UiElement Msg
 compactConfigCode =
-    """
+    Common.highlightCode "elm"
+        """
 simpleTable =
     Table.simpleTable
         |> Table.withCompact
         |> Table.withColumns tableColumn
-        |> Table.view information"""
-        |> Util.uiHighlightCode "elm"
+        |> Table.view information
+"""
 
 
 
@@ -265,17 +272,17 @@ simpleTable =
 
 
 tableColumn =
-    [ { head = Util.text "Role"
-      , viewData = \data -> UiFramework.uiParagraph [ Font.bold ] [ Util.text data.role ]
+    [ { head = UiFramework.uiText "Role"
+      , viewData = \data -> UiFramework.uiParagraph [ Font.bold ] [ UiFramework.uiText data.role ]
       }
-    , { head = Util.text "Column 1"
-      , viewData = \data -> UiFramework.uiParagraph [] [ Util.text data.column1 ]
+    , { head = UiFramework.uiText "Column 1"
+      , viewData = \data -> UiFramework.uiParagraph [] [ UiFramework.uiText data.column1 ]
       }
-    , { head = Util.text "Column 2"
-      , viewData = \data -> UiFramework.uiParagraph [] [ Util.text data.column2 ]
+    , { head = UiFramework.uiText "Column 2"
+      , viewData = \data -> UiFramework.uiParagraph [] [ UiFramework.uiText data.column2 ]
       }
-    , { head = Util.text "Column 3"
-      , viewData = \data -> UiFramework.uiParagraph [] [ Util.text data.column3 ]
+    , { head = UiFramework.uiText "Column 3"
+      , viewData = \data -> UiFramework.uiParagraph [] [ UiFramework.uiText data.column3 ]
       }
     ]
 
@@ -316,4 +323,4 @@ update : SharedState -> Msg -> Model -> ( Model, Cmd Msg, SharedStateUpdate )
 update sharedState msg model =
     case msg of
         NavigateTo route ->
-            ( model, Util.navigate sharedState.navKey route, NoUpdate )
+            ( model, Navigation.pushUrl sharedState.navKey (Routes.toUrlString route), NoUpdate )

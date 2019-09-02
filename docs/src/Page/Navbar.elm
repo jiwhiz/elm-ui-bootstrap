@@ -1,7 +1,8 @@
 module Page.Navbar exposing (Model, Msg(..), init, update, view)
 
-import Common exposing (code, componentNavbar, section, title, viewHeader, wrappedText)
-import Element exposing (Color, Element, fill, height, spacing, width)
+import Browser.Navigation as Navigation
+import Common exposing (code, componentNavbar, highlightCode, section, title, viewHeader, wrappedText)
+import Element
 import FontAwesome.Solid
 import Routes
 import SharedState exposing (SharedState, SharedStateUpdate)
@@ -11,7 +12,6 @@ import UiFramework.Dropdown as Dropdown
 import UiFramework.Navbar as Navbar
 import UiFramework.Types exposing (Role(..))
 import UiFramework.Typography as Typography
-import Util
 
 
 
@@ -70,10 +70,12 @@ toContext model sharedState =
 -- VIEW
 
 
-view : SharedState -> Model -> Element Msg
+view : SharedState -> Model -> Element.Element Msg
 view sharedState model =
     UiFramework.uiColumn
-        [ width fill, height fill ]
+        [ Element.width Element.fill
+        , Element.height Element.fill
+        ]
         [ viewHeader
             { title = "Navbar"
             , description = "A concise header for branding, navigation, and other elements."
@@ -81,14 +83,14 @@ view sharedState model =
         , Container.simple
             [ Element.paddingXY 0 64 ]
           <|
-            UiFramework.uiRow [ width fill ]
+            UiFramework.uiRow [ Element.width Element.fill ]
                 [ Container.simple
-                    [ width <| Element.fillPortion 1
-                    , height fill
+                    [ Element.width <| Element.fillPortion 1
+                    , Element.height Element.fill
                     ]
                   <|
                     componentNavbar NavigateTo Routes.Navbar
-                , Container.simple [ width <| Element.fillPortion 6 ] <| content
+                , Container.simple [ Element.width <| Element.fillPortion 6 ] <| content
                 ]
         ]
         |> UiFramework.toElement (toContext model sharedState)
@@ -97,8 +99,8 @@ view sharedState model =
 content : UiElement Msg
 content =
     UiFramework.uiColumn
-        [ width fill
-        , spacing 64
+        [ Element.width Element.fill
+        , Element.spacing 64
         ]
         [ basicExample
         , complexExample
@@ -112,7 +114,7 @@ type SimpleDropdownState
 basicExample : UiElement Msg
 basicExample =
     UiFramework.uiColumn
-        [ width fill
+        [ Element.width Element.fill
         , Element.spacing 32
         ]
         [ title "Basic Example"
@@ -141,7 +143,8 @@ basicExample =
 
 basicExampleCode : UiElement Msg
 basicExampleCode =
-    """
+    Common.highlightCode "elm"
+        """
 import Browser
 import Browser.Events
 import Element exposing (Device)
@@ -285,13 +288,14 @@ subscriptions _ =
     Browser.Events.onResize
         (\\x y ->
             WindowSizeChange (WindowSize x y)
-        )"""
-        |> Util.uiHighlightCode "elm"
+        )
+"""
 
 
 basicHtmlCode : UiElement Msg
 basicHtmlCode =
-    """
+    Common.highlightCode "elm"
+        """
 <!DOCTYPE html>
 <html>
 
@@ -317,8 +321,8 @@ basicHtmlCode =
     </script>
 </body>
 
-</html>"""
-        |> Util.uiHighlightCode "html"
+</html>
+"""
 
 
 type ComplexDropdownState
@@ -331,7 +335,7 @@ complexExample =
     UiFramework.flatMap
         (\context ->
             UiFramework.uiColumn
-                [ width fill
+                [ Element.width Element.fill
                 , Element.spacing 32
                 ]
                 [ title "Customization"
@@ -368,7 +372,8 @@ complexExample =
 
 complexNavbarCode : UiElement Msg
 complexNavbarCode =
-    """
+    Common.highlightCode "elm"
+        """
 import UiFramework.Dropdown as Dropdown
 import UiFramework.Types exposing (Role(..))
 
@@ -470,8 +475,8 @@ view model =
                 [ FontAwesome.Styles.css
                 , elem 
                 ]
-            )"""
-        |> Util.uiHighlightCode "elm"
+            )
+"""
 
 
 
@@ -493,7 +498,7 @@ update sharedState msg model =
             ( model, Cmd.none, SharedState.NoUpdate )
 
         NavigateTo route ->
-            ( model, Util.navigate sharedState.navKey route, SharedState.NoUpdate )
+            ( model, Navigation.pushUrl sharedState.navKey (Routes.toUrlString route), SharedState.NoUpdate )
 
         ToggleDropdown ->
             let
