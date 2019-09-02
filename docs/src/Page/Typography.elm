@@ -119,17 +119,13 @@ import UiFramework
 import UiFramework.Typography as Typography
 
 
-text : String -> WithContext context msg
-text str =
-    UiFramework.uiText (\\_ -> str)
-
 displayExamples = 
     UiFramework.uiColumn 
         [ spacing 16 ]
-        [ Typography.display1 [] (text "Display1")
-        , Typography.display2 [] (text "Display2")
-        , Typography.display3 [] (text "Display3")
-        , Typography.display4 [] (text "Display4")
+        [ Typography.display1 [] ( UiFramework.uiText "Display1")
+        , Typography.display2 [] (UiFramework.uiText "Display2")
+        , Typography.display3 [] (UiFramework.uiText "Display3")
+        , Typography.display4 [] (UiFramework.uiText "Display4")
         ]
 """
 
@@ -141,12 +137,12 @@ headerCode =
 headerExamples = 
     UiFramework.uiColumn 
         [ spacing 16 ]
-        [ Typography.h1 [] (text "H1")
-        , Typography.h2 [] (text "H2")
-        , Typography.h3 [] (text "H3")
-        , Typography.h4 [] (text "H4")
-        , Typography.h5 [] (text "H4")
-        , Typography.h6 [] (text "H4")
+        [ Typography.h1 [] (UiFramework.uiText "H1")
+        , Typography.h2 [] (UiFramework.uiText "H2")
+        , Typography.h3 [] (UiFramework.uiText "H3")
+        , Typography.h4 [] (UiFramework.uiText "H4")
+        , Typography.h5 [] (UiFramework.uiText "H4")
+        , Typography.h6 [] (UiFramework.uiText "H4")
         ]
 """
 
@@ -173,18 +169,13 @@ textCode : UiElement Msg
 textCode =
     Common.highlightCode "elm"
         """
-text : String -> WithContext context msg
-text str =
-    UiFramework.uiText (\\_ -> str)
-
-
 textExamples =
     UiFramework.uiColumn 
         [ spacing 16 ]
-        [ Typography.textLead [] (text "Text Lead - Use me below titles!")
-        , UiFramework.uiParagraph [] [text "Regular text!"]
-        , Typography.textSmall [] (text "Small text!")
-        , Typography.textExtraSmall [] (text "Super small text!")
+        [ Typography.textLead [] (UiFramework.uiText "Text Lead - Use me below titles!")
+        , UiFramework.uiParagraph [] [UiFramework.uiText "Regular text!"]
+        , Typography.textSmall [] (UiFramework.uiText "Small text!")
+        , Typography.textExtraSmall [] (UiFramework.uiText "Super small text!")
         ]
 """
 

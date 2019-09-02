@@ -1,7 +1,7 @@
 module Page.Button exposing (Model, Msg(..), init, update, view)
 
 import Browser.Navigation as Navigation
-import Common exposing (code, componentNavbar, highlightCode, section, title, viewHeader, wrappedText)
+import Common exposing (code, componentNavbar, highlightCode, roleAndNameList, section, title, viewHeader, wrappedText)
 import Element
 import FontAwesome.Brands
 import Routes
@@ -186,7 +186,7 @@ roleConfig =
                         |> Button.withRole role
                         |> Button.view
                 )
-                rolesAndNames
+                roleAndNameList
             )
         , roleConfigCode
         ]
@@ -279,7 +279,7 @@ outlineConfig =
                         |> Button.withOutlined
                         |> Button.view
                 )
-                rolesAndNames
+                roleAndNameList
             )
         , outlineConfigCode
         ]
@@ -408,7 +408,7 @@ disableConfig =
                         |> Button.withDisabled
                         |> Button.view
                 )
-                rolesAndNames
+                roleAndNameList
             )
         , disableConfigCode
         ]
@@ -480,19 +480,6 @@ buttonSizes =
             |> Button.view
         ]
 """
-
-
-rolesAndNames : List ( Role, String )
-rolesAndNames =
-    [ ( Primary, "Primary" )
-    , ( Secondary, "Secondary" )
-    , ( Success, "Success" )
-    , ( Info, "Info" )
-    , ( Warning, "Warning" )
-    , ( Danger, "Danger" )
-    , ( Light, "Light" )
-    , ( Dark, "Dark" )
-    ]
 
 
 

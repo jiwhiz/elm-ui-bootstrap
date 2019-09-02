@@ -1,7 +1,7 @@
 module Page.Badge exposing (Model, Msg(..), init, update, view)
 
 import Browser.Navigation as Navigation
-import Common exposing (code, componentNavbar, highlightCode, section, title, viewHeader, wrappedText)
+import Common exposing (code, componentNavbar, highlightCode, roleAndNameList, section, title, viewHeader, wrappedText)
 import Element
 import Element.Border as Border
 import Routes
@@ -95,7 +95,7 @@ basicExample =
                 (\( role, name ) ->
                     Badge.simple role name
                 )
-                rolesAndNames
+                roleAndNameList
         , basicExampleCode
         ]
 
@@ -273,19 +273,6 @@ pillBadge =
         |> Badge.withPill
         |> Badge.view
 """
-
-
-rolesAndNames : List ( Role, String )
-rolesAndNames =
-    [ ( Primary, "Primary" )
-    , ( Secondary, "Secondary" )
-    , ( Success, "Success" )
-    , ( Info, "Info" )
-    , ( Warning, "Warning" )
-    , ( Danger, "Danger" )
-    , ( Light, "Light" )
-    , ( Dark, "Dark" )
-    ]
 
 
 

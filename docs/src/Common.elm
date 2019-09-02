@@ -3,6 +3,7 @@ module Common exposing
     , code
     , componentNavbar
     , highlightCode
+    , roleAndNameList
     , section
     , title
     , viewHeader
@@ -21,6 +22,7 @@ import Routes exposing (Route(..))
 import UiFramework exposing (WithContext)
 import UiFramework.ColorUtils as ColorUtils
 import UiFramework.Container as Container
+import UiFramework.Types exposing (Role(..))
 import UiFramework.Typography as Typography
 
 
@@ -168,4 +170,17 @@ routeNameList =
     , ( Table, "Table" )
     , ( Typography, "Typography" )
     , ( Form, "Form" )
+    ]
+
+
+roleAndNameList : List ( Role, String )
+roleAndNameList =
+    [ ( Primary, "Primary" )
+    , ( Secondary, "Secondary" )
+    , ( Success, "Success" )
+    , ( Info, "Info" )
+    , ( Warning, "Warning" )
+    , ( Danger, "Danger" )
+    , ( Light, "Light" )
+    , ( Dark, "Dark" )
     ]

@@ -1,7 +1,7 @@
 module Page.Alert exposing (Model, Msg(..), init, update, view)
 
 import Browser.Navigation as Navigation
-import Common exposing (code, componentNavbar, highlightCode, section, title, viewHeader, wrappedText)
+import Common exposing (code, componentNavbar, highlightCode, roleAndNameList, section, title, viewHeader, wrappedText)
 import Element
 import Element.Border as Border
 import Routes
@@ -240,7 +240,7 @@ roleConfigs =
                         |> Alert.withChild (UiFramework.uiText (name ++ " alert, also a small one!"))
                         |> Alert.view
                 )
-                rolesAndNames
+                roleAndNameList
         , roleCode
         ]
 
@@ -311,7 +311,7 @@ Alert.simple Success <|
         [ Element.spacing 8 ]
         [ UiFramework.uiRow
             [ Element.spacing 8 ]
-            [ Typography.textLead [] (text "Yay!")
+            [ Typography.textLead [] (UiFramework.uiText "Yay!")
             , Badge.simple Success "Certified Bruh Moment"
             ]
         , UiFramework.uiText "Congratulations! You have made a fancy alert!"
@@ -328,7 +328,7 @@ attributeConfigs =
         [ section "Adding extra attributes"
         , wrappedText "Using Elm-Ui's styling, we can modify our alerts how we choose."
         , Alert.default
-            |> Alert.withChild (UiFramework.uiText "This alert has a thicc border")
+            |> Alert.withChild (UiFramework.uiText "This alert has a thick border")
             |> Alert.withExtraAttrs
                 [ Border.width 5 ]
             |> Alert.view
@@ -344,24 +344,11 @@ import Element.Border as Border
 
 
 Alert.default
-    |> Alert.withChild (text "This alert has a thicc border")
+    |> Alert.withChild (UiFramework.uiText "This alert has a thick border")
     |> Alert.withExtraAttrs
         [ Border.width 5 ]
     |> Alert.view
 """
-
-
-rolesAndNames : List ( Role, String )
-rolesAndNames =
-    [ ( Primary, "Primary" )
-    , ( Secondary, "Secondary" )
-    , ( Success, "Success" )
-    , ( Info, "Info" )
-    , ( Warning, "Warning" )
-    , ( Danger, "Danger" )
-    , ( Light, "Light" )
-    , ( Dark, "Dark" )
-    ]
 
 
 

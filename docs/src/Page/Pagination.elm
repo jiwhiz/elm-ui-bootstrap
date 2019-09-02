@@ -305,12 +305,6 @@ updatePaginationSlice newSlice state =
     { state | currentSliceNumber = newSlice }
 
 
-
-text : String -> WithContext Context Msg
-text str = 
-    UiFramework.uiText (\\_ -> str)
-
-
 view : Model -> Html Msg 
 view model =
     let
@@ -359,8 +353,8 @@ view model =
                 ]
                 [ UiFramework.uiParagraph
                     [ Font.center ]
-                    [ text "Currently on slice #"
-                    , text <| String.fromInt (state.currentSliceNumber + 1)
+                    [ UiFramework.uiText "Currently on slice #"
+                    , UiFramework.uiText <| String.fromInt (state.currentSliceNumber + 1)
                     ]
                 , paginationElement
                 ]
