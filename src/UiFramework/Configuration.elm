@@ -340,8 +340,8 @@ defaultFontSize size =
 
 
 defaultBorderWidth : Size -> Int
-defaultBorderWidth _ =
-    1
+defaultBorderWidth =
+    always 1
 
 
 defaultBorderRadius : Size -> Int
@@ -367,7 +367,7 @@ defaultAlertConfig themeColor =
     , fontSize = defaultFontSize
     , borderColor = themeColor >> colorLevel -9
     , borderWidth = defaultBorderWidth
-    , borderRadius = \_ -> 4
+    , borderRadius = always 4
     }
 
 
@@ -472,7 +472,7 @@ defaultInputConfig colors themeColor =
     , paddingX = 12
     , paddingY = 10
     , borderColor = colors.gray400
-    , borderWidth = always 1
+    , borderWidth = defaultBorderWidth
     , borderRadius = defaultBorderRadius
     , focusedBorderColor = (themeColor >> lighten 0.25) Primary
     , placeholderColor = colors.gray600
