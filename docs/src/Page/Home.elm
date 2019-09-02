@@ -96,7 +96,7 @@ lead : UiElement Msg
 lead =
     UiFramework.uiParagraph [ Font.center ]
         [ Typography.textLead [] <|
-            UiFramework.uiText "Rewriting the Bootstrap framework using Elm-ui."
+            UiFramework.uiText "Rewriting the Bootstrap framework using elm-ui."
         ]
 
 
@@ -114,7 +114,7 @@ description =
                 (wrappedText "Responsive, Scalable, and Composable Projects on the Web")
             , Typography.textLead
                 [ Element.width Element.fill, Font.center ]
-                (wrappedText "Elm Ui Bootstrap is better than Elm Bootstrap lol")
+                (wrappedText "Elm Ui Bootstrap is inspired by many other elm projects")
             , UiFramework.uiRow
                 [ Element.width Element.fill
                 , Element.paddingXY 0 64

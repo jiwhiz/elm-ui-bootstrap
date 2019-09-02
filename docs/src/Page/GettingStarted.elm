@@ -96,12 +96,27 @@ content =
             , Element.spacing 16
             ]
             [ Typography.h1 [] (UiFramework.uiText "Quick Start")
+            , Typography.textLead [] (UiFramework.uiText "Not Released Yet!")
             , setupCode
-            , Typography.h1 [] (UiFramework.uiText "Module Code")
+            , Typography.h1 [] (UiFramework.uiText "Sample Code")
             , UiFramework.uiParagraph []
-                [ UiFramework.uiText "Elm Ui Bootstrap requires a the full model-view-update architecture to work, because of the context architecture. Below is the not updated boilerplate code to start off a simple project."
+                [ UiFramework.uiText "See "
+                , fromElement
+                    (\_ ->
+                        Element.link []
+                            { url = "https://joshuaji.com/projects/ui-bootstrap-demo/"
+                            , label = Element.text "demo website"
+                            }
+                    )
+                , UiFramework.uiText " made by Joshua, source code at Github: "
+                , fromElement
+                    (\_ ->
+                        Element.link []
+                            { url = "https://github.com/joshuanianji/ui-bootstrap-demo"
+                            , label = Element.text "https://github.com/joshuanianji/ui-bootstrap-demo!"
+                            }
+                    )
                 ]
-            , moduleCode
             ]
 
 
@@ -109,32 +124,7 @@ setupCode : UiElement Msg
 setupCode =
     Common.highlightCode "bash"
         """
-mkdir elm-ui-bootstrap
-cd elm-ui-bootstrap
-elm install something/ui-bootstrap-quickstart
-"""
-
-
-moduleCode : UiElement Msg
-moduleCode =
-    Common.highlightCode "elm"
-        """
-module Main exposing (main)
-
-import Html exposing (..)
-import Bootstrap.CDN as CDN
-import Bootstrap.Grid as Grid
-
-
-main =
-    Grid.container []
-        [ CDN.stylesheet -- creates an inline style node with the Bootstrap CSS
-        , Grid.row []
-            [ Grid.col []
-                [  UiFramework.uiText "Some content for my view here..."]
-            ]
-
-        ]
+TBD
 """
 
 
