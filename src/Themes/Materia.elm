@@ -24,6 +24,7 @@ import UiFramework.Configuration
         , defaultDropdownConfig
         , defaultFontConfig
         , defaultInputConfig
+        , defaultLinkConfig
         , defaultNavConfig
         , defaultNavbarConfig
         , defaultPaginationConfig
@@ -213,6 +214,7 @@ materiaThemeConfig =
     , dropdownConfig = defaultDropdownConfig
     , globalConfig = materiaGlobalConfig
     , inputConfig = materiaInputConfig materiaColors themeColor
+    , linkConfig = defaultLinkConfig themeColor
     , navbarConfig = materiaNavbarConfig
     , navConfig = materiaNavConfig
     , paginationConfig = defaultPaginationConfig themeColor

@@ -6,6 +6,7 @@ module UiFramework exposing
     , toElement
     , uiColumn
     , uiContextualText
+    , uiLink
     , uiNone
     , uiParagraph
     , uiRow
@@ -45,8 +46,6 @@ uiNone =
     Internal.uiNone
 
 
-{-| Text node.
--}
 uiText : String -> WithContext c msg
 uiText =
     Internal.uiText
@@ -55,6 +54,11 @@ uiText =
 uiContextualText : (UiContextual c -> String) -> WithContext c msg
 uiContextualText =
     Internal.uiContextualText
+
+
+uiLink : { url : String, label : String } -> WithContext c msg
+uiLink =
+    Internal.uiLink
 
 
 uiRow : List (Attribute msg) -> List (WithContext c msg) -> WithContext c msg
@@ -72,6 +76,6 @@ uiColumn =
     Internal.uiColumn
 
 
-uiParagraph : List (Attribute msg) -> List (WithContext context msg) -> WithContext context msg
+uiParagraph : List (Attribute msg) -> List (WithContext c msg) -> WithContext c msg
 uiParagraph =
     Internal.uiParagraph
