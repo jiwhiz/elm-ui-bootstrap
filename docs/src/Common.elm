@@ -159,17 +159,17 @@ highlightCode languageStr codeStr =
 
 routeNameList : List ( Route, String )
 routeNameList =
-    [ ( Button, "Button" )
-    , ( Alert, "Alert" )
+    [ ( Alert, "Alert" )
     , ( Badge, "Badge" )
+    , ( Button, "Button" )
     , ( Container, "Container" )
     , ( Dropdown, "Dropdown" )
+    , ( Form, "Form" )
     , ( Icon, "Icon" )
     , ( Navbar, "Navbar" )
     , ( Pagination, "Pagination" )
     , ( Table, "Table" )
     , ( Typography, "Typography" )
-    , ( Form, "Form" )
     ]
 
 

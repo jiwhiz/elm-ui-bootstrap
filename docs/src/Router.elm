@@ -48,17 +48,17 @@ type alias Model =
 type Page
     = HomePage Home.Model
     | GettingStartedPage GettingStarted.Model
-    | ButtonPage Button.Model
     | AlertPage Alert.Model
     | BadgePage Badge.Model
+    | ButtonPage Button.Model
     | ContainerPage Container.Model
     | DropdownPage Dropdown.Model
+    | FormPage Form.Model
     | IconPage Icon.Model
     | NavbarPage Navbar.Model
     | PaginationPage Pagination.Model
     | TablePage Table.Model
     | TypographyPage Typography.Model
-    | FormPage Form.Model
     | NotFoundPage NotFound.Model
 
 
@@ -114,20 +114,23 @@ tabBarTitle model =
         GettingStartedPage _ ->
             "Getting Started"
 
-        ButtonPage _ ->
-            "Button"
-
         AlertPage _ ->
             "Alert"
 
         BadgePage _ ->
             "Badge"
 
+        ButtonPage _ ->
+            "Button"
+
         ContainerPage _ ->
             "Container"
 
         DropdownPage _ ->
             "Dropdown"
+
+        FormPage _ ->
+            "Form"
 
         IconPage _ ->
             "Icon"
@@ -143,9 +146,6 @@ tabBarTitle model =
 
         TypographyPage _ ->
             "Typography"
-
-        FormPage _ ->
-            "Form"
 
         NotFoundPage _ ->
             "Not Found"
@@ -200,7 +200,7 @@ navbar model sharedState =
                 |> UiFramework.Navbar.withMenuTitle "Getting Started"
 
         buttonsItem =
-            UiFramework.Navbar.linkItem (NavigateTo Button)
+            UiFramework.Navbar.linkItem (NavigateTo Alert)
                 |> UiFramework.Navbar.withMenuTitle "Modules"
 
         examplesItem =
@@ -432,20 +432,23 @@ navigateTo route sharedState model =
         GettingStarted ->
             GettingStarted.init |> initWith GettingStartedPage GettingStartedMsg model SharedState.NoUpdate
 
-        Button ->
-            Button.init |> initWith ButtonPage ButtonMsg model SharedState.NoUpdate
-
         Alert ->
             Alert.init |> initWith AlertPage AlertMsg model SharedState.NoUpdate
 
         Badge ->
             Badge.init |> initWith BadgePage BadgeMsg model SharedState.NoUpdate
 
+        Button ->
+            Button.init |> initWith ButtonPage ButtonMsg model SharedState.NoUpdate
+
         Container ->
             Container.init |> initWith ContainerPage ContainerMsg model SharedState.NoUpdate
 
         Dropdown ->
             Dropdown.init |> initWith DropdownPage DropdownMsg model SharedState.NoUpdate
+
+        Form ->
+            Form.init |> initWith FormPage FormMsg model SharedState.NoUpdate
 
         Icon ->
             Icon.init |> initWith IconPage IconMsg model SharedState.NoUpdate
@@ -462,14 +465,17 @@ navigateTo route sharedState model =
         Typography ->
             Typography.init |> initWith TypographyPage TypographyMsg model SharedState.NoUpdate
 
-        Form ->
-            Form.init |> initWith FormPage FormMsg model SharedState.NoUpdate
-
         NotFound ->
             NotFound.init |> initWith NotFoundPage NotFoundMsg model SharedState.NoUpdate
 
 
-initWith : (subModel -> Page) -> (subMsg -> Msg) -> Model -> SharedStateUpdate -> ( subModel, Cmd subMsg ) -> ( Model, Cmd Msg, SharedStateUpdate )
+initWith :
+    (subModel -> Page)
+    -> (subMsg -> Msg)
+    -> Model
+    -> SharedStateUpdate
+    -> ( subModel, Cmd subMsg )
+    -> ( Model, Cmd Msg, SharedStateUpdate )
 initWith toPage toMsg model sharedStateUpdate ( subModel, subCmd ) =
     ( { model | currentPage = toPage subModel }
     , Cmd.batch
