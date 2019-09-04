@@ -1,6 +1,6 @@
 module UiFramework.Form.WebForm exposing (..)
 
-import Element exposing (el, fill, spacing, text, width)
+import Element exposing (Attribute, el, fill, spacing, text, width)
 import Element.Font as Font
 import Form.Error exposing (Error)
 import Set exposing (Set)
@@ -56,10 +56,11 @@ type WebForm values msg
 
 type alias WebFormOptions values msg =
     { onChange : WebFormState values -> msg
-    , actionLabel : String
+    , content : Form values msg
+    , submitLabel : String
     , loadingLabel : Maybe String
     , validationStrategy : ValidationStrategy
-    , content : Form values msg
+    , attributes : List (Attribute msg)
     }
 
 
@@ -68,24 +69,40 @@ type ValidationStrategy
     | ValidateOnBlur
 
 
-
--- builder functions
-
-
-simpleForm : (WebFormState values -> msg) -> Form values msg -> String -> WebForm values msg
-simpleForm onChange content label =
-    WebForm
-        { onChange = onChange
-        , actionLabel = label
-        , loadingLabel = Nothing
-        , validationStrategy = ValidateOnSubmit
-        , content = content
-        }
+withSubmitLabel : String -> WebForm values msg -> WebForm values msg
+withSubmitLabel label (WebForm options) =
+    WebForm { options | submitLabel = label }
 
 
 withLoadingLabel : String -> WebForm values msg -> WebForm values msg
 withLoadingLabel label (WebForm options) =
     WebForm { options | loadingLabel = Just label }
+
+
+withValidationStrategy : ValidationStrategy -> WebForm values msg -> WebForm values msg
+withValidationStrategy validationStrategy (WebForm options) =
+    WebForm { options | validationStrategy = validationStrategy }
+
+
+withExtraAttrs : List (Attribute msg) -> WebForm values msg -> WebForm values msg
+withExtraAttrs attributes (WebForm options) =
+    WebForm { options | attributes = attributes }
+
+
+
+-- builder functions
+
+
+simpleForm : (WebFormState values -> msg) -> Form values msg -> WebForm values msg
+simpleForm onChange content =
+    WebForm
+        { onChange = onChange
+        , content = content
+        , submitLabel = "Submit"
+        , loadingLabel = Nothing
+        , validationStrategy = ValidateOnSubmit
+        , attributes = []
+        }
 
 
 view :
@@ -173,12 +190,12 @@ view state (WebForm options) =
                         -- add spinner icon?
 
                      else
-                        options.actionLabel
+                        options.submitLabel
                     )
                 |> Button.view
     in
     Internal.uiColumn
-        [ spacing 20, width fill ]
+        ([ spacing 20, width fill ] ++ options.attributes)
         (renderedFields ++ [ formError, submitButton ])
 
 
