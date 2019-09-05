@@ -1,9 +1,11 @@
 module Page.Dropdown exposing (Context, Model, Msg(..), init, update, view)
 
+import Browser.Events as Events
 import Browser.Navigation as Navigation
 import Common exposing (code, componentNavbar, highlightCode, section, title, viewHeader, wrappedText)
 import Element
 import FontAwesome.Solid
+import Json.Decode as Json
 import Routes
 import SharedState exposing (SharedState, SharedStateUpdate(..))
 import UiFramework exposing (UiContextual, WithContext, toElement)
@@ -106,9 +108,9 @@ state a boolean.
                     |> Dropdown.withTitle "Static Dropdown"
                     |> Dropdown.withIcon FontAwesome.Solid.appleAlt
                     |> Dropdown.withMenuItems
-                        [ Dropdown.menuLinkItem NoOp
+                        [ Dropdown.menuLinkItem CloseDropdown
                             |> Dropdown.withMenuTitle "Item 1"
-                        , Dropdown.menuLinkItem NoOp
+                        , Dropdown.menuLinkItem CloseDropdown
                             |> Dropdown.withMenuIcon FontAwesome.Solid.bowlingBall
                             |> Dropdown.withMenuTitle "With Icon"
                         ]
@@ -177,19 +179,30 @@ simpleDropdown model =
 
 
 type Msg
-    = NoOp
-    | NavigateTo Routes.Route
+    = NavigateTo Routes.Route
     | ToggleSimpleDropdown
+    | CloseDropdown
 
 
 update : SharedState -> Msg -> Model -> ( Model, Cmd Msg, SharedStateUpdate )
 update sharedState msg model =
     case msg of
-        NoOp ->
-            ( model, Cmd.none, NoUpdate )
-
         NavigateTo route ->
             ( model, Navigation.pushUrl sharedState.navKey (Routes.toUrlString route), NoUpdate )
 
         ToggleSimpleDropdown ->
             ( { model | simpleDropdownState = not model.simpleDropdownState }, Cmd.none, NoUpdate )
+
+        CloseDropdown ->
+            ( { model | simpleDropdownState = False }, Cmd.none, NoUpdate )
+
+
+{-| TODO : add subscriptions in Router.elm
+-}
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    if model.simpleDropdownState == True then
+        Events.onClick (Json.succeed CloseDropdown)
+
+    else
+        Sub.none
