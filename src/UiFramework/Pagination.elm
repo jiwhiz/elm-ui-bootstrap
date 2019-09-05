@@ -117,8 +117,6 @@ withItemLabel itemLabel (Pagination options) =
     Pagination { options | itemLabel = itemLabel }
 
 
-{-| Pagination Item type
--}
 type Item
     = NumberItem Int
     | EllipsisItem

@@ -30,8 +30,6 @@ type alias UiElement context msg =
     Internal.WithContext (Internal.UiContextual context) msg
 
 
-{-| Button type
--}
 type Button context msg
     = Button (Options msg)
 

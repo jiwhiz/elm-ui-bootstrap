@@ -1,4 +1,7 @@
-module UiFramework.Typography exposing (display1, display2, display3, display4, h1, h2, h3, h4, h5, h6, textExtraSmall, textLead, textSmall, span)
+module UiFramework.Typography exposing
+    ( display1, display2, display3, display4, h1, h2, h3, h4, h5, h6, textExtraSmall, textLead, textSmall
+    , span
+    )
 
 {-|
 
@@ -45,55 +48,46 @@ display4 listAttr =
     heading Display4 (Font.light :: listAttr)
 
 
-{-| -}
 h1 : List (Element.Attribute msg) -> UiElement context msg -> UiElement context msg
 h1 listAttr =
     heading SizeH1 (Font.bold :: listAttr)
 
 
-{-| -}
 h2 : List (Element.Attribute msg) -> UiElement context msg -> UiElement context msg
 h2 listAttr =
     heading SizeH2 (Font.bold :: listAttr)
 
 
-{-| -}
 h3 : List (Element.Attribute msg) -> UiElement context msg -> UiElement context msg
 h3 listAttr =
     heading SizeH3 (Font.bold :: listAttr)
 
 
-{-| -}
 h4 : List (Element.Attribute msg) -> UiElement context msg -> UiElement context msg
 h4 listAttr =
     heading SizeH4 (Font.bold :: listAttr)
 
 
-{-| -}
 h5 : List (Element.Attribute msg) -> UiElement context msg -> UiElement context msg
 h5 listAttr =
     heading SizeH5 (Font.bold :: listAttr)
 
 
-{-| -}
 h6 : List (Element.Attribute msg) -> UiElement context msg -> UiElement context msg
 h6 listAttr =
     heading SizeH6 (Font.bold :: listAttr)
 
 
-{-| -}
 textLead : List (Element.Attribute msg) -> UiElement context msg -> UiElement context msg
 textLead listAttr =
     textSection SizeLead (Font.light :: listAttr)
 
 
-{-| -}
 textSmall : List (Element.Attribute msg) -> UiElement context msg -> UiElement context msg
 textSmall =
     textSection SizeSmall
 
 
-{-| -}
 textExtraSmall : List (Element.Attribute msg) -> UiElement context msg -> UiElement context msg
 textExtraSmall =
     textSection SizeExtraSmall
