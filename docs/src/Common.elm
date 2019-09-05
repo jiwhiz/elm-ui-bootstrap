@@ -87,7 +87,7 @@ componentNavbar navigateToMsg route =
 
 title : String -> WithContext c msg
 title str =
-    Typography.display4 [ Font.size 48 ] (UiFramework.uiText str)
+    Typography.display4 [ Font.size 40 ] (UiFramework.uiText str)
 
 
 
