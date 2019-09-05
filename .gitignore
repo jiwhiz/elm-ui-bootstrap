@@ -3,4 +3,7 @@ elm-stuff
 # elm-repl generated files
 repl-temp-*
 
+# elm-app build output
+build
+
 .DS_Store

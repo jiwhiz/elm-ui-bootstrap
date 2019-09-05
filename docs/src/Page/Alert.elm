@@ -1,7 +1,7 @@
 module Page.Alert exposing (Model, Msg(..), init, update, view)
 
 import Browser.Navigation as Navigation
-import Common exposing (code, componentNavbar, highlightCode, roleAndNameList, section, title, viewHeader, wrappedText)
+import Common exposing (code, componentNavbar, highlightCode, moduleLayout, roleAndNameList, section, title, viewHeader, wrappedText)
 import Element
 import Element.Border as Border
 import Routes
@@ -45,27 +45,13 @@ toContext sharedState =
 
 view : SharedState -> Model -> Element.Element Msg
 view sharedState model =
-    UiFramework.uiColumn
-        [ Element.width Element.fill
-        , Element.height Element.fill
-        ]
-        [ viewHeader
-            { title = "Alert"
-            , description = "Fancy info"
-            }
-        , Container.simple
-            [ Element.paddingXY 0 64 ]
-          <|
-            UiFramework.uiRow [ Element.width Element.fill ]
-                [ Container.simple
-                    [ Element.width <| Element.fillPortion 1
-                    , Element.height Element.fill
-                    ]
-                  <|
-                    componentNavbar NavigateTo Routes.Alert
-                , Container.simple [ Element.width <| Element.fillPortion 6 ] <| content
-                ]
-        ]
+    moduleLayout
+        { title = "Alert"
+        , description = "Fancy info"
+        , navigateToMsg = NavigateTo
+        , currentRoute = Routes.Alert
+        , content = content
+        }
         |> UiFramework.toElement (toContext sharedState)
 
 
@@ -140,7 +126,10 @@ configuration =
             [ Element.spacing 16 ]
             [ title "Configurations"
             , UiFramework.uiParagraph []
-                [ UiFramework.uiText "When configuring, we use pipelines to build up our badge, starting from the default function, "
+                [ UiFramework.uiText
+                    """
+When configuring, we use pipelines to build up our badge, starting from the default function, 
+"""
                 , code "Alert.default"
                 ]
             ]

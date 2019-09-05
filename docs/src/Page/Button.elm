@@ -1,7 +1,7 @@
 module Page.Button exposing (Model, Msg(..), init, update, view)
 
 import Browser.Navigation as Navigation
-import Common exposing (code, componentNavbar, highlightCode, roleAndNameList, section, title, viewHeader, wrappedText)
+import Common exposing (code, componentNavbar, highlightCode, moduleLayout, roleAndNameList, section, title, viewHeader, wrappedText)
 import Element
 import FontAwesome.Brands
 import Routes
@@ -43,27 +43,13 @@ toContext sharedState =
 
 view : SharedState -> Model -> Element.Element Msg
 view sharedState model =
-    UiFramework.uiColumn
-        [ Element.width Element.fill
-        , Element.height Element.fill
-        ]
-        [ viewHeader
-            { title = "Buttons"
-            , description = "Click Click Click Click Click Click Click Click Click Click"
-            }
-        , Container.simple
-            [ Element.paddingXY 0 64 ]
-          <|
-            UiFramework.uiRow [ Element.width Element.fill ]
-                [ Container.simple
-                    [ Element.width <| Element.fillPortion 1
-                    , Element.height Element.fill
-                    ]
-                  <|
-                    componentNavbar NavigateTo Routes.Button
-                , Container.simple [ Element.width <| Element.fillPortion 6 ] content
-                ]
-        ]
+    moduleLayout
+        { title = "Button"
+        , description = "Click Click Click Click Click Click Click Click Click Click"
+        , navigateToMsg = NavigateTo
+        , currentRoute = Routes.Button
+        , content = content
+        }
         |> UiFramework.toElement (toContext sharedState)
 
 
@@ -85,7 +71,11 @@ basicExample =
         , Element.spacing 32
         ]
         [ title "Basic Example"
-        , wrappedText "Default buttons take in a message to trigger when clicked, and a string for the label. Icons are optional, and can be added through configuration."
+        , wrappedText
+            """
+Default buttons take in a message to trigger when clicked, and a string for the label. 
+Icons are optional, and can be added through configuration.
+"""
         , UiFramework.uiWrappedRow
             [ Element.spacing 4 ]
             [ Button.simple NoOp "Do Something" ]
@@ -119,7 +109,10 @@ configuration =
             [ Element.spacing 16 ]
             [ title "Configurations"
             , UiFramework.uiParagraph []
-                [ UiFramework.uiText "When configuring, we use pipelines to build up our button, starting from the default function, "
+                [ UiFramework.uiText
+                    """
+When configuring, we use pipelines to build up our button, starting from the default function, 
+"""
                 , code "Button.default"
                 ]
             ]
@@ -176,7 +169,10 @@ roleConfig =
         , Element.spacing 32
         ]
         [ section "Roles"
-        , wrappedText "There are 6 roles for a button, as well as a Light and Dark role. By default it is the Primary role"
+        , wrappedText
+            """
+There are 6 roles for a button, as well as a Light and Dark role. By default it is the Primary role
+"""
         , UiFramework.uiWrappedRow
             [ Element.spacing 4 ]
             (List.map
@@ -230,7 +226,11 @@ basicFunctionalityConfig =
         , Element.spacing 32
         ]
         [ section "withMessage and withLabel"
-        , wrappedText "These provide the same functionality as Button.simple. By default, every button has a label of an empty string and Nothing for a message."
+        , wrappedText
+            """
+These provide the same functionality as Button.simple. By default, 
+every button has a label of an empty string and Nothing for a message.
+"""
         , Button.simple NoOp "Button"
         , basicFunctionalityConfigCode
         ]

@@ -1,7 +1,7 @@
 module Page.Icon exposing (Model, Msg(..), init, update, view)
 
 import Browser.Navigation as Navigation
-import Common exposing (code, componentNavbar, highlightCode, section, title, viewHeader, wrappedText)
+import Common exposing (code, componentNavbar, highlightCode, moduleLayout, section, title, viewHeader, wrappedText)
 import Element
 import FontAwesome.Brands
 import FontAwesome.Solid
@@ -51,25 +51,13 @@ toContext sharedState =
 
 view : SharedState -> Model -> Element.Element Msg
 view sharedState model =
-    UiFramework.uiColumn
-        [ Element.width Element.fill, Element.height Element.fill ]
-        [ viewHeader
-            { title = "Icon"
-            , description = "FontAwesome 5 Icons with Bootstrap"
-            }
-        , Container.simple
-            [ Element.paddingXY 0 64 ]
-          <|
-            UiFramework.uiRow [ Element.width Element.fill ]
-                [ Container.simple
-                    [ Element.width <| Element.fillPortion 1
-                    , Element.height Element.fill
-                    ]
-                  <|
-                    componentNavbar NavigateTo Routes.Icon
-                , Container.simple [ Element.width <| Element.fillPortion 6 ] <| content
-                ]
-        ]
+    moduleLayout
+        { title = "Icon"
+        , description = "FontAwesome 5 Icons with Bootstrap"
+        , navigateToMsg = NavigateTo
+        , currentRoute = Routes.Icon
+        , content = content
+        }
         |> UiFramework.toElement (toContext sharedState)
 
 
@@ -93,7 +81,12 @@ basicExample =
         ]
         [ title "Basic Example"
         , installFontAwesomeCode
-        , wrappedText "Basic icons are rendered with Lattyware's Elm FontAwesome module. It is converted to an Element type (from Elm ui), though unfortunately the conversion from the Element type to the UiElement type seems a bit weird."
+        , wrappedText
+            """
+Basic icons are rendered with Lattyware's Elm FontAwesome module. It is 
+converted to an Element type (from Elm ui), though unfortunately the conversion 
+from the Element type to the UiElement type seems a bit weird.
+"""
         , UiFramework.fromElement (\_ -> Icon.view FontAwesome.Solid.cog)
         , basicExampleCode
         ]
@@ -127,7 +120,13 @@ gettingStarted =
         , Element.spacing 32
         ]
         [ title "Getting Started"
-        , wrappedText "A stylesheet needs to be added in order for the icons to render properly, though. the FontAwesome.Styles.css is a nice Html function you can easily put in your code (after rendering it from a UiElement type) to easily add in all the necessary styles. Here is an example:"
+        , wrappedText
+            """
+A stylesheet needs to be added in order for the icons to render properly, though.
+The FontAwesome.Styles.css is a nice Html function you can easily put in your 
+code (after rendering it from a UiElement type) to easily add in all the 
+necessary styles. Here is an example:
+"""
         , gettingStartedCode
         ]
 
@@ -162,7 +161,11 @@ realLifeUses =
         , Element.spacing 32
         ]
         [ title "Using Icons"
-        , wrappedText "Using icons may seem rather painful by itself, but they are easily implemented in Navbars and Buttons, for example."
+        , wrappedText
+            """
+Using icons may seem rather painful by itself, but they are easily implemented
+in Navbars and Buttons, for example.
+"""
         , UiFramework.uiRow
             [ Element.spacing 8 ]
             [ Button.default

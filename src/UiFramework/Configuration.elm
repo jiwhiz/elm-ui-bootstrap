@@ -9,6 +9,7 @@ module UiFramework.Configuration exposing
     , FontConfig
     , GlobalConfig
     , InputConfig
+    , LinkConfig
     , NavConfig
     , NavbarConfig
     , PaginationConfig
@@ -25,6 +26,7 @@ module UiFramework.Configuration exposing
     , defaultFontConfig
     , defaultFontSize
     , defaultInputConfig
+    , defaultLinkConfig
     , defaultNavConfig
     , defaultNavbarConfig
     , defaultPaginationConfig
@@ -173,6 +175,12 @@ type alias InputConfig =
     }
 
 
+type alias LinkConfig =
+    { linkColor : Color
+    , linkHoverColor : Color
+    }
+
+
 type alias NavConfig =
     { linkPaddingX : Int
     , linkPaddingY : Int
@@ -251,6 +259,7 @@ type alias ThemeConfig =
     , dropdownConfig : DropdownConfig
     , globalConfig : GlobalConfig
     , inputConfig : InputConfig
+    , linkConfig : LinkConfig
     , navbarConfig : NavbarConfig
     , navConfig : NavConfig
     , paginationConfig : PaginationConfig
@@ -481,6 +490,13 @@ defaultInputConfig colors themeColor =
     }
 
 
+defaultLinkConfig : ThemeColor -> LinkConfig
+defaultLinkConfig themeColor =
+    { linkColor = themeColor Primary
+    , linkHoverColor = (themeColor >> darken 0.15) Primary
+    }
+
+
 defaultNavConfig : NavConfig
 defaultNavConfig =
     { linkPaddingX = 16
@@ -597,6 +613,7 @@ defaultThemeConfig =
     , dropdownConfig = defaultDropdownConfig
     , globalConfig = defaultGlobalConfig
     , inputConfig = defaultInputConfig bootstrapColors themeColor
+    , linkConfig = defaultLinkConfig themeColor
     , navbarConfig = defaultNavbarConfig
     , navConfig = defaultNavConfig
     , paginationConfig = defaultPaginationConfig themeColor

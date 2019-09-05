@@ -24,6 +24,7 @@ import UiFramework.Configuration
         , defaultFontConfig
         , defaultFontSize
         , defaultInputConfig
+        , defaultLinkConfig
         , defaultNavConfig
         , defaultNavbarConfig
         , defaultPaginationConfig
@@ -201,6 +202,7 @@ darklyThemeConfig =
     , dropdownConfig = darklyDropdownConfig
     , globalConfig = darklyGlobalConfig
     , inputConfig = darklyInputConfig darklyColors themeColor
+    , linkConfig = defaultLinkConfig themeColor
     , navbarConfig = defaultNavbarConfig
     , navConfig = defaultNavConfig
     , paginationConfig = darklyPaginationConfig themeColor

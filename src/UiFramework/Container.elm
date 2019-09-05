@@ -42,10 +42,8 @@ withChild child (Container options) =
     Container { options | child = child }
 
 
-
--- same as declaring 'container-fluid"
-
-
+{-| same as declaring 'container-fluid"
+-}
 withFullWidth : Container context msg -> Container context msg
 withFullWidth (Container options) =
     Container { options | fillWidth = True }
@@ -66,10 +64,8 @@ default =
     Container defaultOptions
 
 
-
--- basically `<div class="container> child </div>`
-
-
+{-| basically `<div class="container> child </div>`
+-}
 simple : List (Attribute msg) -> UiElement context msg -> UiElement context msg
 simple attributes child =
     default

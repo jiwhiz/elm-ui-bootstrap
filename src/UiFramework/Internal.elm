@@ -1,20 +1,22 @@
 module UiFramework.Internal exposing
     ( UiContextual
     , WithContext
-    , flatMap
     , fromElement
     , node
     , toElement
     , uiColumn
     , uiContextualText
+    , uiLink
     , uiNone
     , uiParagraph
     , uiRow
     , uiText
     , uiWrappedRow
+    , withContext
     )
 
 import Element exposing (Attribute, Device, Element)
+import Element.Font as Font
 import UiFramework.Configuration exposing (ThemeConfig)
 import UiFramework.Types exposing (Role(..))
 
@@ -51,8 +53,8 @@ fromElement =
     Leaf
 
 
-flatMap : (c -> WithContext c msg) -> WithContext c msg
-flatMap f =
+withContext : (context -> WithContext context msg) -> WithContext context msg
+withContext f =
     fromElement
         (\context ->
             toElement context (f context)
@@ -82,6 +84,23 @@ uiText string =
 uiContextualText : (UiContextual c -> String) -> WithContext (UiContextual c) msg
 uiContextualText f =
     Leaf <| \context -> Element.text <| f context
+
+
+uiLink : { url : String, label : String } -> WithContext (UiContextual c) msg
+uiLink { url, label } =
+    Leaf <|
+        \context ->
+            let
+                linkConfig =
+                    context.themeConfig.linkConfig
+            in
+            Element.newTabLink
+                [ Font.color linkConfig.linkColor
+                , Element.mouseOver [ Font.color linkConfig.linkHoverColor ]
+                ]
+                { url = url
+                , label = Element.text label
+                }
 
 
 uiRow : List (Attribute msg) -> List (WithContext (UiContextual c) msg) -> WithContext (UiContextual c) msg

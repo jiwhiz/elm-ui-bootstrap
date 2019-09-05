@@ -36,20 +36,23 @@ toUrlString route =
                 GettingStarted ->
                     [ "getting-started" ]
 
-                Button ->
-                    [ "button" ]
-
                 Alert ->
                     [ "alert" ]
 
                 Badge ->
                     [ "badge" ]
 
+                Button ->
+                    [ "button" ]
+
                 Container ->
                     [ "container" ]
 
                 Dropdown ->
                     [ "dropdown" ]
+
+                Form ->
+                    [ "form" ]
 
                 Icon ->
                     [ "icon" ]
@@ -65,9 +68,6 @@ toUrlString route =
 
                 Typography ->
                     [ "typography" ]
-
-                Form ->
-                    [ "form" ]
 
                 NotFound ->
                     [ "oops" ]
@@ -95,15 +95,15 @@ urlParser =
     Url.oneOf
         [ Url.map Home Url.top
         , Url.map GettingStarted (Url.s "getting-started")
-        , Url.map Button (Url.s "button")
+        , Url.map Alert (Url.s "alert")
         , Url.map Badge (Url.s "badge")
+        , Url.map Button (Url.s "button")
         , Url.map Container (Url.s "container")
         , Url.map Dropdown (Url.s "dropdown")
+        , Url.map Form (Url.s "form")
         , Url.map Icon (Url.s "icon")
         , Url.map Navbar (Url.s "navbar")
         , Url.map Pagination (Url.s "pagination")
         , Url.map Table (Url.s "table")
         , Url.map Typography (Url.s "typography")
-        , Url.map Alert (Url.s "alert")
-        , Url.map Form (Url.s "form")
         ]

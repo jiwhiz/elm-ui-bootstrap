@@ -1,7 +1,7 @@
 module Page.Table exposing (Model, Msg(..), init, update, view)
 
 import Browser.Navigation as Navigation
-import Common exposing (code, componentNavbar, highlightCode, section, title, viewHeader, wrappedText)
+import Common exposing (code, componentNavbar, highlightCode, moduleLayout, section, title, viewHeader, wrappedText)
 import Element
 import Element.Font as Font
 import Routes
@@ -48,27 +48,13 @@ toContext sharedState =
 
 view : SharedState -> Model -> Element.Element Msg
 view sharedState model =
-    UiFramework.uiColumn
-        [ Element.width Element.fill
-        , Element.height Element.fill
-        ]
-        [ viewHeader
-            { title = "Table"
-            , description = "Displaying stuff"
-            }
-        , Container.simple
-            [ Element.paddingXY 0 64 ]
-          <|
-            UiFramework.uiRow [ Element.width Element.fill ]
-                [ Container.simple
-                    [ Element.width <| Element.fillPortion 1
-                    , Element.height Element.fill
-                    ]
-                  <|
-                    componentNavbar NavigateTo Routes.Table
-                , Container.simple [ Element.width <| Element.fillPortion 6 ] <| content
-                ]
-        ]
+    moduleLayout
+        { title = "Table"
+        , description = "Displaying stuff"
+        , navigateToMsg = NavigateTo
+        , currentRoute = Routes.Table
+        , content = content
+        }
         |> UiFramework.toElement (toContext sharedState)
 
 
@@ -90,7 +76,12 @@ basicExample =
         , Element.spacing 32
         ]
         [ title "Basic Example"
-        , wrappedText "The table module does not have a \"Table.default\" function - you must build up from the Table.simpleTable. Nevertheless, here is a basic example with hardcoded data."
+        , wrappedText
+            """
+The table module does not have a "Table.default" function - you must build 
+up from the Table.simpleTable. Nevertheless, here is a basic example with 
+hardcoded data.
+"""
         , Table.simpleTable
             |> Table.withColumns tableColumn
             |> Table.view information

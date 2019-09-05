@@ -1,8 +1,10 @@
 module Common exposing
     ( Header
     , code
+    , collapse
     , componentNavbar
     , highlightCode
+    , moduleLayout
     , roleAndNameList
     , section
     , title
@@ -10,7 +12,7 @@ module Common exposing
     , wrappedText
     )
 
-import Element exposing (Attribute, Color, fill, height, width)
+import Element exposing (Attribute, Color, Device, DeviceClass(..), Orientation(..), fill, height, width)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Events as Events
@@ -32,6 +34,65 @@ type alias Header =
     }
 
 
+collapse : Device -> Bool
+collapse device =
+    case device.class of
+        Phone ->
+            True
+
+        Tablet ->
+            if device.orientation == Portrait then
+                True
+
+            else
+                False
+
+        _ ->
+            False
+
+
+moduleLayout :
+    { title : String
+    , description : String
+    , navigateToMsg : Route -> msg
+    , currentRoute : Route
+    , content : UiFramework.WithContext context msg
+    }
+    -> WithContext context msg
+moduleLayout config =
+    UiFramework.withContext
+        (\context ->
+            UiFramework.uiColumn
+                [ Element.width Element.fill
+                , Element.height Element.fill
+                ]
+                [ viewHeader
+                    { title = config.title
+                    , description = config.description
+                    }
+                , Container.simple
+                    [ Element.paddingXY 0 64 ]
+                  <|
+                    if collapse context.device then
+                        UiFramework.uiColumn [ Element.width Element.fill ]
+                            [ componentNavbar config.navigateToMsg config.currentRoute
+                            , config.content
+                            ]
+
+                    else
+                        UiFramework.uiRow [ Element.width Element.fill ]
+                            [ Container.simple
+                                [ Element.width <| Element.fillPortion 1
+                                , Element.height Element.fill
+                                ]
+                              <|
+                                componentNavbar config.navigateToMsg config.currentRoute
+                            , Container.simple [ Element.width <| Element.fillPortion 6 ] <| config.content
+                            ]
+                ]
+        )
+
+
 viewHeader : Header -> WithContext c msg
 viewHeader pageContent =
     let
@@ -48,7 +109,7 @@ viewHeader pageContent =
                     [ Typography.textLead [] <| UiFramework.uiText pageContent.description ]
                 ]
     in
-    UiFramework.flatMap
+    UiFramework.withContext
         (\context ->
             Container.jumbotron
                 |> Container.withFullWidth
@@ -87,7 +148,7 @@ componentNavbar navigateToMsg route =
 
 title : String -> WithContext c msg
 title str =
-    Typography.display4 [ Font.size 48 ] (UiFramework.uiText str)
+    Typography.display4 [ Font.size 40 ] (UiFramework.uiText str)
 
 
 
@@ -96,7 +157,7 @@ title str =
 
 section : String -> WithContext c msg
 section str =
-    Typography.h1 [] (UiFramework.uiText str)
+    Typography.h1 [] (wrappedText str)
 
 
 
@@ -159,17 +220,17 @@ highlightCode languageStr codeStr =
 
 routeNameList : List ( Route, String )
 routeNameList =
-    [ ( Button, "Button" )
-    , ( Alert, "Alert" )
+    [ ( Alert, "Alert" )
     , ( Badge, "Badge" )
+    , ( Button, "Button" )
     , ( Container, "Container" )
     , ( Dropdown, "Dropdown" )
+    , ( Form, "Form" )
     , ( Icon, "Icon" )
     , ( Navbar, "Navbar" )
     , ( Pagination, "Pagination" )
     , ( Table, "Table" )
     , ( Typography, "Typography" )
-    , ( Form, "Form" )
     ]
 
 

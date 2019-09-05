@@ -33,8 +33,6 @@ type alias UiElement context msg =
     Internal.WithContext (Internal.UiContextual context) msg
 
 
-{-| Table type
--}
 type Table data context msg
     = Table (Options data context msg)
 

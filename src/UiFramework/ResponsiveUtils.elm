@@ -3,10 +3,9 @@ module UiFramework.ResponsiveUtils exposing (classifyDevice)
 import Element exposing (Device, DeviceClass(..), Orientation(..))
 
 
-
--- Use Bootstrap responsive breakpoints: https://getbootstrap.com/docs/4.3/layout/overview/#responsive-breakpoints
-
-
+{-| Use Bootstrap responsive breakpoints:
+<https://getbootstrap.com/docs/4.3/layout/overview/#responsive-breakpoints>
+-}
 classifyDevice : { window | height : Int, width : Int } -> Device
 classifyDevice window =
     { class =

@@ -1,7 +1,7 @@
 module Page.Pagination exposing (Model, Msg(..), init, update, view)
 
 import Browser.Navigation as Navigation
-import Common exposing (code, componentNavbar, highlightCode, section, title, viewHeader, wrappedText)
+import Common exposing (code, componentNavbar, highlightCode, moduleLayout, section, title, viewHeader, wrappedText)
 import Element
 import Element.Font as Font
 import Routes
@@ -64,27 +64,13 @@ toContext model sharedState =
 
 view : SharedState -> Model -> Element.Element Msg
 view sharedState model =
-    UiFramework.uiColumn
-        [ Element.width Element.fill
-        , Element.height Element.fill
-        ]
-        [ viewHeader
-            { title = "Pagination"
-            , description = "False routing"
-            }
-        , Container.simple
-            [ Element.paddingXY 0 64 ]
-          <|
-            UiFramework.uiRow [ Element.width Element.fill ]
-                [ Container.simple
-                    [ Element.width <| Element.fillPortion 1
-                    , Element.height Element.fill
-                    ]
-                  <|
-                    componentNavbar NavigateTo Routes.Pagination
-                , Container.simple [ Element.width <| Element.fillPortion 6 ] <| content
-                ]
-        ]
+    moduleLayout
+        { title = "Pagination"
+        , description = "False routing"
+        , navigateToMsg = NavigateTo
+        , currentRoute = Routes.Pagination
+        , content = content
+        }
         |> UiFramework.toElement (toContext model sharedState)
 
 
@@ -106,8 +92,17 @@ basicExample =
         , Element.spacing 32
         ]
         [ title "Basic Example"
-        , wrappedText "Paginations need states and boilerplate code to handle its responsive behaviour, but for now, let's make a simple static pagination. A basic example of that would look like this."
-        , wrappedText "Note that you still need to import the FontAwesome stylesheet into your code, as the buttons rely on their icons."
+        , wrappedText
+            """
+Paginations need states and boilerplate code to handle its responsive behaviour, 
+but for now, let's make a simple static pagination. A basic example of 
+that would look like this.
+"""
+        , wrappedText
+            """
+Note that you still need to import the FontAwesome stylesheet into your code, 
+as the buttons rely on their icons.
+"""
         , Pagination.default (\_ -> NoOp)
             |> Pagination.withItems
                 [ Pagination.NumberItem 0
@@ -156,7 +151,7 @@ staticPagination =
 
 responsiveExample : UiElement Msg
 responsiveExample =
-    UiFramework.flatMap
+    UiFramework.withContext
         (\context ->
             UiFramework.uiColumn
                 [ Element.width Element.fill
@@ -173,9 +168,25 @@ responsiveExample =
                             ( 0, state.numberOfSlices - 1 )
 
                         else
-                            ( max 0 (state.currentSliceNumber - 2)
-                            , min (state.numberOfSlices - 1) (state.currentSliceNumber + 2)
-                            )
+                            let
+                                start =
+                                    if state.currentSliceNumber < 3 then
+                                        0
+
+                                    else if state.currentSliceNumber + 2 < state.numberOfSlices then
+                                        state.currentSliceNumber - 2
+
+                                    else
+                                        state.numberOfSlices - 5
+
+                                end =
+                                    if start + 4 < state.numberOfSlices then
+                                        start + 4
+
+                                    else
+                                        state.numberOfSlices - 1
+                            in
+                            ( start, end )
 
                     itemList =
                         (if startNumber > 0 then
@@ -209,9 +220,17 @@ responsiveExample =
                                 , paginationElement
                                 ]
                        )
-                , wrappedText "Paginations need the full model-view-update architecture to function, so here's a complete code set to deal with a simple responsive pagination."
+                , wrappedText
+                    """
+Paginations need the full model-view-update architecture to function, 
+so here's a complete code set to deal with a simple responsive pagination.
+"""
                 , responsiveExampleCode
-                , wrappedText "Because of the flags, you'll also need to configure an index.html file. Below is the setup you can use yourself."
+                , wrappedText
+                    """
+Because of the flags, you'll also need to configure an index.html file. 
+Below is the setup you can use yourself.
+"""
                 , basicHtmlCode
                 ]
         )

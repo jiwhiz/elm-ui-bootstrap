@@ -1,9 +1,11 @@
 module Page.Dropdown exposing (Context, Model, Msg(..), init, update, view)
 
+import Browser.Events as Events
 import Browser.Navigation as Navigation
-import Common exposing (code, componentNavbar, highlightCode, section, title, viewHeader, wrappedText)
+import Common exposing (code, componentNavbar, highlightCode, moduleLayout, section, title, viewHeader, wrappedText)
 import Element
 import FontAwesome.Solid
+import Json.Decode as Json
 import Routes
 import SharedState exposing (SharedState, SharedStateUpdate(..))
 import UiFramework exposing (UiContextual, WithContext, toElement)
@@ -52,27 +54,13 @@ toContext model sharedState =
 
 view : SharedState -> Model -> Element.Element Msg
 view sharedState model =
-    UiFramework.uiColumn
-        [ Element.width Element.fill
-        , Element.height Element.fill
-        ]
-        [ viewHeader
-            { title = "Dropdown"
-            , description = "Flexible components for almost any navigational sections."
-            }
-        , Container.simple
-            [ Element.paddingXY 0 64 ]
-          <|
-            UiFramework.uiRow [ Element.width Element.fill ]
-                [ Container.simple
-                    [ Element.width <| Element.fillPortion 1
-                    , Element.height Element.fill
-                    ]
-                  <|
-                    componentNavbar NavigateTo Routes.Dropdown
-                , Container.simple [ Element.width <| Element.fillPortion 6 ] <| content
-                ]
-        ]
+    moduleLayout
+        { title = "Dropdown"
+        , description = "Flexible components for almost any navigational sections."
+        , navigateToMsg = NavigateTo
+        , currentRoute = Routes.Dropdown
+        , content = content
+        }
         |> UiFramework.toElement (toContext model sharedState)
 
 
@@ -88,26 +76,36 @@ content =
 
 basicExample : UiElement Msg
 basicExample =
-    UiFramework.flatMap
+    UiFramework.withContext
         (\context ->
             UiFramework.uiColumn
                 [ Element.width Element.fill
                 , Element.spacing 32
                 ]
                 [ title "Basic Example"
-                , wrappedText "The implementation of Dropdowns closely align with Navbars and Paginations. Dropdowns need a state to dictate their actions, though here, that state is fully up the the developer to choose. For this simple demo I've made that state a boolean."
+                , wrappedText
+                    """
+The implementation of Dropdowns closely align with Navbars and Paginations. 
+Dropdowns need a state to dictate their actions, though here, that state is 
+fully up the the developer to choose. For this simple demo I've made that 
+state a boolean.
+"""
                 , Dropdown.default ToggleSimpleDropdown True
                     |> Dropdown.withTitle "Static Dropdown"
                     |> Dropdown.withIcon FontAwesome.Solid.appleAlt
                     |> Dropdown.withMenuItems
-                        [ Dropdown.menuLinkItem NoOp
+                        [ Dropdown.menuLinkItem CloseDropdown
                             |> Dropdown.withMenuTitle "Item 1"
-                        , Dropdown.menuLinkItem NoOp
+                        , Dropdown.menuLinkItem CloseDropdown
                             |> Dropdown.withMenuIcon FontAwesome.Solid.bowlingBall
                             |> Dropdown.withMenuTitle "With Icon"
                         ]
                     |> Dropdown.view context.simpleDropdownState
-                , wrappedText "The code below is greatly simplified from the actual implementation of the UiFramework, but serves as a way to showcase how to get the types working."
+                , wrappedText
+                    """
+The code below is greatly simplified from the actual implementation of
+the UiFramework, but serves as a way to showcase how to get the types working.
+"""
                 , basicExampleCode
                 ]
         )
@@ -167,19 +165,30 @@ simpleDropdown model =
 
 
 type Msg
-    = NoOp
-    | NavigateTo Routes.Route
+    = NavigateTo Routes.Route
     | ToggleSimpleDropdown
+    | CloseDropdown
 
 
 update : SharedState -> Msg -> Model -> ( Model, Cmd Msg, SharedStateUpdate )
 update sharedState msg model =
     case msg of
-        NoOp ->
-            ( model, Cmd.none, NoUpdate )
-
         NavigateTo route ->
             ( model, Navigation.pushUrl sharedState.navKey (Routes.toUrlString route), NoUpdate )
 
         ToggleSimpleDropdown ->
             ( { model | simpleDropdownState = not model.simpleDropdownState }, Cmd.none, NoUpdate )
+
+        CloseDropdown ->
+            ( { model | simpleDropdownState = False }, Cmd.none, NoUpdate )
+
+
+{-| TODO : add subscriptions in Router.elm
+-}
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    if model.simpleDropdownState == True then
+        Events.onClick (Json.succeed CloseDropdown)
+
+    else
+        Sub.none
