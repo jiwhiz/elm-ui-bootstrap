@@ -199,7 +199,7 @@ navbar model sharedState =
             UiFramework.Navbar.linkItem (NavigateTo GettingStarted)
                 |> UiFramework.Navbar.withMenuTitle "Getting Started"
 
-        buttonsItem =
+        modulesItem =
             UiFramework.Navbar.linkItem (NavigateTo Alert)
                 |> UiFramework.Navbar.withMenuTitle "Modules"
 
@@ -212,7 +212,7 @@ navbar model sharedState =
         |> UiFramework.Navbar.withBackground Light
         |> UiFramework.Navbar.withMenuItems
             [ homeItem
-            , buttonsItem
+            , modulesItem
             , examplesItem
             ]
         |> UiFramework.Navbar.withExtraAttrs []
@@ -231,10 +231,6 @@ content model sharedState =
             GettingStarted.view sharedState pageModel
                 |> Element.map GettingStartedMsg
 
-        ButtonPage pageModel ->
-            Button.view sharedState pageModel
-                |> Element.map ButtonMsg
-
         AlertPage pageModel ->
             Alert.view sharedState pageModel
                 |> Element.map AlertMsg
@@ -243,6 +239,10 @@ content model sharedState =
             Badge.view sharedState pageModel
                 |> Element.map BadgeMsg
 
+        ButtonPage pageModel ->
+            Button.view sharedState pageModel
+                |> Element.map ButtonMsg
+
         ContainerPage pageModel ->
             Container.view sharedState pageModel
                 |> Element.map ContainerMsg
@@ -250,6 +250,10 @@ content model sharedState =
         DropdownPage pageModel ->
             Dropdown.view sharedState pageModel
                 |> Element.map DropdownMsg
+
+        FormPage pageModel ->
+            Form.view sharedState pageModel
+                |> Element.map FormMsg
 
         IconPage pageModel ->
             Icon.view sharedState pageModel
@@ -270,10 +274,6 @@ content model sharedState =
         TypographyPage pageModel ->
             Typography.view sharedState pageModel
                 |> Element.map TypographyMsg
-
-        FormPage pageModel ->
-            Form.view sharedState pageModel
-                |> Element.map FormMsg
 
         NotFoundPage pageModel ->
             NotFound.view sharedState pageModel

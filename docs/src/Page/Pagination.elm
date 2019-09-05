@@ -1,7 +1,7 @@
 module Page.Pagination exposing (Model, Msg(..), init, update, view)
 
 import Browser.Navigation as Navigation
-import Common exposing (code, componentNavbar, highlightCode, section, title, viewHeader, wrappedText)
+import Common exposing (code, componentNavbar, highlightCode, moduleLayout, section, title, viewHeader, wrappedText)
 import Element
 import Element.Font as Font
 import Routes
@@ -64,27 +64,13 @@ toContext model sharedState =
 
 view : SharedState -> Model -> Element.Element Msg
 view sharedState model =
-    UiFramework.uiColumn
-        [ Element.width Element.fill
-        , Element.height Element.fill
-        ]
-        [ viewHeader
-            { title = "Pagination"
-            , description = "False routing"
-            }
-        , Container.simple
-            [ Element.paddingXY 0 64 ]
-          <|
-            UiFramework.uiRow [ Element.width Element.fill ]
-                [ Container.simple
-                    [ Element.width <| Element.fillPortion 1
-                    , Element.height Element.fill
-                    ]
-                  <|
-                    componentNavbar NavigateTo Routes.Pagination
-                , Container.simple [ Element.width <| Element.fillPortion 6 ] <| content
-                ]
-        ]
+    moduleLayout
+        { title = "Pagination"
+        , description = "False routing"
+        , navigateToMsg = NavigateTo
+        , currentRoute = Routes.Pagination
+        , content = content
+        }
         |> UiFramework.toElement (toContext model sharedState)
 
 
@@ -182,9 +168,25 @@ responsiveExample =
                             ( 0, state.numberOfSlices - 1 )
 
                         else
-                            ( max 0 (state.currentSliceNumber - 2)
-                            , min (state.numberOfSlices - 1) (state.currentSliceNumber + 2)
-                            )
+                            let
+                                start =
+                                    if state.currentSliceNumber < 3 then
+                                        0
+
+                                    else if state.currentSliceNumber + 2 < state.numberOfSlices then
+                                        state.currentSliceNumber - 2
+
+                                    else
+                                        state.numberOfSlices - 5
+
+                                end =
+                                    if start + 4 < state.numberOfSlices then
+                                        start + 4
+
+                                    else
+                                        state.numberOfSlices - 1
+                            in
+                            ( start, end )
 
                     itemList =
                         (if startNumber > 0 then

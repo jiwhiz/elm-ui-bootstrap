@@ -1,7 +1,7 @@
 module Page.Container exposing (Model, Msg(..), init, update, view)
 
 import Browser.Navigation as Navigation
-import Common exposing (code, componentNavbar, highlightCode, section, title, viewHeader, wrappedText)
+import Common exposing (code, componentNavbar, highlightCode, moduleLayout, section, title, viewHeader, wrappedText)
 import Element
 import Element.Background as Background
 import Element.Border as Border
@@ -44,27 +44,13 @@ toContext sharedState =
 
 view : SharedState -> Model -> Element.Element Msg
 view sharedState model =
-    UiFramework.uiColumn
-        [ Element.width Element.fill
-        , Element.height Element.fill
-        ]
-        [ viewHeader
-            { title = "Container"
-            , description = "Basic layout elements that contain 1 child"
-            }
-        , Container.simple
-            [ Element.paddingXY 0 64 ]
-          <|
-            UiFramework.uiRow [ Element.width Element.fill ]
-                [ Container.simple
-                    [ Element.width <| Element.fillPortion 1
-                    , Element.height Element.fill
-                    ]
-                  <|
-                    componentNavbar NavigateTo Routes.Container
-                , Container.simple [ Element.width <| Element.fillPortion 6 ] <| content
-                ]
-        ]
+    moduleLayout
+        { title = "Container"
+        , description = "Basic layout elements that contain 1 child"
+        , navigateToMsg = NavigateTo
+        , currentRoute = Routes.Container
+        , content = content
+        }
         |> UiFramework.toElement (toContext sharedState)
 
 
@@ -232,7 +218,7 @@ jumbotronConfig =
             |> Container.withChild
                 (UiFramework.uiColumn []
                     [ Typography.display4 [] (UiFramework.uiText "Jumbotron")
-                    , Typography.textLead [] (UiFramework.uiText "grab attention with these backgrounds.")
+                    , Typography.textLead [] (wrappedText "grab attention with these backgrounds.")
                     ]
                 )
             |> Container.view

@@ -1,7 +1,7 @@
 module Page.Navbar exposing (Model, Msg(..), init, update, view)
 
 import Browser.Navigation as Navigation
-import Common exposing (code, componentNavbar, highlightCode, section, title, viewHeader, wrappedText)
+import Common exposing (code, componentNavbar, highlightCode, moduleLayout, section, title, viewHeader, wrappedText)
 import Element
 import FontAwesome.Solid
 import Routes
@@ -72,27 +72,13 @@ toContext model sharedState =
 
 view : SharedState -> Model -> Element.Element Msg
 view sharedState model =
-    UiFramework.uiColumn
-        [ Element.width Element.fill
-        , Element.height Element.fill
-        ]
-        [ viewHeader
-            { title = "Navbar"
-            , description = "A concise header for branding, navigation, and other elements."
-            }
-        , Container.simple
-            [ Element.paddingXY 0 64 ]
-          <|
-            UiFramework.uiRow [ Element.width Element.fill ]
-                [ Container.simple
-                    [ Element.width <| Element.fillPortion 1
-                    , Element.height Element.fill
-                    ]
-                  <|
-                    componentNavbar NavigateTo Routes.Navbar
-                , Container.simple [ Element.width <| Element.fillPortion 6 ] <| content
-                ]
-        ]
+    moduleLayout
+        { title = "Navbar"
+        , description = "A concise header for branding, navigation, and other elements."
+        , navigateToMsg = NavigateTo
+        , currentRoute = Routes.Navbar
+        , content = content
+        }
         |> UiFramework.toElement (toContext model sharedState)
 
 

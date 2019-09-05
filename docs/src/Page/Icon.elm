@@ -1,7 +1,7 @@
 module Page.Icon exposing (Model, Msg(..), init, update, view)
 
 import Browser.Navigation as Navigation
-import Common exposing (code, componentNavbar, highlightCode, section, title, viewHeader, wrappedText)
+import Common exposing (code, componentNavbar, highlightCode, moduleLayout, section, title, viewHeader, wrappedText)
 import Element
 import FontAwesome.Brands
 import FontAwesome.Solid
@@ -51,25 +51,13 @@ toContext sharedState =
 
 view : SharedState -> Model -> Element.Element Msg
 view sharedState model =
-    UiFramework.uiColumn
-        [ Element.width Element.fill, Element.height Element.fill ]
-        [ viewHeader
-            { title = "Icon"
-            , description = "FontAwesome 5 Icons with Bootstrap"
-            }
-        , Container.simple
-            [ Element.paddingXY 0 64 ]
-          <|
-            UiFramework.uiRow [ Element.width Element.fill ]
-                [ Container.simple
-                    [ Element.width <| Element.fillPortion 1
-                    , Element.height Element.fill
-                    ]
-                  <|
-                    componentNavbar NavigateTo Routes.Icon
-                , Container.simple [ Element.width <| Element.fillPortion 6 ] <| content
-                ]
-        ]
+    moduleLayout
+        { title = "Icon"
+        , description = "FontAwesome 5 Icons with Bootstrap"
+        , navigateToMsg = NavigateTo
+        , currentRoute = Routes.Icon
+        , content = content
+        }
         |> UiFramework.toElement (toContext sharedState)
 
 

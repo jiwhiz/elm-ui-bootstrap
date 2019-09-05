@@ -2,7 +2,7 @@ module Page.Dropdown exposing (Context, Model, Msg(..), init, update, view)
 
 import Browser.Events as Events
 import Browser.Navigation as Navigation
-import Common exposing (code, componentNavbar, highlightCode, section, title, viewHeader, wrappedText)
+import Common exposing (code, componentNavbar, highlightCode, moduleLayout, section, title, viewHeader, wrappedText)
 import Element
 import FontAwesome.Solid
 import Json.Decode as Json
@@ -54,27 +54,13 @@ toContext model sharedState =
 
 view : SharedState -> Model -> Element.Element Msg
 view sharedState model =
-    UiFramework.uiColumn
-        [ Element.width Element.fill
-        , Element.height Element.fill
-        ]
-        [ viewHeader
-            { title = "Dropdown"
-            , description = "Flexible components for almost any navigational sections."
-            }
-        , Container.simple
-            [ Element.paddingXY 0 64 ]
-          <|
-            UiFramework.uiRow [ Element.width Element.fill ]
-                [ Container.simple
-                    [ Element.width <| Element.fillPortion 1
-                    , Element.height Element.fill
-                    ]
-                  <|
-                    componentNavbar NavigateTo Routes.Dropdown
-                , Container.simple [ Element.width <| Element.fillPortion 6 ] <| content
-                ]
-        ]
+    moduleLayout
+        { title = "Dropdown"
+        , description = "Flexible components for almost any navigational sections."
+        , navigateToMsg = NavigateTo
+        , currentRoute = Routes.Dropdown
+        , content = content
+        }
         |> UiFramework.toElement (toContext model sharedState)
 
 

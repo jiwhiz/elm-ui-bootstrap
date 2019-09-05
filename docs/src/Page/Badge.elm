@@ -1,7 +1,7 @@
 module Page.Badge exposing (Model, Msg(..), init, update, view)
 
 import Browser.Navigation as Navigation
-import Common exposing (code, componentNavbar, highlightCode, roleAndNameList, section, title, viewHeader, wrappedText)
+import Common exposing (code, componentNavbar, highlightCode, moduleLayout, roleAndNameList, section, title, viewHeader, wrappedText)
 import Element
 import Element.Border as Border
 import Routes
@@ -43,27 +43,13 @@ toContext sharedState =
 
 view : SharedState -> Model -> Element.Element Msg
 view sharedState model =
-    UiFramework.uiColumn
-        [ Element.width Element.fill
-        , Element.height Element.fill
-        ]
-        [ viewHeader
-            { title = "Badge"
-            , description = "Nerfed alerts"
-            }
-        , Container.simple
-            [ Element.paddingXY 0 64 ]
-          <|
-            UiFramework.uiRow [ Element.width Element.fill ]
-                [ Container.simple
-                    [ Element.width <| Element.fillPortion 1
-                    , Element.height Element.fill
-                    ]
-                  <|
-                    componentNavbar NavigateTo Routes.Badge
-                , Container.simple [ Element.width <| Element.fillPortion 6 ] <| content
-                ]
-        ]
+    moduleLayout
+        { title = "Badge"
+        , description = "Nerfed alerts"
+        , navigateToMsg = NavigateTo
+        , currentRoute = Routes.Badge
+        , content = content
+        }
         |> UiFramework.toElement (toContext sharedState)
 
 
