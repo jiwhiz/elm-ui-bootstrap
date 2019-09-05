@@ -80,6 +80,7 @@ basicExample =
         , Element.spacing 32
         ]
         [ title "Basic Example"
+        , installFontAwesomeCode
         , wrappedText
             """
 Basic icons are rendered with Lattyware's Elm FontAwesome module. It is 
@@ -89,6 +90,13 @@ from the Element type to the UiElement type seems a bit weird.
         , UiFramework.fromElement (\_ -> Icon.view FontAwesome.Solid.cog)
         , basicExampleCode
         ]
+
+
+installFontAwesomeCode : UiElement Msg
+installFontAwesomeCode =
+    Common.highlightCode "bash"
+        """
+elm install lattyware/elm-fontawesome"""
 
 
 basicExampleCode : UiElement Msg
