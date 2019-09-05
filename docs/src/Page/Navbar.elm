@@ -340,7 +340,7 @@ type ComplexDropdownState
 
 complexExample : UiElement Msg
 complexExample =
-    UiFramework.flatMap
+    UiFramework.withContext
         (\context ->
             UiFramework.uiColumn
                 [ Element.width Element.fill

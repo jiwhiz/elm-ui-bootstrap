@@ -165,7 +165,7 @@ staticPagination =
 
 responsiveExample : UiElement Msg
 responsiveExample =
-    UiFramework.flatMap
+    UiFramework.withContext
         (\context ->
             UiFramework.uiColumn
                 [ Element.width Element.fill

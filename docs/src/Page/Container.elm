@@ -87,7 +87,7 @@ basicExample =
         ]
         [ title "Basic Example"
         , wrappedText "Default containers are responsive, with fixed max-widths that change at each breakpoint. Imo, containers are dwarved by the uiColumn and uiRow elements, and are not really used anywhere other than being a top-level parent element that dictates the width of the content."
-        , UiFramework.flatMap
+        , UiFramework.withContext
             (\context ->
                 Container.simple
                     [ Background.color context.themeConfig.globalConfig.colors.purple

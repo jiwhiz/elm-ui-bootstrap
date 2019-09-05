@@ -1,7 +1,6 @@
 module UiFramework.Internal exposing
     ( UiContextual
     , WithContext
-    , flatMap
     , fromElement
     , node
     , toElement
@@ -13,6 +12,7 @@ module UiFramework.Internal exposing
     , uiRow
     , uiText
     , uiWrappedRow
+    , withContext
     )
 
 import Element exposing (Attribute, Device, Element)
@@ -53,8 +53,8 @@ fromElement =
     Leaf
 
 
-flatMap : (c -> WithContext c msg) -> WithContext c msg
-flatMap f =
+withContext : (context -> WithContext context msg) -> WithContext context msg
+withContext f =
     fromElement
         (\context ->
             toElement context (f context)

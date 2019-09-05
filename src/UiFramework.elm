@@ -1,7 +1,6 @@
 module UiFramework exposing
     ( UiContextual
     , WithContext
-    , flatMap
     , fromElement
     , toElement
     , uiColumn
@@ -12,6 +11,7 @@ module UiFramework exposing
     , uiRow
     , uiText
     , uiWrappedRow
+    , withContext
     )
 
 import Element exposing (Attribute, Element)
@@ -36,9 +36,9 @@ fromElement =
     Internal.fromElement
 
 
-flatMap : (UiContextual c -> WithContext c msg) -> WithContext c msg
-flatMap =
-    Internal.flatMap
+withContext : (UiContextual c -> WithContext c msg) -> WithContext c msg
+withContext =
+    Internal.withContext
 
 
 uiNone : WithContext c msg

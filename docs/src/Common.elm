@@ -48,7 +48,7 @@ viewHeader pageContent =
                     [ Typography.textLead [] <| UiFramework.uiText pageContent.description ]
                 ]
     in
-    UiFramework.flatMap
+    UiFramework.withContext
         (\context ->
             Container.jumbotron
                 |> Container.withFullWidth

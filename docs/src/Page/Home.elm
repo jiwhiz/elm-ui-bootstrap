@@ -76,7 +76,7 @@ header =
                 , lead
                 ]
     in
-    UiFramework.flatMap
+    UiFramework.withContext
         (\context ->
             Container.jumbotron
                 |> Container.withFullWidth

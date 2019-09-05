@@ -182,7 +182,7 @@ withMenuTitle title item =
 
 view : NavbarState state -> Navbar context state msg -> UiElement context msg
 view { toggleMenuState, dropdownState } (Navbar options) =
-    Internal.flatMap
+    Internal.withContext
         (\context ->
             let
                 navbarConfig =

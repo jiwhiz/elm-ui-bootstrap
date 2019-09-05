@@ -88,7 +88,7 @@ content =
 
 basicExample : UiElement Msg
 basicExample =
-    UiFramework.flatMap
+    UiFramework.withContext
         (\context ->
             UiFramework.uiColumn
                 [ Element.width Element.fill
