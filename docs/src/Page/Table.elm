@@ -90,7 +90,12 @@ basicExample =
         , Element.spacing 32
         ]
         [ title "Basic Example"
-        , wrappedText "The table module does not have a \"Table.default\" function - you must build up from the Table.simpleTable. Nevertheless, here is a basic example with hardcoded data."
+        , wrappedText
+            """
+The table module does not have a "Table.default" function - you must build 
+up from the Table.simpleTable. Nevertheless, here is a basic example with 
+hardcoded data.
+"""
         , Table.simpleTable
             |> Table.withColumns tableColumn
             |> Table.view information

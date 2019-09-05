@@ -140,7 +140,10 @@ configuration =
             [ Element.spacing 16 ]
             [ title "Configurations"
             , UiFramework.uiParagraph []
-                [ UiFramework.uiText "When configuring, we use pipelines to build up our badge, starting from the default function, "
+                [ UiFramework.uiText
+                    """
+When configuring, we use pipelines to build up our badge, starting from the default function, 
+"""
                 , code "Alert.default"
                 ]
             ]

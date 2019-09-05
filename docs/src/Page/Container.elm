@@ -123,7 +123,10 @@ configuration =
         [ UiFramework.uiColumn
             [ Element.spacing 16 ]
             [ title "Configurations"
-            , wrappedText "Custom containers are often built using pipelines starting from the default container function."
+            , wrappedText
+                """
+Custom containers are often built using pipelines starting from the default container function.
+"""
             ]
         , configExampleCode
         , fullWidthConfig
@@ -158,7 +161,10 @@ childConfig =
         , Element.spacing 32
         ]
         [ section "Children"
-        , wrappedText "Containers can only hold 1 child element, since uiRow and uiColumn are used to hold multiple children."
+        , wrappedText
+            """
+Containers can only hold 1 child element, since uiRow and uiColumn are used to hold multiple children.
+"""
         , Container.default
             |> Container.withChild (UiFramework.uiText "Hello")
             |> Container.view
@@ -184,7 +190,12 @@ fullWidthConfig =
         , Element.width Element.fill
         ]
         [ section "Using fullWidth"
-        , wrappedText "This function is similar to Bootstrap's .container-fluid class, where instead of  a max-width property that changes based on the screen width, it always fills the width of the parent element."
+        , wrappedText
+            """
+This function is similar to Bootstrap's .container-fluid class, where instead of
+a max-width property that changes based on the screen width, it always fills
+the width of the parent element.
+"""
         , Container.default
             |> Container.withFullWidth
             |> Container.withExtraAttrs

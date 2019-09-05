@@ -135,7 +135,10 @@ configuration =
             [ Element.spacing 16 ]
             [ title "Configurations"
             , UiFramework.uiParagraph []
-                [ UiFramework.uiText "When configuring, we use pipelines to build up our badge, starting from the default function, "
+                [ UiFramework.uiText
+                    """
+When configuring, we use pipelines to build up our badge, starting from the default function,
+"""
                 , code "Badge.default"
                 ]
             ]
@@ -211,7 +214,11 @@ rolesAndLabelConfig =
         ]
         [ section "Roles and Labels"
         , UiFramework.uiParagraph []
-            [ UiFramework.uiText "These pipeline functions bring the basic functionality to badge customization. By default, the role of a badge is the "
+            [ UiFramework.uiText
+                """
+These pipeline functions bring the basic functionality to badge customization.
+By default, the role of a badge is the 
+"""
             , code "Primary"
             , UiFramework.uiText " role, and the label is an empty string."
             ]

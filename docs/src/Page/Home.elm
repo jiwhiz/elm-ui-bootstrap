@@ -128,7 +128,12 @@ description =
                     [ Typography.h4
                         []
                         (UiFramework.uiText "Getting Started")
-                    , wrappedText "Get to know the basics of the Context architecture, and how to use it to greatly simplify your code. Download the starter application (which is not yet finished) and start fiddling around with the code with elm-live."
+                    , wrappedText
+                        """
+Get to know the basics of the Context architecture, and how to use it to greatly 
+simplify your code. Download the starter application (which is not yet finished)
+and start fiddling around with the code with elm-live.
+"""
                     , getStartedButton
                     ]
                 , UiFramework.uiColumn
@@ -139,7 +144,11 @@ description =
                     [ Typography.h4
                         []
                         (UiFramework.uiText "Documentation")
-                    , wrappedText "Learn the components of the UiFramework, and understand the modularity and type safe API through clear explanations and code examples. "
+                    , wrappedText
+                        """
+Learn the components of the UiFramework, and understand the modularity and type
+safe API through clear explanations and code examples.
+"""
                     , learnMoreButton
                     ]
                 ]

@@ -95,7 +95,13 @@ basicExample =
                 , Element.spacing 32
                 ]
                 [ title "Basic Example"
-                , wrappedText "The implementation of Dropdowns closely align with Navbars and Paginations. Dropdowns need a state to dictate their actions, though here, that state is fully up the the developer to choose. For this simple demo I've made that state a boolean."
+                , wrappedText
+                    """
+The implementation of Dropdowns closely align with Navbars and Paginations. 
+Dropdowns need a state to dictate their actions, though here, that state is 
+fully up the the developer to choose. For this simple demo I've made that 
+state a boolean.
+"""
                 , Dropdown.default ToggleSimpleDropdown True
                     |> Dropdown.withTitle "Static Dropdown"
                     |> Dropdown.withIcon FontAwesome.Solid.appleAlt
@@ -107,7 +113,11 @@ basicExample =
                             |> Dropdown.withMenuTitle "With Icon"
                         ]
                     |> Dropdown.view context.simpleDropdownState
-                , wrappedText "The code below is greatly simplified from the actual implementation of the UiFramework, but serves as a way to showcase how to get the types working."
+                , wrappedText
+                    """
+The code below is greatly simplified from the actual implementation of
+the UiFramework, but serves as a way to showcase how to get the types working.
+"""
                 , basicExampleCode
                 ]
         )

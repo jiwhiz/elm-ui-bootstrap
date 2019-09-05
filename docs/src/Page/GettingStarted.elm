@@ -97,34 +97,67 @@ content =
             ]
             [ Typography.h1 [] (UiFramework.uiText "Quick Start")
             , Typography.textLead [] (UiFramework.uiText "Not Released Yet!")
+            , wrappedText
+                """
+If you want to try it in your own project, you can checkout the code along side
+with your project repo, and include the code in elm.json, as well as other dependencies.
+See example from demo app here:
+"""
             , setupCode
             , Typography.h1 [] (UiFramework.uiText "Sample Code")
             , UiFramework.uiParagraph []
                 [ UiFramework.uiText "See "
-                , fromElement
-                    (\_ ->
-                        Element.link []
-                            { url = "https://joshuaji.com/projects/ui-bootstrap-demo/"
-                            , label = Element.text "demo website"
-                            }
-                    )
+                , UiFramework.uiLink
+                    { url = "https://joshuaji.com/projects/ui-bootstrap-demo/"
+                    , label = "demo app website"
+                    }
                 , UiFramework.uiText " made by Joshua, source code at Github: "
-                , fromElement
-                    (\_ ->
-                        Element.link []
-                            { url = "https://github.com/joshuanianji/ui-bootstrap-demo"
-                            , label = Element.text "https://github.com/joshuanianji/ui-bootstrap-demo!"
-                            }
-                    )
+                , UiFramework.uiLink
+                    { url = "https://github.com/joshuanianji/ui-bootstrap-demo"
+                    , label = "https://github.com/joshuanianji/ui-bootstrap-demo"
+                    }
                 ]
             ]
 
 
 setupCode : UiElement Msg
 setupCode =
-    Common.highlightCode "bash"
+    Common.highlightCode "json"
         """
-TBD
+{
+    "type": "application",
+    "source-directories": [
+        "src",
+        "../elm-ui-bootstrap/src"
+    ],
+    "elm-version": "0.19.0",
+    "dependencies": {
+        "direct": {
+            "avh4/elm-color": "1.0.0",
+            "elm/browser": "1.0.1",
+            "elm/core": "1.0.2",
+            "elm/html": "1.0.0",
+            "elm/json": "1.1.3",
+            "elm/parser": "1.1.0",
+            "elm/url": "1.0.0",
+            "hecrj/composable-form": "8.0.1",
+            "lattyware/elm-fontawesome": "3.0.2",
+            "mdgriffith/elm-ui": "1.1.3",
+            "noahzgordon/elm-color-extra": "1.0.2"
+        },
+        "indirect": {
+            "elm/regex": "1.0.0",
+            "elm/svg": "1.0.1",
+            "elm/time": "1.0.0",
+            "elm/virtual-dom": "1.0.2",
+            "elm-community/list-extra": "8.2.2"
+        }
+    },
+    "test-dependencies": {
+        "direct": {},
+        "indirect": {}
+    }
+}
 """
 
 

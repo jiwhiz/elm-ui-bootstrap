@@ -118,7 +118,11 @@ basicExample =
         , Element.spacing 32
         ]
         [ title "Basic Example"
-        , wrappedText "Navbars are easy to create, but need some wiring to set up, as it requires states to handle the responsive behaviour."
+        , wrappedText
+            """
+Navbars are easy to create, but need some wiring to set up, as it requires 
+states to handle the responsive behaviour.
+"""
         , Navbar.default NoOp
             |> Navbar.withBrand (Element.text "Navbar")
             |> Navbar.withMenuItems
@@ -136,7 +140,11 @@ basicExample =
                 ]
             |> Navbar.view { toggleMenuState = False, dropdownState = NoDropdowns }
         , basicExampleCode
-        , wrappedText "Because of the flags, you'll also need to configure an index.html file. Below is a simple setup you can use yourself."
+        , wrappedText
+            """
+Because of the flags, you'll also need to configure an index.html file. 
+Below is a simple setup you can use yourself.
+"""
         , basicHtmlCode
         ]
 
@@ -339,7 +347,13 @@ complexExample =
                 , Element.spacing 32
                 ]
                 [ title "Customization"
-                , wrappedText "Navbars at the moment are pretty rigid, but there is a small amount of customization you can do. You can use Roles defined in UiFramework.Types to change the background color, and add dropdowns. In this navbar, we have a dropdown where we can change the background color based on three roles."
+                , wrappedText
+                    """
+Navbars at the moment are pretty rigid, but there is a small amount of 
+customization you can do. You can use Roles defined in UiFramework.
+Types to change the background color, and add dropdowns. In this navbar, 
+we have a dropdown where we can change the background color based on three roles.
+"""
                 , Navbar.default ToggleComplexNav
                     |> Navbar.withBackground context.complexNavTheme
                     |> Navbar.withBrand (Element.text "Navbar")

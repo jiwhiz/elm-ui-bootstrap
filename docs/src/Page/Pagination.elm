@@ -106,8 +106,17 @@ basicExample =
         , Element.spacing 32
         ]
         [ title "Basic Example"
-        , wrappedText "Paginations need states and boilerplate code to handle its responsive behaviour, but for now, let's make a simple static pagination. A basic example of that would look like this."
-        , wrappedText "Note that you still need to import the FontAwesome stylesheet into your code, as the buttons rely on their icons."
+        , wrappedText
+            """
+Paginations need states and boilerplate code to handle its responsive behaviour, 
+but for now, let's make a simple static pagination. A basic example of 
+that would look like this.
+"""
+        , wrappedText
+            """
+Note that you still need to import the FontAwesome stylesheet into your code, 
+as the buttons rely on their icons.
+"""
         , Pagination.default (\_ -> NoOp)
             |> Pagination.withItems
                 [ Pagination.NumberItem 0
@@ -209,9 +218,17 @@ responsiveExample =
                                 , paginationElement
                                 ]
                        )
-                , wrappedText "Paginations need the full model-view-update architecture to function, so here's a complete code set to deal with a simple responsive pagination."
+                , wrappedText
+                    """
+Paginations need the full model-view-update architecture to function, 
+so here's a complete code set to deal with a simple responsive pagination.
+"""
                 , responsiveExampleCode
-                , wrappedText "Because of the flags, you'll also need to configure an index.html file. Below is the setup you can use yourself."
+                , wrappedText
+                    """
+Because of the flags, you'll also need to configure an index.html file. 
+Below is the setup you can use yourself.
+"""
                 , basicHtmlCode
                 ]
         )
