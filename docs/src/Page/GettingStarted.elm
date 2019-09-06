@@ -97,12 +97,17 @@ content =
             ]
             [ Typography.h1 [] (UiFramework.uiText "Quick Start")
             , Typography.textLead [] (UiFramework.uiText "Not Released Yet!")
-            , wrappedText
-                """
-If you want to try it in your own project, you can checkout the code along side
-with your project repo, and include the code in elm.json, as well as other dependencies.
-See example from demo app here:
-"""
+            , UiFramework.uiParagraph []
+                [ UiFramework.uiText "If you want to try it in your own project, you can checkout the source code from "
+                , UiFramework.uiLink
+                    { url = "https://github.com/jiwhiz/elm-ui-bootstrap"
+                    , label = "https://github.com/jiwhiz/elm-ui-bootstrap"
+                    }
+                , UiFramework.uiText " along side with your project repo, and include the code in elm.json, as well as other dependencies. "
+                , UiFramework.uiText "See example "
+                , code "elm.json"
+                , UiFramework.uiText " from demo app here:"
+                ]
             , setupCode
             , Typography.h1 [] (UiFramework.uiText "Sample Code")
             , UiFramework.uiParagraph []
