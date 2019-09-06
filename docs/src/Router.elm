@@ -13,6 +13,7 @@ import Page.Badge as Badge
 import Page.Button as Button
 import Page.Container as Container
 import Page.Dropdown as Dropdown
+import Page.Examples as Examples
 import Page.Form as Form
 import Page.GettingStarted as GettingStarted
 import Page.Home as Home
@@ -59,6 +60,7 @@ type Page
     | PaginationPage Pagination.Model
     | TablePage Table.Model
     | TypographyPage Typography.Model
+    | ExamplesPage Examples.Model
     | NotFoundPage NotFound.Model
 
 
@@ -147,6 +149,9 @@ tabBarTitle model =
         TypographyPage _ ->
             "Typography"
 
+        ExamplesPage _ ->
+            "Examples"
+
         NotFoundPage _ ->
             "Not Found"
 
@@ -204,7 +209,7 @@ navbar model sharedState =
                 |> UiFramework.Navbar.withMenuTitle "Modules"
 
         examplesItem =
-            UiFramework.Navbar.linkItem NoOp
+            UiFramework.Navbar.linkItem (NavigateTo Examples)
                 |> UiFramework.Navbar.withMenuTitle "Examples"
     in
     UiFramework.Navbar.default ToggleMenu
@@ -275,6 +280,10 @@ content model sharedState =
             Typography.view sharedState pageModel
                 |> Element.map TypographyMsg
 
+        ExamplesPage pageModel ->
+            Examples.view sharedState pageModel
+                |> Element.map ExamplesMsg
+
         NotFoundPage pageModel ->
             NotFound.view sharedState pageModel
                 |> Element.map NotFoundMsg
@@ -289,17 +298,18 @@ type Msg
     | NavigateTo Route
     | HomeMsg Home.Msg
     | GettingStartedMsg GettingStarted.Msg
-    | ButtonMsg Button.Msg
     | AlertMsg Alert.Msg
     | BadgeMsg Badge.Msg
+    | ButtonMsg Button.Msg
     | ContainerMsg Container.Msg
     | DropdownMsg Dropdown.Msg
+    | FormMsg Form.Msg
     | IconMsg Icon.Msg
     | NavbarMsg Navbar.Msg
     | PaginationMsg Pagination.Msg
     | TableMsg Table.Msg
     | TypographyMsg Typography.Msg
-    | FormMsg Form.Msg
+    | ExamplesMsg Examples.Msg
     | NotFoundMsg NotFound.Msg
     | ToggleDropdown
     | ToggleMenu
@@ -337,10 +347,6 @@ update sharedState msg model =
             GettingStarted.update sharedState subMsg subModel
                 |> updateWith GettingStartedPage GettingStartedMsg model
 
-        ( ButtonMsg subMsg, ButtonPage subModel ) ->
-            Button.update sharedState subMsg subModel
-                |> updateWith ButtonPage ButtonMsg model
-
         ( AlertMsg subMsg, AlertPage subModel ) ->
             Alert.update sharedState subMsg subModel
                 |> updateWith AlertPage AlertMsg model
@@ -349,6 +355,10 @@ update sharedState msg model =
             Badge.update sharedState subMsg subModel
                 |> updateWith BadgePage BadgeMsg model
 
+        ( ButtonMsg subMsg, ButtonPage subModel ) ->
+            Button.update sharedState subMsg subModel
+                |> updateWith ButtonPage ButtonMsg model
+
         ( ContainerMsg subMsg, ContainerPage subModel ) ->
             Container.update sharedState subMsg subModel
                 |> updateWith ContainerPage ContainerMsg model
@@ -356,6 +366,10 @@ update sharedState msg model =
         ( DropdownMsg subMsg, DropdownPage subModel ) ->
             Dropdown.update sharedState subMsg subModel
                 |> updateWith DropdownPage DropdownMsg model
+
+        ( FormMsg subMsg, FormPage subModel ) ->
+            Form.update sharedState subMsg subModel
+                |> updateWith FormPage FormMsg model
 
         ( IconMsg subMsg, IconPage subModel ) ->
             Icon.update sharedState subMsg subModel
@@ -377,9 +391,9 @@ update sharedState msg model =
             Typography.update sharedState subMsg subModel
                 |> updateWith TypographyPage TypographyMsg model
 
-        ( FormMsg subMsg, FormPage subModel ) ->
-            Form.update sharedState subMsg subModel
-                |> updateWith FormPage FormMsg model
+        ( ExamplesMsg subMsg, ExamplesPage subModel ) ->
+            Examples.update sharedState subMsg subModel
+                |> updateWith ExamplesPage ExamplesMsg model
 
         ( NotFoundMsg subMsg, NotFoundPage subModel ) ->
             NotFound.update sharedState subMsg subModel
@@ -464,6 +478,9 @@ navigateTo route sharedState model =
 
         Typography ->
             Typography.init |> initWith TypographyPage TypographyMsg model SharedState.NoUpdate
+
+        Examples ->
+            Examples.init |> initWith ExamplesPage ExamplesMsg model SharedState.NoUpdate
 
         NotFound ->
             NotFound.init |> initWith NotFoundPage NotFoundMsg model SharedState.NoUpdate

@@ -7,18 +7,19 @@ import Url.Parser as Url
 type Route
     = Home
     | GettingStarted
-    | NotFound
-    | Button
     | Alert
     | Badge
+    | Button
     | Container
     | Dropdown
+    | Form
     | Icon
     | Navbar
     | Pagination
     | Table
     | Typography
-    | Form
+    | Examples
+    | NotFound
 
 
 
@@ -69,6 +70,9 @@ toUrlString route =
                 Typography ->
                     [ "typography" ]
 
+                Examples ->
+                    [ "examples" ]
+
                 NotFound ->
                     [ "oops" ]
     in
@@ -106,4 +110,5 @@ urlParser =
         , Url.map Pagination (Url.s "pagination")
         , Url.map Table (Url.s "table")
         , Url.map Typography (Url.s "typography")
+        , Url.map Examples (Url.s "examples")
         ]
