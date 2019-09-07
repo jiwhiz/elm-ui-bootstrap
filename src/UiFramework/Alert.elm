@@ -1,9 +1,17 @@
 module UiFramework.Alert exposing
     ( Alert
-    , Options
     , default
+    , externalLink
     , link
     , simple
+    , simpleDanger
+    , simpleDark
+    , simpleInfo
+    , simpleLight
+    , simplePrimary
+    , simpleSecondary
+    , simpleSuccess
+    , simpleWarning
     , view
     , withChild
     , withExtraAttrs
@@ -76,12 +84,56 @@ default =
     Alert defaultOptions
 
 
+
+-- Simple alert builder functions
+
+
 simple : Role -> UiElement context msg -> UiElement context msg
 simple role child =
     default
         |> withRole role
         |> withChild child
         |> view
+
+
+simplePrimary : UiElement context msg -> UiElement context msg
+simplePrimary =
+    simple Primary
+
+
+simpleSecondary : UiElement context msg -> UiElement context msg
+simpleSecondary =
+    simple Secondary
+
+
+simpleSuccess : UiElement context msg -> UiElement context msg
+simpleSuccess =
+    simple Success
+
+
+simpleInfo : UiElement context msg -> UiElement context msg
+simpleInfo =
+    simple Info
+
+
+simpleWarning : UiElement context msg -> UiElement context msg
+simpleWarning =
+    simple Warning
+
+
+simpleDanger : UiElement context msg -> UiElement context msg
+simpleDanger =
+    simple Danger
+
+
+simpleLight : UiElement context msg -> UiElement context msg
+simpleLight =
+    simple Light
+
+
+simpleDark : UiElement context msg -> UiElement context msg
+simpleDark =
+    simple Dark
 
 
 
@@ -141,6 +193,29 @@ link { onPress, label } =
             Input.button
                 [ Font.bold, Font.color fontColor ]
                 { onPress = onPress
+                , label = Internal.toElement context label
+                }
+        )
+
+
+externalLink :
+    { url : String
+    , label : UiElement context msg
+    }
+    -> UiElement context msg
+externalLink { url, label } =
+    Internal.fromElement
+        (\context ->
+            let
+                role =
+                    context.parentRole |> Maybe.withDefault Primary
+
+                fontColor =
+                    context.themeConfig.alertConfig.fontColor role
+            in
+            Element.newTabLink
+                [ Font.bold, Font.color fontColor ]
+                { url = url
                 , label = Internal.toElement context label
                 }
         )

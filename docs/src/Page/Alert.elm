@@ -6,7 +6,7 @@ import Element
 import Element.Border as Border
 import Routes
 import SharedState exposing (SharedState, SharedStateUpdate(..))
-import UiFramework exposing (UiContextual, WithContext, toElement)
+import UiFramework
 import UiFramework.Alert as Alert
 import UiFramework.Badge as Badge
 import UiFramework.Container as Container
@@ -15,7 +15,7 @@ import UiFramework.Typography as Typography
 
 
 type alias UiElement msg =
-    WithContext {} msg
+    UiFramework.WithContext {} msg
 
 
 
@@ -31,7 +31,7 @@ init =
     ( {}, Cmd.none )
 
 
-toContext : SharedState -> UiContextual {}
+toContext : SharedState -> UiFramework.UiContextual {}
 toContext sharedState =
     { device = sharedState.device
     , parentRole = Nothing
@@ -62,6 +62,7 @@ content =
         , Element.spacing 64
         ]
         [ basicExample
+        , linkExample
         , configuration
         ]
 
@@ -73,19 +74,23 @@ basicExample =
         , Element.width Element.fill
         ]
         [ title "Basic Example"
-        , wrappedText "Alerts are available in 8 different roles and are available for any length of text"
+        , wrappedText
+            """
+Alerts are available in 8 different roles, you can use Alert.simple or one of 
+eight simple* functions to wrap any UiElement.
+"""
         , UiFramework.uiColumn
             [ Element.spacing 8
             , Element.width Element.fill
             ]
-            [ Alert.simple Primary (UiFramework.uiText "Primary role!")
-            , Alert.simple Secondary (UiFramework.uiText "Secondary role!")
-            , Alert.simple Success (UiFramework.uiText "Success role!")
-            , Alert.simple Info (UiFramework.uiText "Info role!")
-            , Alert.simple Warning (UiFramework.uiText "Warning role!")
-            , Alert.simple Danger (UiFramework.uiText "Danger role!")
-            , Alert.simple Light (UiFramework.uiText "Light role!")
-            , Alert.simple Dark (UiFramework.uiText "Dark role!")
+            [ Alert.simplePrimary (UiFramework.uiText "Primary role!")
+            , Alert.simpleSecondary (UiFramework.uiText "Secondary role!")
+            , Alert.simpleSuccess (UiFramework.uiText "Success role!")
+            , Alert.simpleInfo (UiFramework.uiText "Info role!")
+            , Alert.simpleWarning (UiFramework.uiText "Warning role!")
+            , Alert.simpleDanger (UiFramework.uiText "Danger role!")
+            , Alert.simpleLight (UiFramework.uiText "Light role!")
+            , Alert.simpleDark (UiFramework.uiText "Dark role!")
             ]
         , basicExampleCode
         ]
@@ -98,20 +103,94 @@ basicExampleCode =
 import Element
 import UiFramework
 import UiFramework.Alert as Alert
-import UiFramework.Types exposing (Role(..))
 
-UiFramework.uiColumn 
+
+type alias UiElement msg =
+    UiFramework.WithContext {} msg
+
+
+content : UiElement Msg 
+content = 
+    UiFramework.uiColumn 
+        [ Element.spacing 8
+        , Element.width Element.fill
+        ] 
+        [ Alert.simplePrimary (UiFramework.uiText "Primary role!")
+        , Alert.simpleSecondary (UiFramework.uiText "Secondary role!")
+        , Alert.simpleSuccess (UiFramework.uiText "Success role!")
+        , Alert.simpleInfo (UiFramework.uiText "Info role!")
+        , Alert.simpleWarning (UiFramework.uiText "Warning role!")
+        , Alert.simpleDanger (UiFramework.uiText "Danger role!")
+        , Alert.simpleLight (UiFramework.uiText "Light role!")
+        , Alert.simpleDark (UiFramework.uiText "Dark role!")
+        ]
+"""
+
+
+linkExample : UiElement Msg
+linkExample =
+    UiFramework.uiColumn
+        [ Element.spacing 16
+        , Element.width Element.fill
+        ]
+        [ title "Link Example"
+        , wrappedText
+            """
+Inside any alert, you can put link button as Alert.link, or exteranl new tab link
+as Alert.externalLink. It will match the color of link to the parent alert.
+"""
+        , UiFramework.uiColumn
+            [ Element.spacing 8
+            , Element.width Element.fill
+            ]
+            [ Alert.simplePrimary <|
+                UiFramework.uiParagraph []
+                    [ UiFramework.uiText "A simple primary alert with "
+                    , Alert.link
+                        { onPress = Nothing
+                        , label = UiFramework.uiText "an example link"
+                        }
+                    , UiFramework.uiText ". Give it a click if you like."
+                    ]
+            , Alert.simpleWarning <|
+                UiFramework.uiParagraph []
+                    [ UiFramework.uiText "A simple warning alert with "
+                    , Alert.externalLink
+                        { url = "https://github.com/jiwhiz/elm-ui-bootstrap"
+                        , label = UiFramework.uiText "an external link"
+                        }
+                    , UiFramework.uiText ", which will open our Github repo."
+                    ]
+            ]
+        , linkExampleCode
+        ]
+
+
+linkExampleCode : UiElement Msg
+linkExampleCode =
+    Common.highlightCode "elm"
+        """
+UiFramework.uiColumn
     [ Element.spacing 8
     , Element.width Element.fill
-    ] 
-    [ Alert.simple Primary (UiFramework.uiText "Primary role!")
-    , Alert.simple Secondary (UiFramework.uiText "Secondary role!")
-    , Alert.simple Success (UiFramework.uiText "Success role!")
-    , Alert.simple Info (UiFramework.uiText "Info role!")
-    , Alert.simple Warning (UiFramework.uiText "Warning role!")
-    , Alert.simple Danger (UiFramework.uiText "Danger role!")
-    , Alert.simple Light (UiFramework.uiText "Light role!")
-    , Alert.simple Dark (UiFramework.uiText "Dark role!")
+    ]
+    [ Alert.simplePrimary <|
+        UiFramework.uiParagraph []
+            [ UiFramework.uiText "A simple primary alert with "
+            , ALert.link 
+                { onPress = Nothing
+                , label = UiFramework.uiText "an example link"}
+            , UiFramework.uiText ". Give it a click if you like."
+            ]
+        
+    , Alert.simpleWarning <|
+        UiFramework.uiParagraph []
+            [ UiFramework.uiText "A simple warning alert with "
+            , ALert.externalLink 
+                { url = "https://github.com/jiwhiz/elm-ui-bootstrap"
+                , label = UiFramework.uiText "an external link"}
+            , UiFramework.uiText ", which will open our Github repo."
+            ]
     ]
 """
 
@@ -147,7 +226,7 @@ configExampleCode =
         """
 -- an example showing all the configurations available at the moment
 
-customBadge =
+customAlert =
     Alert.default
         |> Alert.withSmall -- or withLarge
         |> Alert.withRole Secondary
@@ -191,21 +270,19 @@ sizingCode =
 -- which creates an `Alert` type with default options.
 -- To convert the `Alert` type to a `UiElement msg` type, we need to use `Alert.view`.
 
-content : UiElement Msg 
-content = 
-    UiFramework.uiColumn 
-        [ Element.spacing 8
-        , Element.width Element.fill ] 
-        [ Alert.default 
-            |> Alert.withLarge
-            |> Alert.withChild (UiFramework.uiText "Large alert!")
-            |> Alert.view
-        , Alert.simple Primary (UiFramework.uiText "Default alert!")
-        , Alert.default 
-            |> Alert.withSmall
-            |> Alert.withChild (UiFramework.uiText "Small alert!")
-            |> Alert.view
-        ]
+UiFramework.uiColumn 
+    [ Element.spacing 8
+    , Element.width Element.fill ] 
+    [ Alert.default 
+        |> Alert.withLarge
+        |> Alert.withChild (UiFramework.uiText "Large alert!")
+        |> Alert.view
+    , Alert.simple Primary (UiFramework.uiText "Default alert!")
+    , Alert.default 
+        |> Alert.withSmall
+        |> Alert.withChild (UiFramework.uiText "Small alert!")
+        |> Alert.view
+    ]
 """
 
 
@@ -238,23 +315,21 @@ roleCode : UiElement Msg
 roleCode =
     Common.highlightCode "elm"
         """
-content : UiElement Msg 
-content = 
-    UiFramework.uiColumn 
-        [ Element.spacing 8
-        , Element.width Element.fill ] 
-        [ Alert.default
-            |> Alert.withSmall
-            |> Alert.withRole Primary
-            |> Alert.withChild ( UiFramework.uiText "Primary alert, also a small one")
-            |> Alert.view
-        , Alert.default
-            |> Alert.withSmall
-            |> Alert.withRole Secondary
-            |> Alert.withChild ( UiFramework.uiText "Secondary alert, also a small one"
-            |> Alert.view 
-        ...
-        ]
+UiFramework.uiColumn 
+    [ Element.spacing 8
+    , Element.width Element.fill ] 
+    [ Alert.default
+        |> Alert.withSmall
+        |> Alert.withRole Primary
+        |> Alert.withChild ( UiFramework.uiText "Primary alert, also a small one")
+        |> Alert.view
+    , Alert.default
+        |> Alert.withSmall
+        |> Alert.withRole Secondary
+        |> Alert.withChild ( UiFramework.uiText "Secondary alert, also a small one"
+        |> Alert.view 
+    ...
+    ]
 """
 
 
@@ -270,7 +345,7 @@ childConfigs =
             , code "UiElement"
             , UiFramework.uiText " node to be a child"
             ]
-        , Alert.simple Success <|
+        , Alert.simpleSuccess <|
             UiFramework.uiColumn
                 [ Element.spacing 8 ]
                 [ UiFramework.uiRow
@@ -288,14 +363,7 @@ childCode : UiElement Msg
 childCode =
     Common.highlightCode "elm"
         """
-import UiFramework.Alert as Alert
-import UiFramework
-import Element
-import UiFramework.Types exposing (Role(..))
-import UiFramework.Badge as Badge
-
-
-Alert.simple Success <|
+Alert.simpleSuccess <|
     UiFramework.uiColumn
         [ Element.spacing 8 ]
         [ UiFramework.uiRow
@@ -329,9 +397,6 @@ attributeCode : UiElement Msg
 attributeCode =
     Common.highlightCode "elm"
         """
-import Element.Border as Border
-
-
 Alert.default
     |> Alert.withChild (UiFramework.uiText "This alert has a thick border")
     |> Alert.withExtraAttrs
