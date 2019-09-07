@@ -14,6 +14,7 @@ module UiFramework.Alert exposing
     , simpleWarning
     , view
     , withChild
+    , withDismissButton
     , withExtraAttrs
     , withLarge
     , withRole
@@ -25,6 +26,7 @@ import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
+import Html
 import UiFramework.Internal as Internal
 import UiFramework.Types exposing (Role(..), Size(..))
 
@@ -40,6 +42,7 @@ type Alert context msg
 type alias Options context msg =
     { role : Role
     , size : Size
+    , dismissable : Maybe msg
     , attributes : List (Attribute msg)
     , child : UiElement context msg
     }
@@ -60,6 +63,11 @@ withSmall (Alert options) =
     Alert { options | size = SizeSmall }
 
 
+withDismissButton : msg -> Alert context msg -> Alert context msg
+withDismissButton msg (Alert options) =
+    Alert { options | dismissable = Just msg }
+
+
 withExtraAttrs : List (Attribute msg) -> Alert context msg -> Alert context msg
 withExtraAttrs attributes (Alert options) =
     Alert { options | attributes = attributes }
@@ -74,6 +82,7 @@ defaultOptions : Options context msg
 defaultOptions =
     { role = Primary
     , size = SizeDefault
+    , dismissable = Nothing
     , attributes = []
     , child = Internal.fromElement (\_ -> none)
     }
@@ -93,7 +102,7 @@ simple role child =
     default
         |> withRole role
         |> withChild child
-        |> view
+        |> view True
 
 
 simplePrimary : UiElement context msg -> UiElement context msg
@@ -140,15 +149,19 @@ simpleDark =
 -- Rendering Alert
 
 
-view : Alert context msg -> UiElement context msg
-view (Alert options) =
-    Internal.fromElement
-        (\context ->
-            el (viewAttributes context options) <|
-                Internal.toElement
-                    { context | parentRole = Just options.role }
-                    options.child
-        )
+view : Bool -> Alert context msg -> UiElement context msg
+view visible (Alert options) =
+    if visible then
+        Internal.fromElement
+            (\context ->
+                el (viewAttributes context options) <|
+                    Internal.toElement
+                        { context | parentRole = Just options.role }
+                        options.child
+            )
+
+    else
+        Internal.uiNone
 
 
 viewAttributes : Internal.UiContextual context -> Options context msg -> List (Attribute msg)
@@ -156,6 +169,23 @@ viewAttributes context options =
     let
         config =
             context.themeConfig.alertConfig
+
+        closeButton =
+            case options.dismissable of
+                Nothing ->
+                    []
+
+                Just msg ->
+                    [ Element.inFront <|
+                        Input.button
+                            [ Element.alignTop
+                            , Element.alignRight
+                            , Element.paddingXY config.paddingX config.paddingY
+                            ]
+                            { onPress = Just msg
+                            , label = Element.text "×"
+                            }
+                    ]
     in
     [ width fill
     , paddingXY config.paddingX config.paddingY
@@ -168,6 +198,7 @@ viewAttributes context options =
     , Border.color <| config.borderColor options.role
     , Background.color <| config.backgroundColor options.role
     ]
+        ++ closeButton
         ++ options.attributes
 
 

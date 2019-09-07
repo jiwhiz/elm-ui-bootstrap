@@ -9,6 +9,7 @@ import SharedState exposing (SharedState, SharedStateUpdate(..))
 import UiFramework
 import UiFramework.Alert as Alert
 import UiFramework.Badge as Badge
+import UiFramework.Button as Button
 import UiFramework.Container as Container
 import UiFramework.Types exposing (Role(..))
 import UiFramework.Typography as Typography
@@ -23,12 +24,13 @@ type alias UiElement msg =
 
 
 type alias Model =
-    {}
+    { alertVisible : Bool
+    }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( {}, Cmd.none )
+    ( { alertVisible = True }, Cmd.none )
 
 
 toContext : SharedState -> UiFramework.UiContextual {}
@@ -50,20 +52,20 @@ view sharedState model =
         , description = "Fancy info"
         , navigateToMsg = NavigateTo
         , currentRoute = Routes.Alert
-        , content = content
+        , content = content model
         }
         |> UiFramework.toElement (toContext sharedState)
 
 
-content : UiElement Msg
-content =
+content : Model -> UiElement Msg
+content model =
     UiFramework.uiColumn
         [ Element.width Element.fill
         , Element.spacing 64
         ]
         [ basicExample
         , linkExample
-        , configuration
+        , configuration model
         ]
 
 
@@ -195,8 +197,8 @@ UiFramework.uiColumn
 """
 
 
-configuration : UiElement Msg
-configuration =
+configuration : Model -> UiElement Msg
+configuration model =
     UiFramework.uiColumn
         [ Element.spacing 48
         , Element.width Element.fill
@@ -207,7 +209,7 @@ configuration =
             , UiFramework.uiParagraph []
                 [ UiFramework.uiText
                     """
-When configuring, we use pipelines to build up our badge, starting from the default function, 
+When configuring, we use pipelines to build up our alert, starting from the default function, 
 """
                 , code "Alert.default"
                 ]
@@ -217,6 +219,7 @@ When configuring, we use pipelines to build up our badge, starting from the defa
         , roleConfigs
         , childConfigs
         , attributeConfigs
+        , dismissConfigs model
         ]
 
 
@@ -232,7 +235,8 @@ customAlert =
         |> Alert.withRole Secondary
         |> Alert.withExtraAttrs []
         |> Alert.withChild (UiFramework.uiText "Hello!")
-        |> Alert.view
+        |> Alert.withDismissButton
+        |> Alert.view model.alertState
 """
 
 
@@ -251,12 +255,12 @@ sizeConfigs =
             [ Alert.default
                 |> Alert.withLarge
                 |> Alert.withChild (UiFramework.uiText "Large alert!")
-                |> Alert.view
+                |> Alert.view True
             , Alert.simple Primary (UiFramework.uiText "Default alert!")
             , Alert.default
                 |> Alert.withSmall
                 |> Alert.withChild (UiFramework.uiText "Small alert!")
-                |> Alert.view
+                |> Alert.view True
             ]
         , sizingCode
         ]
@@ -276,12 +280,12 @@ UiFramework.uiColumn
     [ Alert.default 
         |> Alert.withLarge
         |> Alert.withChild (UiFramework.uiText "Large alert!")
-        |> Alert.view
+        |> Alert.view True
     , Alert.simple Primary (UiFramework.uiText "Default alert!")
     , Alert.default 
         |> Alert.withSmall
         |> Alert.withChild (UiFramework.uiText "Small alert!")
-        |> Alert.view
+        |> Alert.view True
     ]
 """
 
@@ -304,7 +308,7 @@ roleConfigs =
                         |> Alert.withSmall
                         |> Alert.withRole role
                         |> Alert.withChild (UiFramework.uiText (name ++ " alert, also a small one!"))
-                        |> Alert.view
+                        |> Alert.view True
                 )
                 roleAndNameList
         , roleCode
@@ -322,12 +326,12 @@ UiFramework.uiColumn
         |> Alert.withSmall
         |> Alert.withRole Primary
         |> Alert.withChild ( UiFramework.uiText "Primary alert, also a small one")
-        |> Alert.view
+        |> Alert.view True
     , Alert.default
         |> Alert.withSmall
         |> Alert.withRole Secondary
         |> Alert.withChild ( UiFramework.uiText "Secondary alert, also a small one"
-        |> Alert.view 
+        |> Alert.view  True
     ...
     ]
 """
@@ -388,7 +392,7 @@ attributeConfigs =
             |> Alert.withChild (UiFramework.uiText "This alert has a thick border")
             |> Alert.withExtraAttrs
                 [ Border.width 5 ]
-            |> Alert.view
+            |> Alert.view True
         , attributeCode
         ]
 
@@ -401,7 +405,46 @@ Alert.default
     |> Alert.withChild (UiFramework.uiText "This alert has a thick border")
     |> Alert.withExtraAttrs
         [ Border.width 5 ]
-    |> Alert.view
+    |> Alert.view True
+"""
+
+
+dismissConfigs : Model -> UiElement Msg
+dismissConfigs model =
+    UiFramework.uiColumn
+        [ Element.spacing 16
+        , Element.width Element.fill
+        ]
+        [ section "Making alert dismissable"
+        , wrappedText
+            """
+It is quite easy to make the alert dismissable. Config the alert with close handling
+msg, it will automatically add close button to top right corner. You should store 
+tge state of alert to the page model, and pass it to Alert.view function. Right now
+the state of alert is just a Bool to indicate showing or hiding. In the future, it will
+be changed to support animation.
+"""
+        , Alert.default
+            |> Alert.withChild (UiFramework.uiText "This alert is dismissable!")
+            |> Alert.withDismissButton CloseAlert
+            |> Alert.view model.alertVisible
+        , if model.alertVisible then
+            UiFramework.uiNone
+
+          else
+            Button.simple TriggerAlert "Trigger Alert"
+        , dismissCode
+        ]
+
+
+dismissCode : UiElement Msg
+dismissCode =
+    Common.highlightCode "elm"
+        """
+, Alert.default
+    |> Alert.withChild (UiFramework.uiText "This alert is dismissable!")
+    |> Alert.withDismissButton CloseAlert
+    |> Alert.view model.alertVisible
 """
 
 
@@ -411,6 +454,8 @@ Alert.default
 
 type Msg
     = NavigateTo Routes.Route
+    | TriggerAlert
+    | CloseAlert
 
 
 update : SharedState -> Msg -> Model -> ( Model, Cmd Msg, SharedStateUpdate )
@@ -418,3 +463,15 @@ update sharedState msg model =
     case msg of
         NavigateTo route ->
             ( model, Navigation.pushUrl sharedState.navKey (Routes.toUrlString route), NoUpdate )
+
+        TriggerAlert ->
+            ( { model | alertVisible = True }
+            , Cmd.none
+            , NoUpdate
+            )
+
+        CloseAlert ->
+            ( { model | alertVisible = False }
+            , Cmd.none
+            , NoUpdate
+            )
