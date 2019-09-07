@@ -81,12 +81,14 @@ basicExample =
         ]
         [ title "Basic Example"
         , installFontAwesomeCode
-        , wrappedText
-            """
-Basic icons are rendered with Lattyware's Elm FontAwesome module. It is 
-converted to an Element type (from Elm ui), though unfortunately the conversion 
-from the Element type to the UiElement type seems a bit weird.
-"""
+        , UiFramework.uiParagraph
+            []
+            [ UiFramework.uiText "Basic icons are rendered with Lattyware's Elm FontAwesome module. It is converted to an "
+            , code "Element"
+            , UiFramework.uiText " type (from "
+            , code "Elm-Ui"
+            , UiFramework.uiText " ), though unfortunately the conversion from the seems a bit weird."
+            ]
         , UiFramework.fromElement (\_ -> Icon.view FontAwesome.Solid.cog)
         , basicExampleCode
         ]
@@ -120,13 +122,13 @@ gettingStarted =
         , Element.spacing 32
         ]
         [ title "Getting Started"
-        , wrappedText
-            """
-A stylesheet needs to be added in order for the icons to render properly, though.
-The FontAwesome.Styles.css is a nice Html function you can easily put in your 
-code (after rendering it from a UiElement type) to easily add in all the 
-necessary styles. Here is an example:
-"""
+        , UiFramework.uiParagraph []
+            [ UiFramework.uiText "A stylesheet needs to be added in order for the icons to render properly. The "
+            , code "FontAwesome.Styles.css"
+            , UiFramework.uiText " is a nice Html function you can easily put in your code (after rendering it from a "
+            , code "UiElement"
+            , UiFramework.uiText " type) to easily add in all the necessary styles. Here is an example:"
+            ]
         , gettingStartedCode
         ]
 
