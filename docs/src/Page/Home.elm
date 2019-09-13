@@ -168,7 +168,7 @@ getStartedButton =
 learnMoreButton : UiElement Msg
 learnMoreButton =
     Button.default
-        |> Button.withMessage (Just <| NavigateTo Button)
+        |> Button.withMessage (Just <| NavigateTo Alert)
         |> Button.withLabel "Learn more"
         |> Button.withOutlined
         |> Button.withLarge
