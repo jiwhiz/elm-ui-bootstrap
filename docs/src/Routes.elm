@@ -19,6 +19,7 @@ type Route
     | Table
     | Typography
     | Examples
+    | Sandbox
     | NotFound
 
 
@@ -72,6 +73,9 @@ toUrlString route =
 
                 Examples ->
                     [ "examples" ]
+                
+                Sandbox ->
+                    [ "Sandbox" ]
 
                 NotFound ->
                     [ "oops" ]
@@ -111,4 +115,5 @@ urlParser =
         , Url.map Table (Url.s "table")
         , Url.map Typography (Url.s "typography")
         , Url.map Examples (Url.s "examples")
+        , Url.map Sandbox (Url.s "sandbox")
         ]

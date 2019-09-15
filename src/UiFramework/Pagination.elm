@@ -50,8 +50,8 @@ type Pagination context msg
 
 type alias Options msg =
     { selectedMsg : Int -> msg
-    , labels : LabelType
-    , ellipsis : Icon.Icon
+    , labels : LabelType msg
+    , ellipsis : Icon.Icon msg
     , size : Size
     , items : List Item
     , itemLabel : Int -> Element msg
@@ -59,12 +59,12 @@ type alias Options msg =
     }
 
 
-type LabelType
+type LabelType msg
     = IconLabels
-        { first : Icon.Icon
-        , previous : Icon.Icon
-        , next : Icon.Icon
-        , last : Icon.Icon
+        { first : Icon.Icon msg
+        , previous : Icon.Icon msg
+        , next : Icon.Icon msg
+        , last : Icon.Icon msg
         }
     | StringLabels
         { first : String
@@ -128,12 +128,12 @@ default selectedMsg =
         { selectedMsg = selectedMsg
         , labels =
             IconLabels
-                { first = FontAwesome.Solid.stepBackward
-                , previous = FontAwesome.Solid.caretLeft
-                , next = FontAwesome.Solid.caretRight
-                , last = FontAwesome.Solid.stepForward
+                { first = Icon.fontAwesome FontAwesome.Solid.stepBackward
+                , previous = Icon.fontAwesome FontAwesome.Solid.caretLeft
+                , next = Icon.fontAwesome FontAwesome.Solid.caretRight
+                , last = Icon.fontAwesome FontAwesome.Solid.stepForward
                 }
-        , ellipsis = FontAwesome.Solid.ellipsisH
+        , ellipsis = Icon.fontAwesome FontAwesome.Solid.ellipsisH
         , size = SizeDefault
         , items = []
         , itemLabel = \i -> text <| String.fromInt (i + 1)
@@ -230,7 +230,7 @@ view state (Pagination options) =
                     )
                     (case options.labels of
                         IconLabels icons ->
-                            Icon.view icons.first
+                            Icon.viewAsElement icons.first
 
                         StringLabels labels ->
                             text labels.first
@@ -241,7 +241,7 @@ view state (Pagination options) =
                     (Border.rounded 0 :: commonAttrs previousDisabled)
                     (case options.labels of
                         IconLabels icons ->
-                            Icon.view icons.previous
+                            Icon.viewAsElement icons.previous
 
                         StringLabels labels ->
                             text labels.previous
@@ -254,7 +254,7 @@ view state (Pagination options) =
                             (Border.rounded 0 :: commonAttrs nextDisabled)
                             (case options.labels of
                                 IconLabels icons ->
-                                    Icon.view icons.next
+                                    Icon.viewAsElement icons.next
 
                                 StringLabels labels ->
                                     text labels.next
@@ -272,7 +272,7 @@ view state (Pagination options) =
                             )
                             (case options.labels of
                                 IconLabels icons ->
-                                    Icon.view icons.last
+                                    Icon.viewAsElement icons.last
 
                                 StringLabels labels ->
                                     text labels.last
@@ -326,4 +326,4 @@ renderItem state context options item =
                 , paddingXY paddingX paddingY
                 , Font.color config.color
                 ]
-                (Icon.view options.ellipsis)
+                (Icon.viewAsElement options.ellipsis)
