@@ -89,7 +89,7 @@ basicExample =
             , code "Elm-Ui"
             , UiFramework.uiText " ), though unfortunately the conversion from the seems a bit weird."
             ]
-        , UiFramework.fromElement (\_ -> Icon.view FontAwesome.Solid.cog)
+        , Icon.simple FontAwesome.Solid.cog
         , basicExampleCode
         ]
 
@@ -111,7 +111,7 @@ import FontAwesome.Solid as Solid
 
 
 cogIcon =
-    UiFramework.fromElement (\\_ -> Icon.view FontAwesome.Solid.cog)
+    UiFramework.fromElement (\\_ -> Icon.viewAsElement FontAwesome.Solid.cog)
 """
 
 
@@ -172,11 +172,11 @@ in Navbars and Buttons, for example.
             [ Element.spacing 8 ]
             [ Button.default
                 |> Button.withLabel "Github"
-                |> Button.withIcon FontAwesome.Brands.github
+                |> Button.withIcon (Icon.fontAwesome FontAwesome.Brands.github)
                 |> Button.view
             , Button.default
                 |> Button.withLabel "Check"
-                |> Button.withIcon FontAwesome.Solid.check
+                |> Button.withIcon (Icon.fontAwesome FontAwesome.Solid.check)
                 |> Button.withRole Success
                 |> Button.view
             ]
@@ -185,13 +185,13 @@ in Navbars and Buttons, for example.
             |> Navbar.withBrand (Element.text "Navbar")
             |> Navbar.withMenuItems
                 [ Navbar.linkItem NoOp
-                    |> Navbar.withMenuIcon FontAwesome.Solid.home
+                    |> Navbar.withMenuIcon (Icon.fontAwesome FontAwesome.Solid.home)
                     |> Navbar.withMenuTitle "Home"
                 , Navbar.linkItem NoOp
-                    |> Navbar.withMenuIcon FontAwesome.Solid.book
+                    |> Navbar.withMenuIcon (Icon.fontAwesome FontAwesome.Solid.book)
                     |> Navbar.withMenuTitle "Blog"
                 , Navbar.linkItem NoOp
-                    |> Navbar.withMenuIcon FontAwesome.Solid.addressBook
+                    |> Navbar.withMenuIcon (Icon.fontAwesome FontAwesome.Solid.addressBook)
                     |> Navbar.withMenuTitle "Contact"
                 ]
             |> Navbar.view { toggleMenuState = False, dropdownState = AllDown }

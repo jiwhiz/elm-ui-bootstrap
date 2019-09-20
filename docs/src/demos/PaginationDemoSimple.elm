@@ -3,11 +3,11 @@ module PaginationTestSimple exposing (main)
 import Browser
 import Browser.Events
 import Element exposing (Device)
-import FontAwesome.Solid
 import FontAwesome.Styles
 import Html exposing (Html)
 import UiFramework
 import UiFramework.Configuration exposing (ThemeConfig, defaultThemeConfig)
+import UiFramework.Icon as Icon
 import UiFramework.Pagination as Pagination exposing (PaginationState)
 import UiFramework.ResponsiveUtils exposing (classifyDevice)
 

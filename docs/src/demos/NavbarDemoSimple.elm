@@ -1,6 +1,7 @@
 module NavbarTestSimple exposing (main)
 
-{-| Somehow Elm Analyze "encounters an error parsing the file" but it works and compiles so...-}
+{-| Somehow Elm Analyze "encounters an error parsing the file" but it works and compiles so...
+-}
 
 import Browser
 import Browser.Events
@@ -11,6 +12,7 @@ import Html exposing (Html)
 import UiFramework
 import UiFramework.Configuration exposing (ThemeConfig, defaultThemeConfig)
 import UiFramework.Dropdown as Dropdown
+import UiFramework.Icon as Icon
 import UiFramework.Navbar as Navbar exposing (NavbarState)
 import UiFramework.ResponsiveUtils exposing (classifyDevice)
 import UiFramework.Types exposing (Role(..))
@@ -153,13 +155,13 @@ view model =
         |> Navbar.withMenuItems
             [ Navbar.linkItem NoOp
                 -- Navbar.linkItem accepts a msg type that dictates its action when clicked
-                |> Navbar.withMenuIcon FontAwesome.Solid.home
+                |> Navbar.withMenuIcon (Icon.fontAwesome FontAwesome.Solid.home)
                 |> Navbar.withMenuTitle "Home"
             , Navbar.linkItem NoOp
-                |> Navbar.withMenuIcon FontAwesome.Solid.book
+                |> Navbar.withMenuIcon (Icon.fontAwesome FontAwesome.Solid.book)
                 |> Navbar.withMenuTitle "Blog"
             , Dropdown.default ToggleDropdown ThemeSelectOpen
-                |> Dropdown.withIcon FontAwesome.Solid.paintBrush
+                |> Dropdown.withIcon (Icon.fontAwesome FontAwesome.Solid.paintBrush)
                 |> Dropdown.withTitle "Theme"
                 |> Dropdown.withMenuItems
                     [ Dropdown.menuLinkItem (ChangeNavTheme Light)

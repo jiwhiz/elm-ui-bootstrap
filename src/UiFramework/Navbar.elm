@@ -96,7 +96,7 @@ type MenuItem context state msg
 
 type alias LinkItemOptions msg =
     { triggerMsg : msg
-    , icon : Maybe Icon.Icon
+    , icon : Maybe (Icon.Icon msg)
     , title : String
     }
 
@@ -146,7 +146,7 @@ linkItem msg =
         }
 
 
-withMenuIcon : Icon.Icon -> MenuItem context state msg -> MenuItem context state msg
+withMenuIcon : (Icon.Icon msg) -> MenuItem context state msg -> MenuItem context state msg
 withMenuIcon icon item =
     case item of
         LinkItem options ->
@@ -350,7 +350,7 @@ viewLinkItem options =
                         text options.title
 
                     Just icon ->
-                        row [ spacing 5 ] [ el [] <| Icon.view icon, el [] (text options.title) ]
+                        row [ spacing 5 ] [ el [] <| Icon.viewAsElement icon, el [] (text options.title) ]
                 )
         )
 
