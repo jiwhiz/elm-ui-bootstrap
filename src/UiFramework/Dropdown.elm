@@ -51,7 +51,7 @@ type Dropdown context state msg
 type alias DropdownOptions context state msg =
     { toggleDropdownMsg : msg
     , openState : state
-    , icon : Maybe Icon.Icon
+    , icon : Maybe (Icon.Icon msg)
     , title : String
     , items : List (MenuItem context msg)
     }
@@ -65,12 +65,12 @@ type MenuItem context msg
 
 type alias LinkItemOptions msg =
     { triggerMsg : msg
-    , icon : Maybe Icon.Icon
+    , icon : Maybe (Icon.Icon msg)
     , title : String
     }
 
 
-withIcon : Icon.Icon -> Dropdown context state msg -> Dropdown context state msg
+withIcon : (Icon.Icon msg) -> Dropdown context state msg -> Dropdown context state msg
 withIcon icon (Dropdown options) =
     Dropdown { options | icon = Just icon }
 
@@ -105,7 +105,7 @@ menuLinkItem msg =
         }
 
 
-withMenuIcon : Icon.Icon -> MenuItem context msg -> MenuItem context msg
+withMenuIcon : (Icon.Icon msg) -> MenuItem context msg -> MenuItem context msg
 withMenuIcon icon item =
     case item of
         LinkItem options ->
@@ -151,7 +151,7 @@ view dropdownState (Dropdown options) =
                         text <| options.title ++ " ▾"
 
                     Just icon ->
-                        row [ spacing 5 ] [ el [] <| Icon.view icon, el [] (text <| options.title ++ " ▾") ]
+                        row [ spacing 5 ] [ el [] <| Icon.viewAsElement icon, el [] (text <| options.title ++ " ▾") ]
                 )
         )
 
@@ -210,7 +210,7 @@ viewLinkItem options =
                         text options.title
 
                     Just icon ->
-                        row [ spacing 5 ] [ el [] <| Icon.view icon, el [] (text options.title) ]
+                        row [ spacing 5 ] [ el [] <| Icon.viewAsElement icon, el [] (text options.title) ]
                 )
         )
 

@@ -9,6 +9,7 @@ import SharedState exposing (SharedState, SharedStateUpdate)
 import UiFramework exposing (UiContextual, WithContext, toElement)
 import UiFramework.Container as Container
 import UiFramework.Dropdown as Dropdown
+import UiFramework.Icon as Icon
 import UiFramework.Navbar as Navbar
 import UiFramework.Types exposing (Role(..))
 import UiFramework.Typography as Typography
@@ -113,13 +114,13 @@ states to handle the responsive behaviour.
             |> Navbar.withBrand (Element.text "Navbar")
             |> Navbar.withMenuItems
                 [ Navbar.linkItem NoOp
-                    |> Navbar.withMenuIcon FontAwesome.Solid.home
+                    |> Navbar.withMenuIcon (Icon.fontAwesome FontAwesome.Solid.home)
                     |> Navbar.withMenuTitle "Home"
                 , Navbar.linkItem NoOp
-                    |> Navbar.withMenuIcon FontAwesome.Solid.book
+                    |> Navbar.withMenuIcon (Icon.fontAwesome FontAwesome.Solid.book)
                     |> Navbar.withMenuTitle "Blog"
                 , Navbar.linkItem NoOp
-                    |> Navbar.withMenuIcon FontAwesome.Solid.addressBook
+                    |> Navbar.withMenuIcon (Icon.fontAwesome FontAwesome.Solid.addressBook)
                     |> Navbar.withMenuTitle "Contact"
                 , Navbar.linkItem NoOp
                     |> Navbar.withMenuTitle "No Icon"
@@ -345,13 +346,13 @@ we have a dropdown where we can change the background color based on three roles
                     |> Navbar.withBrand (Element.text "Navbar")
                     |> Navbar.withMenuItems
                         [ Navbar.linkItem NoOp
-                            |> Navbar.withMenuIcon FontAwesome.Solid.home
+                            |> Navbar.withMenuIcon (Icon.fontAwesome FontAwesome.Solid.home)
                             |> Navbar.withMenuTitle "Home"
                         , Navbar.linkItem NoOp
-                            |> Navbar.withMenuIcon FontAwesome.Solid.book
+                            |> Navbar.withMenuIcon (Icon.fontAwesome FontAwesome.Solid.book)
                             |> Navbar.withMenuTitle "Blog"
                         , Dropdown.default ToggleDropdown ThemeSelectOpen
-                            |> Dropdown.withIcon FontAwesome.Solid.paintBrush
+                            |> Dropdown.withIcon (Icon.fontAwesome FontAwesome.Solid.paintBrush)
                             |> Dropdown.withTitle "Theme"
                             |> Dropdown.withMenuItems
                                 [ Dropdown.menuLinkItem (ChangeNavTheme Light)

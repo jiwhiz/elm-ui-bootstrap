@@ -11,6 +11,7 @@ import SharedState exposing (SharedState, SharedStateUpdate(..))
 import UiFramework exposing (UiContextual, WithContext, toElement)
 import UiFramework.Container as Container
 import UiFramework.Dropdown as Dropdown
+import UiFramework.Icon as Icon
 import UiFramework.Types exposing (Role(..))
 import UiFramework.Typography as Typography
 
@@ -92,12 +93,12 @@ state a boolean.
 """
                 , Dropdown.default ToggleSimpleDropdown True
                     |> Dropdown.withTitle "Static Dropdown"
-                    |> Dropdown.withIcon FontAwesome.Solid.appleAlt
+                    |> Dropdown.withIcon (Icon.fontAwesome FontAwesome.Solid.appleAlt)
                     |> Dropdown.withMenuItems
                         [ Dropdown.menuLinkItem CloseDropdown
                             |> Dropdown.withMenuTitle "Item 1"
                         , Dropdown.menuLinkItem CloseDropdown
-                            |> Dropdown.withMenuIcon FontAwesome.Solid.bowlingBall
+                            |> Dropdown.withMenuIcon (Icon.fontAwesome FontAwesome.Solid.bowlingBall)
                             |> Dropdown.withMenuTitle "With Icon"
                         ]
                     |> Dropdown.view context.simpleDropdownState

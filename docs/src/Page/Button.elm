@@ -9,6 +9,7 @@ import SharedState exposing (SharedState, SharedStateUpdate(..))
 import UiFramework exposing (UiContextual, WithContext, toElement)
 import UiFramework.Button as Button
 import UiFramework.Container as Container
+import UiFramework.Icon as Icon
 import UiFramework.Types exposing (Role(..))
 
 
@@ -458,7 +459,7 @@ iconConfig =
             [ Element.spacing 4 ]
             [ Button.default
                 |> Button.withLabel "Github"
-                |> Button.withIcon FontAwesome.Brands.github
+                |> Button.withIcon (Icon.fontAwesome FontAwesome.Brands.github)
                 |> Button.view
             ]
         , iconConfigCode

@@ -41,7 +41,7 @@ type alias Options msg =
     , disabled : Bool
     , size : Size
     , onPress : Maybe msg
-    , icon : Maybe Icon.Icon
+    , icon : Maybe (Icon.Icon msg)
     , label : String
     , attributes : List (Attribute msg)
     }
@@ -82,7 +82,7 @@ withMessage msg (Button options) =
     Button { options | onPress = msg }
 
 
-withIcon : Icon.Icon -> Button context msg -> Button context msg
+withIcon : (Icon.Icon msg) -> Button context msg -> Button context msg
 withIcon icon (Button options) =
     Button { options | icon = Just icon }
 
@@ -141,7 +141,7 @@ view (Button options) =
                             text options.label
 
                         Just icon ->
-                            row [ spacing 5 ] [ el [] <| Icon.view icon, el [] (text options.label) ]
+                            row [ spacing 5 ] [ el [] <| Icon.viewAsElement icon, el [] (text options.label) ]
                 }
         )
 

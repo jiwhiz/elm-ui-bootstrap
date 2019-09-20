@@ -21,6 +21,7 @@ import Page.Icon as Icon
 import Page.Navbar as Navbar
 import Page.NotFound as NotFound
 import Page.Pagination as Pagination
+import Page.Sandbox as Sandbox
 import Page.Table as Table
 import Page.Typography as Typography
 import Ports
@@ -61,6 +62,7 @@ type Page
     | TablePage Table.Model
     | TypographyPage Typography.Model
     | ExamplesPage Examples.Model
+    | SandboxPage Sandbox.Model
     | NotFoundPage NotFound.Model
 
 
@@ -151,6 +153,9 @@ tabBarTitle model =
 
         ExamplesPage _ ->
             "Examples"
+
+        SandboxPage _ ->
+            "Sandbox"
 
         NotFoundPage _ ->
             "Not Found"
@@ -284,6 +289,10 @@ content model sharedState =
             Examples.view sharedState pageModel
                 |> Element.map ExamplesMsg
 
+        SandboxPage pageModel ->
+            Sandbox.view sharedState pageModel
+                |> Element.map SandboxMsg
+
         NotFoundPage pageModel ->
             NotFound.view sharedState pageModel
                 |> Element.map NotFoundMsg
@@ -310,6 +319,7 @@ type Msg
     | TableMsg Table.Msg
     | TypographyMsg Typography.Msg
     | ExamplesMsg Examples.Msg
+    | SandboxMsg Sandbox.Msg
     | NotFoundMsg NotFound.Msg
     | ToggleDropdown
     | ToggleMenu
@@ -394,6 +404,10 @@ update sharedState msg model =
         ( ExamplesMsg subMsg, ExamplesPage subModel ) ->
             Examples.update sharedState subMsg subModel
                 |> updateWith ExamplesPage ExamplesMsg model
+
+        ( SandboxMsg subMsg, SandboxPage subModel ) ->
+            Sandbox.update sharedState subMsg subModel
+                |> updateWith SandboxPage SandboxMsg model
 
         ( NotFoundMsg subMsg, NotFoundPage subModel ) ->
             NotFound.update sharedState subMsg subModel
@@ -481,6 +495,9 @@ navigateTo route sharedState model =
 
         Examples ->
             Examples.init |> initWith ExamplesPage ExamplesMsg model SharedState.NoUpdate
+
+        Sandbox ->
+            Sandbox.init |> initWith SandboxPage SandboxMsg model SharedState.NoUpdate
 
         NotFound ->
             NotFound.init |> initWith NotFoundPage NotFoundMsg model SharedState.NoUpdate
