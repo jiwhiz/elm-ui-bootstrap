@@ -420,7 +420,7 @@ dismissConfigs model =
             """
 It is quite easy to make the alert dismissable. Config the alert with close handling
 msg, it will automatically add close button to top right corner. You should store 
-tge state of alert to the page model, and pass it to Alert.view function. Right now
+the state of alert in the page model, and pass it to Alert.view function. Right now
 the state of alert is just a Bool to indicate showing or hiding. In the future, it will
 be changed to support animation.
 """
