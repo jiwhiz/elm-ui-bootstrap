@@ -1,8 +1,10 @@
 module UiFramework.Button exposing
     ( Button
     , default
+    , link
     , simple
     , view
+    , withBadge
     , withBlock
     , withDisabled
     , withExtraAttrs
@@ -20,6 +22,7 @@ import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
+import UiFramework.Badge as Badge
 import UiFramework.ColorUtils exposing (alterColor, darken, transparent)
 import UiFramework.Icon as Icon
 import UiFramework.Internal as Internal
@@ -31,10 +34,10 @@ type alias UiElement context msg =
 
 
 type Button context msg
-    = Button (Options msg)
+    = Button (Options context msg)
 
 
-type alias Options msg =
+type alias Options context msg =
     { role : Role
     , outlined : Bool
     , block : Bool
@@ -43,6 +46,7 @@ type alias Options msg =
     , onPress : Maybe msg
     , icon : Maybe (Icon.Icon msg)
     , label : String
+    , badge : Maybe (Badge.Badge context msg)
     , attributes : List (Attribute msg)
     }
 
@@ -82,9 +86,14 @@ withMessage msg (Button options) =
     Button { options | onPress = msg }
 
 
-withIcon : (Icon.Icon msg) -> Button context msg -> Button context msg
+withIcon : Icon.Icon msg -> Button context msg -> Button context msg
 withIcon icon (Button options) =
     Button { options | icon = Just icon }
+
+
+withBadge : Badge.Badge context msg -> Button context msg -> Button context msg
+withBadge badge (Button options) =
+    Button { options | badge = Just badge }
 
 
 withLabel : String -> Button context msg -> Button context msg
@@ -97,7 +106,7 @@ withExtraAttrs attributes (Button options) =
     Button { options | attributes = attributes }
 
 
-defaultOptions : Options msg
+defaultOptions : Options context msg
 defaultOptions =
     { role = Primary
     , outlined = False
@@ -107,6 +116,7 @@ defaultOptions =
     , onPress = Nothing
     , icon = Nothing
     , label = ""
+    , badge = Nothing
     , attributes = []
     }
 
@@ -132,21 +142,26 @@ view : Button context msg -> UiElement context msg
 view (Button options) =
     Internal.fromElement
         (\context ->
+            let
+                icons =
+                    options.icon
+                        |> Maybe.map (Icon.viewAsElement >> List.singleton)
+                        |> Maybe.withDefault []
+
+                badges =
+                    options.badge
+                        |> Maybe.map (Badge.view >> Internal.toElement context >> List.singleton)
+                        |> Maybe.withDefault []
+            in
             Input.button
                 (viewAttributes context options)
                 { onPress = options.onPress
-                , label =
-                    case options.icon of
-                        Nothing ->
-                            text options.label
-
-                        Just icon ->
-                            row [ spacing 5 ] [ el [] <| Icon.viewAsElement icon, el [] (text options.label) ]
+                , label = row [ spacing 5 ] (icons ++ [ text options.label ] ++ badges)
                 }
         )
 
 
-viewAttributes : Internal.UiContextual context -> Options msg -> List (Attribute msg)
+viewAttributes : Internal.UiContextual context -> Options context msg -> List (Attribute msg)
 viewAttributes context options =
     let
         config =
@@ -193,7 +208,7 @@ type alias ButtonColorsConfig =
     }
 
 
-buttonColors : Internal.UiContextual context -> Options msg -> ButtonColorsConfig
+buttonColors : Internal.UiContextual context -> Options context msg -> ButtonColorsConfig
 buttonColors context options =
     let
         config =
@@ -227,3 +242,29 @@ buttonColors context options =
 
     else
         defaultColors
+
+
+
+--  Link Button
+
+
+link :
+    { onPress : Maybe msg
+    , label : UiElement context msg
+    }
+    -> UiElement context msg
+link { onPress, label } =
+    Internal.fromElement
+        (\context ->
+            let
+                linkConfig =
+                    context.themeConfig.linkConfig
+            in
+            Input.button
+                [ Font.color linkConfig.linkColor
+                , Element.mouseOver [ Font.color linkConfig.linkHoverColor ]
+                ]
+                { onPress = onPress
+                , label = Internal.toElement context label
+                }
+        )

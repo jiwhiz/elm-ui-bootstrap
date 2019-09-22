@@ -4,9 +4,11 @@ import Browser.Navigation as Navigation
 import Common exposing (code, componentNavbar, highlightCode, moduleLayout, roleAndNameList, section, title, viewHeader, wrappedText)
 import Element
 import FontAwesome.Brands
+import FontAwesome.Solid
 import Routes
 import SharedState exposing (SharedState, SharedStateUpdate(..))
 import UiFramework exposing (UiContextual, WithContext, toElement)
+import UiFramework.Badge as Badge
 import UiFramework.Button as Button
 import UiFramework.Container as Container
 import UiFramework.Icon as Icon
@@ -62,6 +64,7 @@ content =
         ]
         [ basicExample
         , configuration
+        , linkExample
         ]
 
 
@@ -125,6 +128,7 @@ When configuring, we use pipelines to build up our button, starting from the def
         , blockConfig
         , disableConfig
         , iconConfig
+        , badgeConfig
         ]
 
 
@@ -443,18 +447,7 @@ iconConfig =
         , Element.spacing 32
         ]
         [ section "Buttons with Icons"
-        , wrappedText "Though used primarily with navbars, buttons with icons can serve other uses as well."
-        , UiFramework.uiParagraph []
-            [ UiFramework.uiText "Note that you'll have to "
-            , UiFramework.uiText "include the required CSS in your website "
-            , UiFramework.uiText "(check out the Elm FontAwesome page for more details - "
-            , UiFramework.uiText "https://github.com/lattyware/elm-fontawesome/tree/3.1.0#required-css)"
-            ]
-        , UiFramework.uiParagraph []
-            [ UiFramework.uiText "As of now, you cannot add a custom"
-            , code "UiElement"
-            , UiFramework.uiText " to a button. This means you cannot add an animated icon, for example."
-            ]
+        , wrappedText "You can add any icon to a button."
         , UiFramework.uiWrappedRow
             [ Element.spacing 4 ]
             [ Button.default
@@ -463,6 +456,22 @@ iconConfig =
                 |> Button.view
             ]
         , iconConfigCode
+        , wrappedText "You can make the icon spinning."
+        , UiFramework.uiWrappedRow
+            [ Element.spacing 4 ]
+            [ Button.default
+                |> Button.withLabel "Loading..."
+                |> Button.withIcon
+                    (Icon.fontAwesome FontAwesome.Solid.spinner |> Icon.withSpin)
+                |> Button.withDisabled
+                |> Button.view
+            ]
+        , iconSpinningConfigCode
+        , UiFramework.uiParagraph []
+            [ UiFramework.uiText "See "
+            , Button.link { onPress = Just <| NavigateTo Routes.Icon, label = UiFramework.uiText "Icon module" }
+            , UiFramework.uiText " to learn more about Icons."
+            ]
         ]
 
 
@@ -472,14 +481,101 @@ iconConfigCode =
         """
 import FontAwesome.Brands
 
-buttonSizes =
-    UiFramework.uiWrappedRow
-        [ Element.spacing 4 ]
-        [ Button.default
-            |> Button.withLabel "Github"
-            |> Button.withIcon FontAwesome.Brands.github
-            |> Button.view
+githubButton =
+    Button.default
+        |> Button.withLabel "Github"
+        |> Button.withIcon (Icon.fontAwesome FontAwesome.Brands.github)
+        |> Button.view
+
+"""
+
+
+iconSpinningConfigCode : UiElement Msg
+iconSpinningConfigCode =
+    Common.highlightCode "elm"
+        """
+import FontAwesome.Solid
+
+loadingButton =
+    Button.default
+        |> Button.withLabel "Loading..."
+        |> Button.withIcon
+            (Icon.fontAwesome FontAwesome.Solid.spinner |> Icon.withSpin)
+        |> Button.withDisabled
+        |> Button.view
+
+"""
+
+
+badgeConfig : UiElement Msg
+badgeConfig =
+    UiFramework.uiColumn
+        [ Element.width Element.fill
+        , Element.spacing 32
         ]
+        [ section "Buttons with Badges"
+        , wrappedText
+            """
+You can add badge to buttons. For example, to provide a counter for notification:
+"""
+        , UiFramework.uiWrappedRow
+            [ Element.spacing 4 ]
+            [ Button.default
+                |> Button.withLabel "Notifications"
+                |> Button.withBadge (Badge.default |> Badge.withLabel "4" |> Badge.withRole Light)
+                |> Button.view
+            ]
+        , badgeConfigCode
+        ]
+
+
+badgeConfigCode : UiElement Msg
+badgeConfigCode =
+    Common.highlightCode "elm"
+        """
+import FontAwesome.Brands
+
+notificationButton =
+    Button.default
+        |> Button.withLabel "Notifications"
+        |> Button.withBadge (Badge.default |> Badge.withLabel "4" |> Badge.withRole Light)
+        |> Button.view
+
+"""
+
+
+linkExample : UiElement Msg
+linkExample =
+    UiFramework.uiColumn
+        [ Element.width Element.fill
+        , Element.spacing 32
+        ]
+        [ title "Link Example"
+        , wrappedText
+            """
+Link buttons are special, they are rendered as links, but might trigger Elm messages, 
+usually NagivateTo message.
+"""
+        , UiFramework.uiWrappedRow
+            [ Element.spacing 4 ]
+            [ Button.link
+                { onPress = Just <| NavigateTo Routes.Home
+                , label = UiFramework.uiText "Go to home page"
+                }
+            ]
+        , linkExampleCode
+        ]
+
+
+linkExampleCode : UiElement Msg
+linkExampleCode =
+    Common.highlightCode "elm"
+        """
+linkButton =
+    Button.link
+        { onPress = Just <| NavigateTo Routes.Home
+        , label = UiFramework.uiText "Go to home page"
+        }
 """
 
 
