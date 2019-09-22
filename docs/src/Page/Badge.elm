@@ -99,14 +99,14 @@ UiFramework.uiColumn
     [ Element.spacing 8
     , Element.width Element.fill
     ]
-    [ Badge.simple Primary "Primary badge!"
-    , Badge.simple Secondary "Secondary badge!"
-    , Badge.simple Success "Success badge!"
-    , Badge.simple Info "Info badge!"
-    , Badge.simple Warning "Warning badge!"
-    , Badge.simple Danger "Danger badge!"
-    , Badge.simple Light "Light badge!"
-    , Badge.simple Dark "Dark badge!"
+    [ Badge.simplePrimary "Primary badge!"
+    , Badge.simpleSecondary "Secondary badge!"
+    , Badge.simpleSuccess "Success badge!"
+    , Badge.simpleInfo "Info badge!"
+    , Badge.simpleWarning "Warning badge!"
+    , Badge.simpleDanger "Danger badge!"
+    , Badge.simpleLight "Light badge!"
+    , Badge.simpleDark "Dark badge!"
     ]
 """
 

@@ -2,6 +2,14 @@ module UiFramework.Badge exposing
     ( Badge
     , default
     , simple
+    , simpleDanger
+    , simpleDark
+    , simpleInfo
+    , simpleLight
+    , simplePrimary
+    , simpleSecondary
+    , simpleSuccess
+    , simpleWarning
     , view
     , withExtraAttrs
     , withLabel
@@ -69,6 +77,46 @@ simple role label =
         |> withRole role
         |> withLabel label
         |> view
+
+
+simplePrimary : String -> UiElement context msg
+simplePrimary label =
+    simple Primary label
+
+
+simpleSecondary : String -> UiElement context msg
+simpleSecondary label =
+    simple Secondary label
+
+
+simpleSuccess : String -> UiElement context msg
+simpleSuccess label =
+    simple Success label
+
+
+simpleInfo : String -> UiElement context msg
+simpleInfo label =
+    simple Info label
+
+
+simpleWarning : String -> UiElement context msg
+simpleWarning label =
+    simple Warning label
+
+
+simpleDanger : String -> UiElement context msg
+simpleDanger label =
+    simple Danger label
+
+
+simpleLight : String -> UiElement context msg
+simpleLight label =
+    simple Light label
+
+
+simpleDark : String -> UiElement context msg
+simpleDark label =
+    simple Dark label
 
 
 
