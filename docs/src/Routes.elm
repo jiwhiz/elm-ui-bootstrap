@@ -73,9 +73,9 @@ toUrlString route =
 
                 Examples ->
                     [ "examples" ]
-                
+
                 Sandbox ->
-                    [ "Sandbox" ]
+                    [ "sandbox" ]
 
                 NotFound ->
                     [ "oops" ]

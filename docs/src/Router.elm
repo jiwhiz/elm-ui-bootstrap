@@ -213,6 +213,9 @@ navbar model sharedState =
             UiFramework.Navbar.linkItem (NavigateTo Alert)
                 |> UiFramework.Navbar.withMenuTitle "Modules"
 
+        -- sanboxItem =
+        --     UiFramework.Navbar.linkItem (NavigateTo Sandbox)
+        --         |> UiFramework.Navbar.withMenuTitle "Sandbox"
         examplesItem =
             UiFramework.Navbar.linkItem (NavigateTo Examples)
                 |> UiFramework.Navbar.withMenuTitle "Examples"
@@ -223,6 +226,8 @@ navbar model sharedState =
         |> UiFramework.Navbar.withMenuItems
             [ homeItem
             , modulesItem
+
+            --, sanboxItem
             , examplesItem
             ]
         |> UiFramework.Navbar.withExtraAttrs []
