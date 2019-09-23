@@ -324,7 +324,7 @@ viewAsElement : Icon msg -> Element msg
 viewAsElement (Icon options) =
     viewAsHtml (Icon options)
         |> html
-        |> Element.el [Element.width Element.shrink]
+        |> Element.el ([ Element.width Element.shrink ] ++ options.attributes)
 
 
 
