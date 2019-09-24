@@ -283,7 +283,8 @@ sizing, spinning, rotating, stacking, etc. Starting from the
         , counterConfig
         , spinConfigs
         , pulseConfigs
-        , borderConfigs
+
+        --, borderConfigs
         ]
 
 
@@ -308,7 +309,7 @@ And for Num, you can set from 2 to 10, which means double the size to 10 times t
             [ Element.spacing 10
             , Element.width Element.fill
             ]
-            ([ Icon.Xs, Icon.Sm, Icon.Regular, Icon.Lg ]
+            ([ Icon.Xs, Icon.Sm, Icon.Default, Icon.Lg ]
                 ++ (List.range 2 7 |> List.map (\n -> Icon.Num n))
                 |> List.map
                     (\size ->
@@ -331,7 +332,7 @@ type Size
     | Sm
     | Lg
     | Num Int
-    | Regular
+    | Default
 """
 
 
@@ -345,7 +346,7 @@ UiFramework.uiWrappedRow
     [ Element.spacing 10
     , Element.width Element.fill
     ]
-    ([ Icon.Xs, Icon.Sm, Icon.Regular, Icon.Lg ]
+    ([ Icon.Xs, Icon.Sm, Icon.Default, Icon.Lg ]
         ++ (List.range 2 7 |> List.map (\\n -> Icon.Num n))
         |> List.map
             (\\size ->
@@ -899,7 +900,7 @@ layering =
             []
             [ UiFramework.uiText "Another way to compose icons is to place icons"
             , UiFramework.uiText " and text visually on top of each other, use "
-            , code "Icon.layer"
+            , code "Icon.lay"
             , UiFramework.uiText " function:"
             ]
         , UiFramework.uiWrappedRow
@@ -917,7 +918,6 @@ layering =
             , Icon.fontAwesome FontAwesome.Solid.bookmark
                 |> Icon.lay
                     (Icon.fontAwesome FontAwesome.Solid.heart
-                        |> Icon.withInverse
                         |> Icon.withShrink 10
                         |> Icon.withPosUp 2
                         |> Icon.withColor "#FF6347"
@@ -993,7 +993,6 @@ UiFramework.uiRow [ Element.spacing 20 ]
     , Icon.fontAwesome FontAwesome.Solid.bookmark
         |> Icon.lay
             (Icon.fontAwesome FontAwesome.Solid.heart
-                |> Icon.withInverse
                 |> Icon.withShrink 10
                 |> Icon.withPosUp 2
                 |> Icon.withColor "#FF6347"

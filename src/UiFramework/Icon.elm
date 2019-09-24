@@ -79,7 +79,7 @@ type Size
     | Sm
     | Lg
     | Num Int
-    | Regular
+    | Default
 
 
 type Animation
@@ -97,7 +97,7 @@ defaultOptions =
     { base = Layered []
     , attributes = []
     , htmlAttributes = []
-    , size = Regular
+    , size = Default
     , animation = NoAnimation
     , border = False
     , fixedWidth = False
