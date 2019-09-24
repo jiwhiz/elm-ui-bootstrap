@@ -6,6 +6,7 @@ import Element
 import Element.Font as Font
 import FontAwesome.Brands
 import FontAwesome.Solid
+import Html.Attributes
 import Routes
 import SharedState exposing (SharedState, SharedStateUpdate(..))
 import UiFramework exposing (UiContextual, WithContext, toElement)
@@ -62,7 +63,6 @@ view sharedState model =
         |> UiFramework.toElement (toContext sharedState)
 
 
-content : UiElement Msg
 content =
     UiFramework.uiColumn
         [ Element.width Element.fill
@@ -72,10 +72,11 @@ content =
         , basicExample
         , realLifeUses
         , configuration
+        , transform
+        , layering
         ]
 
 
-gettingStarted : UiElement Msg
 gettingStarted =
     UiFramework.uiColumn
         [ Element.width Element.fill
@@ -107,7 +108,6 @@ gettingStarted =
         ]
 
 
-installFontAwesomeCode : UiElement Msg
 installFontAwesomeCode =
     Common.highlightCode "bash"
         """
@@ -115,7 +115,6 @@ elm install lattyware/elm-fontawesome
 """
 
 
-gettingStartedCode : UiElement Msg
 gettingStartedCode =
     Common.highlightCode "elm"
         """
@@ -134,7 +133,6 @@ viewApplication model sharedState =
 """
 
 
-basicExample : UiElement Msg
 basicExample =
     UiFramework.uiColumn
         [ Element.width Element.fill
@@ -152,7 +150,6 @@ basicExample =
         ]
 
 
-basicExampleCode : UiElement Msg
 basicExampleCode =
     Common.highlightCode "elm"
         """
@@ -165,11 +162,6 @@ cogIcon =
 """
 
 
-type DropdownState
-    = AllDown
-
-
-realLifeUses : UiElement Msg
 realLifeUses =
     UiFramework.uiColumn
         [ Element.width Element.fill
@@ -209,12 +201,11 @@ realLifeUses =
                     |> Navbar.withMenuIcon (Icon.fontAwesome FontAwesome.Solid.addressBook)
                     |> Navbar.withMenuTitle "Contact"
                 ]
-            |> Navbar.view { toggleMenuState = False, dropdownState = AllDown }
+            |> Navbar.view { toggleMenuState = False, dropdownState = False }
         , iconNavbarCode
         ]
 
 
-iconButtonCode : UiElement Msg
 iconButtonCode =
     Common.highlightCode "elm"
         """
@@ -239,17 +230,12 @@ iconButtons =
 """
 
 
-iconNavbarCode : UiElement Msg
 iconNavbarCode =
     Common.highlightCode "elm"
         """
 import FontAwesome.Solid
 import UiFramework.Icon as Icon
 import UiFramework.Navbar as Navbar
-
-
-type DropdownState 
-    = AllDown
 
 
 type Msg
@@ -269,11 +255,10 @@ Navbar.default NoOp
             |> Navbar.withMenuIcon (Icon.fontAwesome FontAwesome.Solid.addressBook)
             |> Navbar.withMenuTitle "Contact"
         ]
-    |> Navbar.view {toggleMenuState = False, dropdownState = AllDown}
+    |> Navbar.view {toggleMenuState = False, dropdownState = False}
 """
 
 
-configuration : UiElement Msg
 configuration =
     UiFramework.uiColumn
         [ Element.spacing 48
@@ -295,20 +280,23 @@ sizing, spinning, rotating, stacking, etc. Starting from the
                 ]
             ]
         , sizeConfigs
+        , counterConfig
         , spinConfigs
+        , pulseConfigs
+        , borderConfigs
         ]
 
 
-sizeConfigs : UiElement Msg
 sizeConfigs =
     UiFramework.uiColumn
         [ Element.spacing 16
         , Element.width Element.fill
         ]
-        [ section "Sizing"
+        [ section "withSize"
         , wrappedText
             """
-Icons inherit font size of their parent container, but you can also speicify the size.
+Icons inherit font size of their parent container, but you can also speicify the size by
+using Icon.withSize function.
 Size type includes following:
 """
         , sizeTypeCode
@@ -335,7 +323,6 @@ And for Num, you can set from 2 to 10, which means double the size to 10 times t
         ]
 
 
-sizeTypeCode : UiElement Msg
 sizeTypeCode =
     Common.highlightCode "elm"
         """
@@ -348,17 +335,18 @@ type Size
 """
 
 
-sizingCode : UiElement Msg
 sizingCode =
     Common.highlightCode "elm"
         """
+import FontAwesome.Solid
+import UiFramework.Icon as Icon
+
 UiFramework.uiWrappedRow
     [ Element.spacing 10
     , Element.width Element.fill
     ]
     ([ Icon.Xs, Icon.Sm, Icon.Regular, Icon.Lg ]
-        ++ (List.range 2 7 |> List.map (
- -> Icon.Num n))
+        ++ (List.range 2 7 |> List.map (\\n -> Icon.Num n))
         |> List.map
             (\\size ->
                 Icon.fontAwesome
@@ -371,16 +359,57 @@ UiFramework.uiWrappedRow
 """
 
 
-spinConfigs : UiElement Msg
+counterConfig =
+    UiFramework.uiColumn
+        [ Element.spacing 16
+        , Element.width Element.fill
+        ]
+        [ section "withCounter"
+        , wrappedText
+            """
+Use Icon.withCounter function to add a counter text at upper right corner of the icon.
+"""
+        , UiFramework.uiRow
+            [ Element.spacing 20 ]
+            [ Icon.fontAwesome FontAwesome.Solid.envelope
+                |> Icon.withCounter { text = "2,999", attrs = [ Html.Attributes.style "background" "#FF6347" ] }
+                |> Icon.withSize (Icon.Num 4)
+                |> Icon.view
+            , Icon.fontAwesome FontAwesome.Solid.globe
+                |> Icon.withCounter { text = "!", attrs = [ Html.Attributes.style "background" "#FF6347" ] }
+                |> Icon.withSize (Icon.Num 4)
+                |> Icon.view
+            ]
+        , counterCode
+        ]
+
+
+counterCode =
+    Common.highlightCode "elm"
+        """
+UiFramework.uiRow
+    [ Element.spacing 20 ]
+    [ Icon.fontAwesome FontAwesome.Solid.envelope
+        |> Icon.withCounter { text = "2,999", attrs = [ Html.Attributes.style "background" "#FF6347" ] }
+        |> Icon.withSize (Icon.Num 4)
+        |> Icon.view
+    , Icon.fontAwesome FontAwesome.Solid.globe
+        |> Icon.withCounter { text = "!", attrs = [ Html.Attributes.style "background" "#FF6347" ] }
+        |> Icon.withSize (Icon.Num 4)
+        |> Icon.view
+    ]
+"""
+
+
 spinConfigs =
     UiFramework.uiColumn
         [ Element.spacing 16
         , Element.width Element.fill
         ]
-        [ section "Spinning"
+        [ section "withSpin"
         , wrappedText
             """
-To make the spinning icons, just use Icon.withSpin function
+To make the spinning icons, just use Icon.withSpin function.
 """
         , UiFramework.uiWrappedRow
             [ Element.spacing 10
@@ -402,13 +431,24 @@ To make the spinning icons, just use Icon.withSpin function
                     )
             )
         , spinningCode
+        , wrappedText
+            """
+You can also make a spinnning icon from text.
+"""
+        , Icon.textIcon "rotate"
+            |> Icon.withSpin
+            |> Icon.withExtraAttributes [ Element.paddingXY 10 20 ]
+            |> Icon.view
+        , spinningTextCode
         ]
 
 
-spinningCode : UiElement Msg
 spinningCode =
     Common.highlightCode "elm"
         """
+import FontAwesome.Solid
+import UiFramework.Icon as Icon
+
 UiFramework.uiWrappedRow
     [ Element.spacing 10
     , Element.width Element.fill
@@ -428,6 +468,586 @@ UiFramework.uiWrappedRow
                     |> Icon.view
             )
     )
+"""
+
+
+spinningTextCode =
+    Common.highlightCode "elm"
+        """
+import UiFramework.Icon as Icon
+
+Icon.textIcon "rotate"
+    |> Icon.withSpin
+    |> Icon.view
+"""
+
+
+pulseConfigs =
+    UiFramework.uiColumn
+        [ Element.spacing 16
+        , Element.width Element.fill
+        ]
+        [ section "withPulse"
+        , wrappedText
+            """
+Use Icon.withPulse function to make the icon rotating with 8 steps.
+"""
+        , Icon.fontAwesome FontAwesome.Solid.spinner
+            |> Icon.withSize (Icon.Num 4)
+            |> Icon.withPulse
+            |> Icon.view
+        , pulseCode
+        ]
+
+
+pulseCode =
+    Common.highlightCode "elm"
+        """
+import FontAwesome.Solid
+import UiFramework.Icon as Icon
+
+Icon.fontAwesome FontAwesome.Solid.spinner
+    |> Icon.withSize (Icon.Num 4)
+    |> Icon.withPulse
+    |> Icon.view
+"""
+
+
+borderConfigs =
+    UiFramework.uiColumn
+        [ Element.spacing 16
+        , Element.width Element.fill
+        ]
+        [ section "withBorder"
+        , wrappedText
+            """
+Use Icon.withBortder function to add border.
+"""
+        , Icon.fontAwesome FontAwesome.Solid.arrowRight
+            |> Icon.withSize (Icon.Num 2)
+            |> Icon.withBorder
+            |> Icon.view
+        , borderCode
+        ]
+
+
+borderCode =
+    Common.highlightCode "elm"
+        """
+import FontAwesome.Solid
+import UiFramework.Icon as Icon
+
+Icon.fontAwesome FontAwesome.Solid.arrowRight
+    |> Icon.withSize (Icon.Num 4)
+    |> Icon.withBorder
+    |> Icon.view
+"""
+
+
+transform =
+    UiFramework.uiColumn
+        [ Element.spacing 48
+        , Element.width Element.fill
+        ]
+        [ UiFramework.uiColumn
+            [ Element.spacing 16 ]
+            [ title "Transforms"
+            , wrappedText
+                """
+We can use many transform functions to scale, position, flip, or rotate icons arbitrarily. 
+"""
+            ]
+        , scaleConfigs
+        , positionConfigs
+        , rotationConfigs
+        , flipConfigs
+        , mixConfigs
+        ]
+
+
+scaleConfigs =
+    UiFramework.uiColumn
+        [ Element.spacing 16
+        , Element.width Element.fill
+        ]
+        [ section "withShrink and withGrow"
+        , wrappedText
+            """
+Use Icon.withShrink or Icon.withGrow functions to scale icons. Units are 1/16em.
+"""
+        , UiFramework.uiRow [ Element.spacing 20 ]
+            [ Icon.fontAwesome FontAwesome.Solid.seedling
+                |> Icon.withSize (Icon.Num 4)
+                |> Icon.withShrink 8.0
+                |> Icon.withBackground "#FFE4E1"
+                |> Icon.view
+            , Icon.fontAwesome FontAwesome.Solid.seedling
+                |> Icon.withSize (Icon.Num 4)
+                |> Icon.withBackground "#FFE4E1"
+                |> Icon.view
+            , Icon.fontAwesome FontAwesome.Solid.seedling
+                |> Icon.withSize (Icon.Num 4)
+                |> Icon.withGrow 6.0
+                |> Icon.withBackground "#FFE4E1"
+                |> Icon.view
+            ]
+        , scaleCode
+        ]
+
+
+scaleCode =
+    Common.highlightCode "elm"
+        """
+import FontAwesome.Solid
+import UiFramework
+import UiFramework.Icon as Icon
+
+UiFramework.uiRow [ Element.spacing 20 ]
+    [ Icon.fontAwesome FontAwesome.Solid.seedling
+        |> Icon.withSize (Icon.Num 4)
+        |> Icon.withShrink 8.0
+        |> Icon.withBackground "#FFE4E1"
+        |> Icon.view
+    , Icon.fontAwesome FontAwesome.Solid.seedling
+        |> Icon.withSize (Icon.Num 4)
+        |> Icon.withBackground "#FFE4E1"
+        |> Icon.view
+    , Icon.fontAwesome FontAwesome.Solid.seedling
+        |> Icon.withSize (Icon.Num 4)
+        |> Icon.withGrow 6.0
+        |> Icon.withBackground "#FFE4E1"
+        |> Icon.view
+    ]
+"""
+
+
+positionConfigs =
+    UiFramework.uiColumn
+        [ Element.spacing 16
+        , Element.width Element.fill
+        ]
+        [ section "withPosition"
+        , wrappedText
+            """
+Use Icon.withPosUp, Icon.withPosDown, Icon.withPosLeft, Icon.withPosRight functions
+to move icons up, down, left, or right.
+"""
+        , UiFramework.uiRow [ Element.spacing 20 ]
+            [ Icon.fontAwesome FontAwesome.Solid.seedling
+                |> Icon.withSize (Icon.Num 4)
+                |> Icon.withShrink 8.0
+                |> Icon.withBackground "#FFE4E1"
+                |> Icon.view
+            , Icon.fontAwesome FontAwesome.Solid.seedling
+                |> Icon.withSize (Icon.Num 4)
+                |> Icon.withShrink 8.0
+                |> Icon.withBackground "#FFE4E1"
+                |> Icon.withPosUp 6.0
+                |> Icon.view
+            , Icon.fontAwesome FontAwesome.Solid.seedling
+                |> Icon.withSize (Icon.Num 4)
+                |> Icon.withShrink 8.0
+                |> Icon.withBackground "#FFE4E1"
+                |> Icon.withPosRight 6.0
+                |> Icon.view
+            , Icon.fontAwesome FontAwesome.Solid.seedling
+                |> Icon.withSize (Icon.Num 4)
+                |> Icon.withShrink 8.0
+                |> Icon.withBackground "#FFE4E1"
+                |> Icon.withPosDown 6.0
+                |> Icon.view
+            , Icon.fontAwesome FontAwesome.Solid.seedling
+                |> Icon.withSize (Icon.Num 4)
+                |> Icon.withShrink 8.0
+                |> Icon.withBackground "#FFE4E1"
+                |> Icon.withPosLeft 6.0
+                |> Icon.view
+            ]
+        , positionCode
+        ]
+
+
+positionCode =
+    Common.highlightCode "elm"
+        """
+import FontAwesome.Solid
+import UiFramework
+import UiFramework.Icon as Icon
+
+UiFramework.uiRow [ Element.spacing 20 ]
+    [ Icon.fontAwesome FontAwesome.Solid.seedling
+        |> Icon.withSize (Icon.Num 4)
+        |> Icon.withShrink 8.0
+        |> Icon.withBackground "#FFE4E1"
+        |> Icon.view
+    , Icon.fontAwesome FontAwesome.Solid.seedling
+        |> Icon.withSize (Icon.Num 4)
+        |> Icon.withShrink 8.0
+        |> Icon.withBackground "#FFE4E1"
+        |> Icon.withPosUp 6.0
+        |> Icon.view
+    , Icon.fontAwesome FontAwesome.Solid.seedling
+        |> Icon.withSize (Icon.Num 4)
+        |> Icon.withShrink 8.0
+        |> Icon.withBackground "#FFE4E1"
+        |> Icon.withPosRight 6.0
+        |> Icon.view
+    , Icon.fontAwesome FontAwesome.Solid.seedling
+        |> Icon.withSize (Icon.Num 4)
+        |> Icon.withShrink 8.0
+        |> Icon.withBackground "#FFE4E1"
+        |> Icon.withPosDown 6.0
+        |> Icon.view
+    , Icon.fontAwesome FontAwesome.Solid.seedling
+        |> Icon.withSize (Icon.Num 4)
+        |> Icon.withShrink 8.0
+        |> Icon.withBackground "#FFE4E1"
+        |> Icon.withPosLeft 6.0
+        |> Icon.view
+    ]
+"""
+
+
+rotationConfigs =
+    UiFramework.uiColumn
+        [ Element.spacing 16
+        , Element.width Element.fill
+        ]
+        [ section "withRotation"
+        , wrappedText
+            """
+To rotate an icon, use Icon.withRotation, and passing a degree to rotate.
+"""
+        , UiFramework.uiRow [ Element.spacing 20 ]
+            [ Icon.fontAwesome FontAwesome.Solid.seedling
+                |> Icon.withSize (Icon.Num 4)
+                |> Icon.withRotation 90
+                |> Icon.withBackground "#FFE4E1"
+                |> Icon.view
+            , Icon.fontAwesome FontAwesome.Solid.seedling
+                |> Icon.withSize (Icon.Num 4)
+                |> Icon.withRotation 180
+                |> Icon.withBackground "#FFE4E1"
+                |> Icon.view
+            , Icon.fontAwesome FontAwesome.Solid.seedling
+                |> Icon.withSize (Icon.Num 4)
+                |> Icon.withRotation 30
+                |> Icon.withBackground "#FFE4E1"
+                |> Icon.view
+            , Icon.fontAwesome FontAwesome.Solid.seedling
+                |> Icon.withSize (Icon.Num 4)
+                |> Icon.withRotation -30
+                |> Icon.withBackground "#FFE4E1"
+                |> Icon.view
+            ]
+        , rotationCode
+        ]
+
+
+rotationCode =
+    Common.highlightCode "elm"
+        """
+import FontAwesome.Solid
+import UiFramework
+import UiFramework.Icon as Icon
+
+UiFramework.uiRow [ Element.spacing 20 ]
+    [ Icon.fontAwesome FontAwesome.Solid.seedling
+        |> Icon.withSize (Icon.Num 4)
+        |> Icon.withRotation 90
+        |> Icon.withBackground "#FFE4E1"
+        |> Icon.view
+    , Icon.fontAwesome FontAwesome.Solid.seedling
+        |> Icon.withSize (Icon.Num 4)
+        |> Icon.withRotation 180
+        |> Icon.withBackground "#FFE4E1"
+        |> Icon.view
+    , Icon.fontAwesome FontAwesome.Solid.seedling
+        |> Icon.withSize (Icon.Num 4)
+        |> Icon.withRotation 30
+        |> Icon.withBackground "#FFE4E1"
+        |> Icon.view
+    , Icon.fontAwesome FontAwesome.Solid.seedling
+        |> Icon.withSize (Icon.Num 4)
+        |> Icon.withRotation -30
+        |> Icon.withBackground "#FFE4E1"
+        |> Icon.view
+    ]
+"""
+
+
+flipConfigs =
+    UiFramework.uiColumn
+        [ Element.spacing 16
+        , Element.width Element.fill
+        ]
+        [ section "withFlipV and withFlipH"
+        , wrappedText
+            """
+Use Icon.withFlipV to flip icon vertically, and Icon.withFlipH to flip icon horizontally.
+"""
+        , UiFramework.uiRow [ Element.spacing 20 ]
+            [ Icon.fontAwesome FontAwesome.Solid.seedling
+                |> Icon.withSize (Icon.Num 4)
+                |> Icon.withBackground "#FFE4E1"
+                |> Icon.view
+            , Icon.fontAwesome FontAwesome.Solid.seedling
+                |> Icon.withSize (Icon.Num 4)
+                |> Icon.withFlipV
+                |> Icon.withBackground "#FFE4E1"
+                |> Icon.view
+            , Icon.fontAwesome FontAwesome.Solid.seedling
+                |> Icon.withSize (Icon.Num 4)
+                |> Icon.withFlipH
+                |> Icon.withBackground "#FFE4E1"
+                |> Icon.view
+            , Icon.fontAwesome FontAwesome.Solid.seedling
+                |> Icon.withSize (Icon.Num 4)
+                |> Icon.withFlipV
+                |> Icon.withFlipH
+                |> Icon.withBackground "#FFE4E1"
+                |> Icon.view
+            ]
+        , flipCode
+        ]
+
+
+flipCode =
+    Common.highlightCode "elm"
+        """
+import FontAwesome.Solid
+import UiFramework
+import UiFramework.Icon as Icon
+
+UiFramework.uiRow [ Element.spacing 20 ]
+    [ Icon.fontAwesome FontAwesome.Solid.seedling
+        |> Icon.withSize (Icon.Num 4)
+        |> Icon.withBackground "#FFE4E1"
+        |> Icon.view
+    , Icon.fontAwesome FontAwesome.Solid.seedling
+        |> Icon.withSize (Icon.Num 4)
+        |> Icon.withFlipV
+        |> Icon.withBackground "#FFE4E1"
+        |> Icon.view
+    , Icon.fontAwesome FontAwesome.Solid.seedling
+        |> Icon.withSize (Icon.Num 4)
+        |> Icon.withFlipH
+        |> Icon.withBackground "#FFE4E1"
+        |> Icon.view
+    , Icon.fontAwesome FontAwesome.Solid.seedling
+        |> Icon.withSize (Icon.Num 4)
+        |> Icon.withFlipV
+        |> Icon.withFlipH
+        |> Icon.withBackground "#FFE4E1"
+        |> Icon.view
+    ]
+"""
+
+
+mixConfigs =
+    UiFramework.uiColumn
+        [ Element.spacing 16
+        , Element.width Element.fill
+        ]
+        [ section "Mix and match "
+        , wrappedText
+            """
+All those above transform functions are composable, you can mix and match together
+on a single icon.
+"""
+        , UiFramework.uiRow [ Element.spacing 20 ]
+            [ Icon.fontAwesome FontAwesome.Solid.smileBeam
+                |> Icon.withSize (Icon.Num 4)
+                |> Icon.withBackground "#FFE4E1"
+                |> Icon.withRotation 30
+                |> Icon.withShrink 8.0
+                |> Icon.withPosRight 6.0
+                |> Icon.withPosUp 6.0
+                |> Icon.view
+            ]
+        , mixCode
+        ]
+
+
+mixCode =
+    Common.highlightCode "elm"
+        """
+import FontAwesome.Solid
+import UiFramework
+import UiFramework.Icon as Icon
+
+UiFramework.uiRow [ Element.spacing 20 ]
+    [ Icon.fontAwesome FontAwesome.Solid.smileBeam
+        |> Icon.withSize (Icon.Num 4)
+        |> Icon.withBackground "#FFE4E1"
+        |> Icon.withRotation 30
+        |> Icon.withShrink 8.0
+        |> Icon.withPosRight 6.0
+        |> Icon.withPosUp 6.0
+        |> Icon.view
+    ]
+"""
+
+
+layering =
+    UiFramework.uiColumn
+        [ Element.width Element.fill
+        , Element.spacing 48
+        ]
+        [ title "Layering"
+        , UiFramework.uiParagraph
+            []
+            [ UiFramework.uiText "Another way to compose icons is to place icons"
+            , UiFramework.uiText " and text visually on top of each other, use "
+            , code "Icon.layer"
+            , UiFramework.uiText " function:"
+            ]
+        , UiFramework.uiWrappedRow
+            [ Element.spacing 20 ]
+            [ Icon.fontAwesome FontAwesome.Solid.circle
+                |> Icon.lay
+                    (Icon.fontAwesome FontAwesome.Solid.times
+                        |> Icon.withInverse
+                        |> Icon.withShrink 6
+                    )
+                |> Icon.withSize (Icon.Num 4)
+                |> Icon.withBackground "#FFE4E1"
+                |> Icon.withColor "#FF6347"
+                |> Icon.view
+            , Icon.fontAwesome FontAwesome.Solid.bookmark
+                |> Icon.lay
+                    (Icon.fontAwesome FontAwesome.Solid.heart
+                        |> Icon.withInverse
+                        |> Icon.withShrink 10
+                        |> Icon.withPosUp 2
+                        |> Icon.withColor "#FF6347"
+                    )
+                |> Icon.withSize (Icon.Num 4)
+                |> Icon.withBackground "#FFE4E1"
+                |> Icon.view
+            , Icon.fontAwesome FontAwesome.Solid.play
+                |> Icon.withRotation -90
+                |> Icon.lay
+                    (Icon.fontAwesome FontAwesome.Solid.sun
+                        |> Icon.withInverse
+                        |> Icon.withShrink 10
+                        |> Icon.withPosUp 2
+                    )
+                |> Icon.lay
+                    (Icon.fontAwesome FontAwesome.Solid.moon
+                        |> Icon.withInverse
+                        |> Icon.withShrink 11
+                        |> Icon.withPosDown 4.2
+                        |> Icon.withPosLeft 4
+                    )
+                |> Icon.lay
+                    (Icon.fontAwesome FontAwesome.Solid.star
+                        |> Icon.withInverse
+                        |> Icon.withShrink 11
+                        |> Icon.withPosDown 4.2
+                        |> Icon.withPosRight 4
+                    )
+                |> Icon.withSize (Icon.Num 4)
+                |> Icon.withBackground "#FFE4E1"
+                |> Icon.view
+            , Icon.fontAwesome FontAwesome.Solid.calendar
+                |> Icon.lay
+                    (Icon.textIcon "27"
+                        |> Icon.withInverse
+                        |> Icon.withShrink 8
+                        |> Icon.withPosDown 3
+                    )
+                |> Icon.withSize (Icon.Num 4)
+                |> Icon.withBackground "#FFE4E1"
+                |> Icon.view
+            , Icon.fontAwesome FontAwesome.Solid.certificate
+                |> Icon.lay
+                    (Icon.textIcon "NEW"
+                        |> Icon.withInverse
+                        |> Icon.withShrink 11.5
+                        |> Icon.withRotation -30
+                        |> Icon.withHtmlAttributes [ Html.Attributes.style "font-weight" "900" ]
+                    )
+                |> Icon.withSize (Icon.Num 4)
+                |> Icon.withBackground "#FFE4E1"
+                |> Icon.view
+            ]
+        , layeringCode
+        ]
+
+
+layeringCode =
+    Common.highlightCode "elm"
+        """
+UiFramework.uiRow [ Element.spacing 20 ]
+    [ Icon.fontAwesome FontAwesome.Solid.circle
+        |> Icon.lay
+            (Icon.fontAwesome FontAwesome.Solid.times
+                |> Icon.withInverse
+                |> Icon.withShrink 6
+            )
+        |> Icon.withSize (Icon.Num 4)
+        |> Icon.withBackground "#FFE4E1"
+        |> Icon.withColor "#FF6347"
+        |> Icon.view
+    , Icon.fontAwesome FontAwesome.Solid.bookmark
+        |> Icon.lay
+            (Icon.fontAwesome FontAwesome.Solid.heart
+                |> Icon.withInverse
+                |> Icon.withShrink 10
+                |> Icon.withPosUp 2
+                |> Icon.withColor "#FF6347"
+            )
+        |> Icon.withSize (Icon.Num 4)
+        |> Icon.withBackground "#FFE4E1"
+        |> Icon.view
+    , Icon.fontAwesome FontAwesome.Solid.play
+        |> Icon.withRotation -90
+        |> Icon.lay
+            (Icon.fontAwesome FontAwesome.Solid.sun
+                |> Icon.withInverse
+                |> Icon.withShrink 10
+                |> Icon.withPosUp 2
+            )
+        |> Icon.lay
+            (Icon.fontAwesome FontAwesome.Solid.moon
+                |> Icon.withInverse
+                |> Icon.withShrink 11
+                |> Icon.withPosDown 4.2
+                |> Icon.withPosLeft 4
+            )
+        |> Icon.lay
+            (Icon.fontAwesome FontAwesome.Solid.star
+                |> Icon.withInverse
+                |> Icon.withShrink 11
+                |> Icon.withPosDown 4.2
+                |> Icon.withPosRight 4
+            )
+        |> Icon.withSize (Icon.Num 4)
+        |> Icon.withBackground "#FFE4E1"
+        |> Icon.view
+    , Icon.fontAwesome FontAwesome.Solid.calendar
+        |> Icon.lay
+            (Icon.textIcon "27"
+                |> Icon.withInverse
+                |> Icon.withShrink 8
+                |> Icon.withPosDown 3
+            )
+        |> Icon.withSize (Icon.Num 4)
+        |> Icon.withBackground "#FFE4E1"
+        |> Icon.view
+    , Icon.fontAwesome FontAwesome.Solid.certificate
+        |> Icon.lay
+            (Icon.textIcon "NEW"
+                |> Icon.withInverse
+                |> Icon.withShrink 11.5
+                |> Icon.withRotation -30
+                |> Icon.withHtmlAttributes [ Html.Attributes.style "font-weight" "900" ]
+            )
+        |> Icon.withSize (Icon.Num 4)
+        |> Icon.withBackground "#FFE4E1"
+        |> Icon.view
+    ]
 """
 
 

@@ -1,18 +1,16 @@
 module UiFramework.Icon exposing
-    ( Animation(..)
-    , Atom(..)
-    , Icon(..)
-    , Options
+    ( Icon
     , Size(..)
-    , UiElement
     , fontAwesome
     , lay
     , simple
     , textIcon
     , view
     , viewAsElement
+    , withBackground
     , withBorder
     , withColor
+    , withCounter
     , withExtraAttributes
     , withFixedWidth
     , withFlipH
@@ -29,14 +27,13 @@ module UiFramework.Icon exposing
     , withShrink
     , withSize
     , withSpin
-    , withSvgAttributes
     )
 
 import Element exposing (Attribute, Color, Element, html)
 import FontAwesome.Attributes
 import FontAwesome.Icon
 import FontAwesome.Layering
-import FontAwesome.Transforms
+import FontAwesome.Transforms as Transforms
 import Html exposing (Html)
 import Html.Attributes
 import Svg
@@ -58,24 +55,23 @@ type Icon msg
 
 
 type alias Options msg =
-    { atom : Atom msg
+    { base : BaseIcon msg
     , attributes : List (Attribute msg)
-    , svgAttributes : List (Svg.Attribute msg)
     , htmlAttributes : List (Html.Attribute msg)
     , size : Size
     , animation : Animation
     , border : Bool
     , fixedWidth : Bool
     , inverse : Bool
-    , transformations : List Transformation -- ordered first to last
+    , transformations : List Transforms.Transform
+    , counter : Maybe { text : String, attrs : List (Html.Attribute msg) }
     }
 
 
-type Atom msg
+type BaseIcon msg
     = FontAwesome FontAwesome.Icon.Icon
     | Text String
     | Layered (List (Icon msg))
-    | Counter String
 
 
 type Size
@@ -93,45 +89,13 @@ type Animation
 
 
 
--- Transformations
-
-
-type Transformation
-    = Flip Flip
-    | Scale Scale
-    | Position Position
-    | Rotate Float
-
-
-type Flip
-    = Horizontal
-    | Vertical
-    | NoFlip
-
-
-type Scale
-    = Shrink Float
-    | Grow Float
-    | NoScale
-
-
-type Position
-    = Up Float
-    | Down Float
-    | Left Float
-    | Right Float
-    | NoPosition
-
-
-
 -- INITIALIZATIONS
 
 
 defaultOptions : Options msg
 defaultOptions =
-    { atom = Layered []
+    { base = Layered []
     , attributes = []
-    , svgAttributes = []
     , htmlAttributes = []
     , size = Regular
     , animation = NoAnimation
@@ -139,17 +103,136 @@ defaultOptions =
     , fixedWidth = False
     , inverse = False
     , transformations = []
+    , counter = Nothing
     }
 
 
 fontAwesome : FontAwesome.Icon.Icon -> Icon msg
 fontAwesome fontAwesomeIcon =
-    Icon { defaultOptions | atom = FontAwesome fontAwesomeIcon }
+    Icon { defaultOptions | base = FontAwesome fontAwesomeIcon }
 
 
 textIcon : String -> Icon msg
 textIcon str =
-    Icon { defaultOptions | atom = Text str }
+    Icon { defaultOptions | base = Text str }
+
+
+withExtraAttributes : List (Attribute msg) -> Icon msg -> Icon msg
+withExtraAttributes attrs (Icon options) =
+    Icon { options | attributes = attrs }
+
+
+withHtmlAttributes : List (Html.Attribute msg) -> Icon msg -> Icon msg
+withHtmlAttributes attrs (Icon options) =
+    Icon { options | htmlAttributes = attrs }
+
+
+withSize : Size -> Icon msg -> Icon msg
+withSize size (Icon options) =
+    Icon
+        { options
+            | size =
+                case size of
+                    Num int ->
+                        Num <| clamp 2 10 int
+
+                    other ->
+                        other
+        }
+
+
+withSpin : Icon msg -> Icon msg
+withSpin (Icon options) =
+    Icon { options | animation = Spin }
+
+
+withPulse : Icon msg -> Icon msg
+withPulse (Icon options) =
+    Icon { options | animation = Pulse }
+
+
+withBorder : Icon msg -> Icon msg
+withBorder (Icon options) =
+    Icon { options | border = True }
+
+
+withFixedWidth : Icon msg -> Icon msg
+withFixedWidth (Icon options) =
+    Icon { options | fixedWidth = True }
+
+
+withInverse : Icon msg -> Icon msg
+withInverse (Icon options) =
+    Icon { options | inverse = True }
+
+
+withColor : String -> Icon msg -> Icon msg
+withColor color (Icon options) =
+    Icon { options | htmlAttributes = Html.Attributes.style "color" color :: options.htmlAttributes }
+
+
+withBackground : String -> Icon msg -> Icon msg
+withBackground color (Icon options) =
+    Icon { options | htmlAttributes = Html.Attributes.style "background" color :: options.htmlAttributes }
+
+
+withCounter : { text : String, attrs : List (Html.Attribute msg) } -> Icon msg -> Icon msg
+withCounter counter (Icon options) =
+    Icon { options | counter = Just counter }
+
+
+
+-- TRANSFORMATIONS
+
+
+withRotation : Float -> Icon msg -> Icon msg
+withRotation degree =
+    addTransformation (Transforms.rotate degree)
+
+
+withFlipV : Icon msg -> Icon msg
+withFlipV =
+    addTransformation Transforms.flipV
+
+
+withFlipH : Icon msg -> Icon msg
+withFlipH =
+    addTransformation Transforms.flipH
+
+
+withShrink : Float -> Icon msg -> Icon msg
+withShrink amount =
+    addTransformation (Transforms.shrink amount)
+
+
+withGrow : Float -> Icon msg -> Icon msg
+withGrow amount =
+    addTransformation (Transforms.grow amount)
+
+
+withPosUp : Float -> Icon msg -> Icon msg
+withPosUp amount =
+    addTransformation (Transforms.up amount)
+
+
+withPosDown : Float -> Icon msg -> Icon msg
+withPosDown amount =
+    addTransformation (Transforms.down amount)
+
+
+withPosLeft : Float -> Icon msg -> Icon msg
+withPosLeft amount =
+    addTransformation (Transforms.left amount)
+
+
+withPosRight : Float -> Icon msg -> Icon msg
+withPosRight amount =
+    addTransformation (Transforms.right amount)
+
+
+addTransformation : Transforms.Transform -> Icon msg -> Icon msg
+addTransformation t (Icon options) =
+    Icon { options | transformations = options.transformations ++ [ t ] }
 
 
 
@@ -165,13 +248,13 @@ icon2
 -}
 lay : Icon msg -> Icon msg -> Icon msg
 lay icon1 (Icon option2) =
-    case option2.atom of
+    case option2.base of
         Layered layers ->
             -- add icon to layers
-            Icon { option2 | atom = Layered (layers ++ [ icon1 ]) }
+            Icon { option2 | base = Layered (layers ++ [ icon1 ]) }
 
-        nonLayered ->
-            Icon { defaultOptions | atom = Layered [ Icon option2, icon1 ] }
+        _ ->
+            Icon { defaultOptions | base = Layered [ Icon option2, icon1 ] }
 
 
 simple : FontAwesome.Icon.Icon -> UiElement context msg
@@ -180,6 +263,8 @@ simple icon =
         |> view
 
 
+{-| Internal rendering function
+-}
 viewAsHtml : Icon msg -> Html msg
 viewAsHtml (Icon options) =
     let
@@ -263,72 +348,49 @@ viewAsHtml (Icon options) =
         attributes =
             [ size, animation, border, fixedWidth, inverse ]
                 |> List.filterMap identity
-                |> (++) options.svgAttributes
-
-        -- Transformations
-        transformations =
-            List.filterMap
-                (\t ->
-                    case t of
-                        Flip Horizontal ->
-                            Just FontAwesome.Transforms.flipH
-
-                        Flip Vertical ->
-                            Just FontAwesome.Transforms.flipV
-
-                        Scale (Shrink amount) ->
-                            Just <| FontAwesome.Transforms.shrink amount
-
-                        Scale (Grow amount) ->
-                            Just <| FontAwesome.Transforms.grow amount
-
-                        Position (Up a) ->
-                            Just <| FontAwesome.Transforms.up a
-
-                        Position (Down a) ->
-                            Just <| FontAwesome.Transforms.down a
-
-                        Position (Left a) ->
-                            Just <| FontAwesome.Transforms.left a
-
-                        Position (Right a) ->
-                            Just <| FontAwesome.Transforms.right a
-
-                        Rotate amount ->
-                            Just <| FontAwesome.Transforms.rotate amount
-
-                        _ ->
-                            Nothing
-                )
-                options.transformations
+                |> (++) options.htmlAttributes
     in
-    Html.span options.htmlAttributes <|
-        List.singleton <|
-            case options.atom of
+    case options.counter of
+        Just { text, attrs } ->
+            case options.base of
                 FontAwesome icon ->
-                    FontAwesome.Icon.viewTransformed attributes transformations icon
+                    FontAwesome.Layering.layers
+                        attributes
+                        [ FontAwesome.Icon.viewTransformed [] options.transformations icon
+                        , FontAwesome.Layering.counter attrs text
+                        ]
 
                 Text str ->
-                    FontAwesome.Layering.textTransformed attributes transformations str
+                    FontAwesome.Layering.layers
+                        attributes
+                        [ FontAwesome.Layering.textTransformed [] options.transformations str
+                        , FontAwesome.Layering.counter attrs text
+                        ]
+
+                Layered layers ->
+                    FontAwesome.Layering.layers
+                        attributes
+                        (FontAwesome.Layering.counter attrs text :: List.map viewAsHtml layers)
+
+        Nothing ->
+            case options.base of
+                FontAwesome icon ->
+                    FontAwesome.Icon.viewTransformed attributes options.transformations icon
+
+                Text str ->
+                    FontAwesome.Layering.textTransformed attributes options.transformations str
 
                 Layered layers ->
                     FontAwesome.Layering.layers
                         attributes
                         (List.map viewAsHtml layers)
 
-                _ ->
-                    Html.text ""
-
 
 viewAsElement : Icon msg -> Element msg
 viewAsElement (Icon options) =
     viewAsHtml (Icon options)
         |> html
-        |> Element.el ([ Element.width Element.shrink ] ++ options.attributes)
-
-
-
--- |> Element.el options.attributes
+        |> Element.el options.attributes
 
 
 view : Icon msg -> UiElement context msg
@@ -337,128 +399,3 @@ view icon =
         (\context ->
             viewAsElement icon
         )
-
-
-
--- ELEMENT ATTRIBUTES - used in the el wrapper
-
-
-withExtraAttributes : List (Attribute msg) -> Icon msg -> Icon msg
-withExtraAttributes attrs (Icon options) =
-    Icon { options | attributes = attrs }
-
-
-withSvgAttributes : List (Svg.Attribute msg) -> Icon msg -> Icon msg
-withSvgAttributes attrs (Icon options) =
-    Icon { options | svgAttributes = attrs }
-
-
-withHtmlAttributes : List (Html.Attribute msg) -> Icon msg -> Icon msg
-withHtmlAttributes attrs (Icon options) =
-    Icon { options | htmlAttributes = attrs }
-
-
-
--- FONTAWESOME ATTRIBUTES
-
-
-withSize : Size -> Icon msg -> Icon msg
-withSize size (Icon options) =
-    Icon
-        { options
-            | size =
-                case size of
-                    Num int ->
-                        Num <| clamp 2 10 int
-
-                    other ->
-                        other
-        }
-
-
-withSpin : Icon msg -> Icon msg
-withSpin (Icon options) =
-    Icon { options | animation = Spin }
-
-
-withPulse : Icon msg -> Icon msg
-withPulse (Icon options) =
-    Icon { options | animation = Pulse }
-
-
-withBorder : Icon msg -> Icon msg
-withBorder (Icon options) =
-    Icon { options | border = True }
-
-
-withFixedWidth : Icon msg -> Icon msg
-withFixedWidth (Icon options) =
-    Icon { options | fixedWidth = True }
-
-
-withInverse : Icon msg -> Icon msg
-withInverse (Icon options) =
-    Icon { options | inverse = True }
-
-
-
--- my own attribute thing lol
-
-
-withColor : String -> Icon msg -> Icon msg
-withColor color (Icon options) =
-    Icon { options | htmlAttributes = Html.Attributes.style "color" color :: options.htmlAttributes }
-
-
-
--- TRANSFORMATIONS
-
-
-withRotation : Float -> Icon msg -> Icon msg
-withRotation degree =
-    addTransformation (Rotate degree)
-
-
-withFlipV : Icon msg -> Icon msg
-withFlipV =
-    addTransformation (Flip Vertical)
-
-
-withFlipH : Icon msg -> Icon msg
-withFlipH =
-    addTransformation (Flip Horizontal)
-
-
-withShrink : Float -> Icon msg -> Icon msg
-withShrink amount =
-    addTransformation (Scale <| Shrink amount)
-
-
-withGrow : Float -> Icon msg -> Icon msg
-withGrow amount =
-    addTransformation (Scale <| Grow amount)
-
-
-withPosUp : Float -> Icon msg -> Icon msg
-withPosUp amount =
-    addTransformation (Position <| Up amount)
-
-
-withPosDown : Float -> Icon msg -> Icon msg
-withPosDown amount =
-    addTransformation (Position <| Down amount)
-
-
-withPosLeft : Float -> Icon msg -> Icon msg
-withPosLeft amount =
-    addTransformation (Position <| Left amount)
-
-
-withPosRight : Float -> Icon msg -> Icon msg
-withPosRight amount =
-    addTransformation (Position <| Right amount)
-
-
-addTransformation : Transformation -> Icon msg -> Icon msg
-addTransformation t (Icon options) =
-    Icon { options | transformations = options.transformations ++ [ t ] }
