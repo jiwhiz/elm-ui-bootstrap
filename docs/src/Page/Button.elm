@@ -463,7 +463,6 @@ iconConfig =
                 |> Button.withLabel "Loading..."
                 |> Button.withIcon
                     (Icon.fontAwesome FontAwesome.Solid.spinner |> Icon.withSpin)
-                |> Button.withDisabled
                 |> Button.view
             ]
         , iconSpinningConfigCode
