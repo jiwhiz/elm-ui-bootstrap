@@ -2,8 +2,10 @@ module UiFramework.Form.WebForm exposing (..)
 
 import Element exposing (Attribute, el, fill, spacing, text, width)
 import Element.Font as Font
+import FontAwesome.Solid
 import Form.Error exposing (Error)
 import Set exposing (Set)
+import UiFramework.Alert as Alert
 import UiFramework.Button as Button
 import UiFramework.Form.CheckboxField as CheckboxField
 import UiFramework.Form.ComposableForm as ComposableForm exposing (Form)
@@ -12,6 +14,7 @@ import UiFramework.Form.RadioField as RadioField
 import UiFramework.Form.RangeField as RangeField
 import UiFramework.Form.SelectField as SelectField
 import UiFramework.Form.TextField as TextField
+import UiFramework.Icon as Icon
 import UiFramework.Internal as Internal
 import UiFramework.Types exposing (Role(..))
 
@@ -50,16 +53,19 @@ idle values =
     }
 
 
-type WebForm values msg
-    = WebForm (WebFormOptions values msg)
+type WebForm values context msg
+    = WebForm (WebFormOptions values context msg)
 
 
-type alias WebFormOptions values msg =
+type alias WebFormOptions values context msg =
     { onChange : WebFormState values -> msg
     , content : Form values msg
-    , submitLabel : String
+    , submitButton : Button.Button context msg
+    , submitLabel : Maybe String
     , loadingLabel : Maybe String
+    , loadingIcon : Icon.Icon msg
     , validationStrategy : ValidationStrategy
+    , displayFormError : String -> UiElement context msg
     , attributes : List (Attribute msg)
     }
 
@@ -69,22 +75,32 @@ type ValidationStrategy
     | ValidateOnBlur
 
 
-withSubmitLabel : String -> WebForm values msg -> WebForm values msg
+withSubmitButton : Button.Button context msg -> WebForm values context msg -> WebForm values context msg
+withSubmitButton button (WebForm options) =
+    WebForm { options | submitButton = button }
+
+
+withSubmitLabel : String -> WebForm values context msg -> WebForm values context msg
 withSubmitLabel label (WebForm options) =
-    WebForm { options | submitLabel = label }
+    WebForm { options | submitLabel = Just label }
 
 
-withLoadingLabel : String -> WebForm values msg -> WebForm values msg
+withLoadingLabel : String -> WebForm values context msg -> WebForm values context msg
 withLoadingLabel label (WebForm options) =
     WebForm { options | loadingLabel = Just label }
 
 
-withValidationStrategy : ValidationStrategy -> WebForm values msg -> WebForm values msg
+withValidationStrategy : ValidationStrategy -> WebForm values context msg -> WebForm values context msg
 withValidationStrategy validationStrategy (WebForm options) =
     WebForm { options | validationStrategy = validationStrategy }
 
 
-withExtraAttrs : List (Attribute msg) -> WebForm values msg -> WebForm values msg
+withDisplayFormError : (String -> UiElement context msg) -> WebForm values context msg -> WebForm values context msg
+withDisplayFormError displayFormError (WebForm options) =
+    WebForm { options | displayFormError = displayFormError }
+
+
+withExtraAttrs : List (Attribute msg) -> WebForm values context msg -> WebForm values context msg
 withExtraAttrs attributes (WebForm options) =
     WebForm { options | attributes = attributes }
 
@@ -93,26 +109,35 @@ withExtraAttrs attributes (WebForm options) =
 -- builder functions
 
 
-simpleForm : (WebFormState values -> msg) -> Form values msg -> WebForm values msg
+simpleForm : (WebFormState values -> msg) -> Form values msg -> WebForm values context msg
 simpleForm onChange content =
     WebForm
         { onChange = onChange
         , content = content
-        , submitLabel = "Submit"
+        , submitButton = Button.default |> Button.withLabel "Submit"
+        , submitLabel = Nothing
         , loadingLabel = Nothing
+        , loadingIcon = Icon.fontAwesome FontAwesome.Solid.spinner |> Icon.withSpin |> Icon.withSize Icon.Lg
         , validationStrategy = ValidateOnSubmit
+        , displayFormError = defaultDisplayFormError
         , attributes = []
         }
 
 
+defaultDisplayFormError : String -> UiElement context msg
+defaultDisplayFormError error =
+    Alert.simpleDanger <| Internal.uiParagraph [] [ Internal.uiText error ]
+
+
 view :
     WebFormState values
-    -> WebForm values msg
+    -> WebForm values context msg
     -> UiElement context msg
 view state (WebForm options) =
     let
         { fields, result } =
-            ComposableForm.fill options.content state.values
+            Debug.log "ComposableForm.fill result:" <|
+                ComposableForm.fill options.content state.values
 
         errorTracking =
             (\(ErrorTracking e) -> e) state.errorTracking
@@ -153,7 +178,7 @@ view state (WebForm options) =
         formError =
             case state.status of
                 Error error ->
-                    Internal.fromElement (\context -> el [ Font.color (context.themeConfig.globalConfig.themeColor Danger) ] (text error))
+                    options.displayFormError error
 
                 _ ->
                     Internal.uiNone
@@ -182,21 +207,28 @@ view state (WebForm options) =
                             )
 
         submitButton =
-            Button.default
+            options.submitButton
                 |> Button.withMessage onSubmit
-                |> Button.withLabel
-                    (if state.status == Loading then
-                        options.loadingLabel |> Maybe.withDefault ""
-                        -- add spinner icon?
+                |> (case ( state.status, options.submitLabel, options.loadingLabel ) of
+                        ( Loading, _, Just loadingLabel ) ->
+                            Button.withLabel loadingLabel
+                                >> Button.withDisabled
+                                >> Button.withIcon options.loadingIcon
 
-                     else
-                        options.submitLabel
-                    )
+                        ( Loading, _, Nothing ) ->
+                            Button.withDisabled >> Button.withIcon options.loadingIcon
+
+                        ( _, Just submitLabel, _ ) ->
+                            Button.withLabel submitLabel
+
+                        _ ->
+                            identity
+                   )
                 |> Button.view
     in
     Internal.uiColumn
-        ([ spacing 20, width fill ] ++ options.attributes)
-        (renderedFields ++ [ formError, submitButton ])
+        ([ spacing 16, width fill ] ++ options.attributes)
+        (formError :: renderedFields ++ [ submitButton ])
 
 
 type alias FieldConfig values msg =

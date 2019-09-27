@@ -4,15 +4,20 @@ import Browser.Navigation as Navigation
 import Common exposing (code, componentNavbar, highlightCode, moduleLayout, section, title, viewHeader, wrappedText)
 import Element
 import Element.Border as Border
+import FontAwesome.Solid
+import Process
 import Routes
 import SharedState exposing (SharedState, SharedStateUpdate(..))
+import Task exposing (Task)
 import UiFramework exposing (UiContextual, WithContext, toElement)
+import UiFramework.Button as Button
 import UiFramework.ColorUtils exposing (hexToColor)
 import UiFramework.Container as Container
 import UiFramework.Form.CheckboxField as CheckboxField
 import UiFramework.Form.ComposableForm as ComposableForm
 import UiFramework.Form.TextField as TextField
 import UiFramework.Form.WebForm as WebForm
+import UiFramework.Icon as Icon
 import UiFramework.Types exposing (Role(..))
 import UiFramework.Typography as Typography
 
@@ -129,10 +134,11 @@ loginForm model =
                     TextField.defaultAttributes
                         |> TextField.withLabel "Username"
                         |> TextField.withPlaceholder "Your username"
+                        |> TextField.withHelpText "We'll never share your email with anyone else."
                 }
 
         passwordField =
-            ComposableForm.textField
+            ComposableForm.passwordField
                 { parser = Ok
                 , value = .password
                 , update = \value values -> { values | password = value }
@@ -155,13 +161,17 @@ loginForm model =
                 }
     in
     WebForm.simpleForm
-        FormChanged
-        (ComposableForm.succeed Login
+        SigninFormChanged
+        (ComposableForm.succeed SigninClicked
             |> ComposableForm.append usernameField
             |> ComposableForm.append passwordField
             |> ComposableForm.append rememberMeCheckbox
         )
-        |> WebForm.withSubmitLabel "Sign in"
+        |> WebForm.withSubmitButton
+            (Button.default
+                |> Button.withLabel "Sign in"
+                |> Button.withIcon (Icon.fontAwesome FontAwesome.Solid.signInAlt)
+            )
         |> WebForm.withLoadingLabel "Loading..."
         |> WebForm.withExtraAttrs [ Element.paddingXY 30 20 ]
         |> WebForm.view model.signin
@@ -238,13 +248,17 @@ loginForm model =
                 }
     in
     WebForm.simpleForm
-        FormChanged
-        (ComposableForm.succeed Login
+        SigninFormChanged
+        (ComposableForm.succeed SigninClicked
             |> ComposableForm.append usernameField
             |> ComposableForm.append passwordField
             |> ComposableForm.append rememberMeCheckbox
         )
-        |> WebForm.withSubmitLabel "Sign in"
+        |> WebForm.withSubmitButton
+            (Button.default
+                |> Button.withLabel "Sign in"
+                |> Button.withIcon (Icon.fontAwesome FontAwesome.Solid.signInAlt)
+            )
         |> WebForm.withLoadingLabel "Loading..."
         |> WebForm.withExtraAttrs [ Element.paddingXY 30 20 ]
         |> WebForm.view model.signin
@@ -274,8 +288,9 @@ configuration =
 type Msg
     = NoOp
     | NavigateTo Routes.Route
-    | FormChanged (WebForm.WebFormState SignInValues)
-    | Login String String Bool
+    | SigninFormChanged (WebForm.WebFormState SignInValues)
+    | SigninClicked String String Bool
+    | ResponseSimulated
 
 
 update : SharedState -> Msg -> Model -> ( Model, Cmd Msg, SharedStateUpdate )
@@ -287,8 +302,22 @@ update sharedState msg model =
         NavigateTo route ->
             ( model, Navigation.pushUrl sharedState.navKey (Routes.toUrlString route), NoUpdate )
 
-        FormChanged values ->
-            ( model, Cmd.none, NoUpdate )
+        SigninFormChanged state ->
+            ( { model | signin = state }, Cmd.none, NoUpdate )
 
-        Login username password rememberMe ->
-            ( model, Cmd.none, NoUpdate )
+        SigninClicked username password rememberMe ->
+            let
+                signin =
+                    model.signin
+            in
+            ( { model | signin = { signin | status = WebForm.Loading } }
+            , Process.sleep 3000 |> Task.perform (always ResponseSimulated)
+            , NoUpdate
+            )
+
+        ResponseSimulated ->
+            let
+                signin =
+                    model.signin
+            in
+            ( { model | signin = { signin | status = WebForm.Error "Login failed!" } }, Cmd.none, NoUpdate )

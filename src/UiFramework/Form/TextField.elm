@@ -10,15 +10,17 @@ module UiFramework.Form.TextField exposing
     , withPlaceholder
     )
 
-import Element exposing (Attribute, alignBottom, el, height, paddingXY, px, text, width)
+import Element exposing (Attribute, alignBottom, column, el, fill, height, none, paddingEach, paddingXY, px, text, width)
+import Element.Background as Background
 import Element.Border as Border
+import Element.Events as Events
 import Element.Font as Font
 import Element.Input as Input
 import Form.Base as Base
 import Form.Error exposing (Error)
 import Form.Field as Field
 import UiFramework.Configuration exposing (defaultFontSize)
-import UiFramework.Form.FormUtils exposing (getLabelAbove, getPlaceholder, whenJust, withCommonAttrs)
+import UiFramework.Form.FormUtils exposing (errorToString, getLabelAbove, getPlaceholder, when, whenJust, withCommonAttrs)
 import UiFramework.Internal as Internal
 import UiFramework.Types exposing (Role(..), Size(..))
 
@@ -109,31 +111,61 @@ view { onChange, onBlur, disabled, value, error, showError, attributes } =
     in
     Internal.fromElement
         (\context ->
-            Input.text
-                (viewAttributes context
-                    |> withCommonAttrs showError error disabled onBlur context
-                    |> whenJust options.helpText
-                        (\help ->
-                            Element.below
-                                (el
-                                    [ Font.color context.themeConfig.inputConfig.placeholderColor
-                                    , Font.size <| defaultFontSize SizeSmall
-                                    , paddingXY 10 10
-                                    ]
-                                    (text help)
-                                )
+            let
+                themeColor =
+                    context.themeConfig.globalConfig.themeColor
+
+                config =
+                    context.themeConfig.inputConfig
+
+                inputField =
+                    Input.text
+                        (inputAttributes context
+                            |> whenJust onBlur Events.onLoseFocus
+                            |> when disabled (Background.color config.disabledBackgroundColor)
                         )
-                )
-                { onChange = onChange
-                , text = value
-                , placeholder = getPlaceholder context options.placeholder
-                , label = getLabelAbove (showError && error /= Nothing) options.label context.themeConfig.globalConfig.themeColor
-                }
+                        { onChange = onChange
+                        , text = value
+                        , placeholder = getPlaceholder context options.placeholder
+                        , label = getLabelAbove (showError && error /= Nothing) options.label themeColor
+                        }
+
+                errorMessage =
+                    case ( showError, error ) of
+                        ( True, Just err ) ->
+                            el
+                                [ Font.color <| themeColor Danger
+                                , paddingXY 0 (config.paddingY // 2)
+                                ]
+                                (text <| errorToString err)
+
+                        _ ->
+                            none
+
+                helpMessage =
+                    options.helpText
+                        |> Maybe.map
+                            (\helpText ->
+                                el
+                                    [ Font.color config.placeholderColor
+                                    , Font.size <| defaultFontSize SizeSmall
+                                    , paddingXY 0 (config.paddingY // 2)
+                                    ]
+                                    (text helpText)
+                            )
+                        |> Maybe.withDefault none
+            in
+            column
+                [ width fill ]
+                [ inputField
+                , errorMessage
+                , helpMessage
+                ]
         )
 
 
-viewAttributes : Internal.UiContextual context -> List (Attribute msg)
-viewAttributes context =
+inputAttributes : Internal.UiContextual context -> List (Attribute msg)
+inputAttributes context =
     let
         config =
             context.themeConfig.inputConfig
