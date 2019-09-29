@@ -369,10 +369,10 @@ blockConfig =
         , UiFramework.uiParagraph []
             [ UiFramework.uiText "Take up the entirety of the parent container width via the "
             , code "withBlock"
-            , UiFramework.uiText " function. This option is not functional yet."
+            , UiFramework.uiText " function."
             ]
         , Button.default
-            |> Button.withLabel "Block Button"
+            |> Button.withLabel "Block level button"
             |> Button.withBlock
             |> Button.view
         , blockConfigCode

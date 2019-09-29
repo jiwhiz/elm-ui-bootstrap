@@ -17,7 +17,7 @@ module UiFramework.Button exposing
     , withSmall
     )
 
-import Element exposing (Attribute, Color, el, paddingXY, row, spacing, text, width)
+import Element exposing (Attribute, Color, centerX, el, fill, paddingXY, row, spacing, text, width)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
@@ -156,7 +156,7 @@ view (Button options) =
             Input.button
                 (viewAttributes context options)
                 { onPress = options.onPress
-                , label = row [ spacing 5 ] (icons ++ [ text options.label ] ++ badges)
+                , label = row [ centerX, spacing 5 ] (icons ++ [ text options.label ] ++ badges)
                 }
         )
 
@@ -196,6 +196,12 @@ viewAttributes context options =
             Just shadow ->
                 shadow
     ]
+        ++ (if options.block then
+                [ width fill ]
+
+            else
+                []
+           )
 
 
 type alias ButtonColorsConfig =
