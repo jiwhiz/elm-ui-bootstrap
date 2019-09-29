@@ -70,20 +70,17 @@ view sharedState model =
         |> UiFramework.toElement (toContext sharedState)
 
 
-content : Model -> UiElement Msg
 content model =
     UiFramework.uiColumn
         [ Element.width Element.fill
         , Element.spacing 64
         ]
-        [ overview
-        , basicExample model
+        [ overview model
         , configuration
         ]
 
 
-overview : UiElement Msg
-overview =
+overview model =
     UiFramework.uiColumn
         [ Element.spacing 16
         , Element.width Element.fill
@@ -96,19 +93,9 @@ overview =
                 , label = "composable-form"
                 }
             , UiFramework.uiText ", and we are trying to support most of features of Bootstrap form."
-            , UiFramework.uiText " The API might be changed during development before 1.0 release."
+            , UiFramework.uiText " The API might be changed dramatically during development before 1.0 release."
             ]
-        ]
-
-
-basicExample : Model -> UiElement Msg
-basicExample model =
-    UiFramework.uiColumn
-        [ Element.spacing 16
-        , Element.width Element.fill
-        ]
-        [ title "Basic Example"
-        , wrappedText "Simple SignIn Form with username, password and remember me checkbox."
+        , wrappedText "Here is a simple SignIn Form with username, password and remember me checkbox."
         , UiFramework.uiColumn
             [ Element.spacing 0
             , Element.width Element.fill
@@ -116,12 +103,11 @@ basicExample model =
             , Border.width 1
             ]
             [ loginForm model
-            , basicExampleCode
+            , loginFormCode
             ]
         ]
 
 
-loginForm : Model -> UiElement Msg
 loginForm model =
     let
         usernameField =
@@ -134,7 +120,6 @@ loginForm model =
                     TextField.defaultAttributes
                         |> TextField.withLabel "Username"
                         |> TextField.withPlaceholder "Your username"
-                        |> TextField.withHelpText "We'll never share your email with anyone else."
                 }
 
         passwordField =
@@ -177,8 +162,7 @@ loginForm model =
         |> WebForm.view model.signin
 
 
-basicExampleCode : UiElement Msg
-basicExampleCode =
+loginFormCode =
     Common.highlightCode "elm"
         """
 import Element
@@ -209,14 +193,13 @@ type Msg
     | Login String String Bool
 
 
-loginForm : Model -> UiElement Msg
 loginForm model =
     let
         usernameField =
             ComposableForm.textField
                 { parser = Ok
                 , value = .username
-                , update = \u{000B}alue values -> { values | username = value }
+                , update = \\value values -> { values | username = value }
                 , error = always Nothing
                 , attributes =
                     TextField.defaultAttributes
@@ -225,10 +208,10 @@ loginForm model =
                 }
 
         passwordField =
-            ComposableForm.textField
+            ComposableForm.passwordField
                 { parser = Ok
                 , value = .password
-                , update = \u{000B}alue values -> { values | password = value }
+                , update = \\value values -> { values | password = value }
                 , error = always Nothing
                 , attributes =
                     TextField.defaultAttributes
@@ -240,7 +223,7 @@ loginForm model =
             ComposableForm.checkboxField
                 { parser = Ok
                 , value = .rememberMe
-                , update = \u{000B}alue values -> { values | rememberMe = value }
+                , update = \\value values -> { values | rememberMe = value }
                 , error = always Nothing
                 , attributes =
                     CheckboxField.defaultAttributes
@@ -266,7 +249,6 @@ loginForm model =
 """
 
 
-configuration : UiElement Msg
 configuration =
     UiFramework.uiColumn
         [ Element.spacing 48
