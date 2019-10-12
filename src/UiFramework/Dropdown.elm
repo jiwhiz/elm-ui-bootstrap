@@ -12,7 +12,6 @@ import Element
         , column
         , el
         , fill
-        , htmlAttribute
         , none
         , paddingXY
         , pointer
@@ -24,8 +23,6 @@ import Element
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
-import Html.Events
-import Json.Decode as Json
 import UiFramework.Configuration exposing (ThemeConfig)
 import UiFramework.Icon as Icon
 import UiFramework.Internal as Internal
@@ -70,7 +67,7 @@ type alias LinkItemOptions msg =
     }
 
 
-withIcon : (Icon.Icon msg) -> Dropdown context state msg -> Dropdown context state msg
+withIcon : Icon.Icon msg -> Dropdown context state msg -> Dropdown context state msg
 withIcon icon (Dropdown options) =
     Dropdown { options | icon = Just icon }
 
@@ -105,7 +102,7 @@ menuLinkItem msg =
         }
 
 
-withMenuIcon : (Icon.Icon msg) -> MenuItem context msg -> MenuItem context msg
+withMenuIcon : Icon.Icon msg -> MenuItem context msg -> MenuItem context msg
 withMenuIcon icon item =
     case item of
         LinkItem options ->
@@ -134,7 +131,7 @@ view dropdownState (Dropdown options) =
     Internal.fromElement
         (\context ->
             el
-                [ onClick options.toggleDropdownMsg
+                [ Internal.onClick options.toggleDropdownMsg
                 , paddingXY
                     context.themeConfig.navConfig.linkPaddingX
                     context.themeConfig.navConfig.linkPaddingY
@@ -198,7 +195,7 @@ viewLinkItem options =
     Internal.fromElement
         (\context ->
             el
-                [ onClick options.triggerMsg
+                [ Internal.onClick options.triggerMsg
                 , paddingXY
                     context.themeConfig.navConfig.linkPaddingX
                     context.themeConfig.navConfig.linkPaddingY
@@ -213,16 +210,3 @@ viewLinkItem options =
                         row [ spacing 5 ] [ el [] <| Icon.viewAsElement icon, el [] (text options.title) ]
                 )
         )
-
-
-onClick : msg -> Attribute msg
-onClick message =
-    Html.Events.custom
-        "click"
-        (Json.succeed
-            { message = message
-            , stopPropagation = True
-            , preventDefault = False
-            }
-        )
-        |> htmlAttribute

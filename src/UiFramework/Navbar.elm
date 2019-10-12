@@ -28,7 +28,6 @@ import Element
         , el
         , fill
         , height
-        , htmlAttribute
         , none
         , padding
         , paddingXY
@@ -43,8 +42,6 @@ import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
 import Element.Region as Region
-import Html.Events
-import Json.Decode as Json
 import UiFramework.Configuration exposing (ThemeConfig)
 import UiFramework.Dropdown as Dropdown
 import UiFramework.Icon as Icon
@@ -146,7 +143,7 @@ linkItem msg =
         }
 
 
-withMenuIcon : (Icon.Icon msg) -> MenuItem context state msg -> MenuItem context state msg
+withMenuIcon : Icon.Icon msg -> MenuItem context state msg -> MenuItem context state msg
 withMenuIcon icon item =
     case item of
         LinkItem options ->
@@ -231,7 +228,7 @@ view { toggleMenuState, dropdownState } (Navbar options) =
                     Internal.fromElement
                         (\_ ->
                             el
-                                [ onClick toggleMenuMsg
+                                [ Internal.onClick toggleMenuMsg
                                 , alignLeft
                                 , paddingXY navbarConfig.togglerPaddingX navbarConfig.togglerPaddingY
                                 , Border.color fontColor
@@ -338,7 +335,7 @@ viewLinkItem options =
     Internal.fromElement
         (\context ->
             el
-                [ onClick options.triggerMsg
+                [ Internal.onClick options.triggerMsg
                 , paddingXY
                     context.themeConfig.navConfig.linkPaddingX
                     context.themeConfig.navConfig.linkPaddingY
@@ -353,16 +350,3 @@ viewLinkItem options =
                         row [ spacing 5 ] [ el [] <| Icon.viewAsElement icon, el [] (text options.title) ]
                 )
         )
-
-
-onClick : msg -> Attribute msg
-onClick message =
-    Html.Events.custom
-        "click"
-        (Json.succeed
-            { message = message
-            , stopPropagation = True
-            , preventDefault = False
-            }
-        )
-        |> htmlAttribute

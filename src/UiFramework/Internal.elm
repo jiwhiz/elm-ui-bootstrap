@@ -3,6 +3,7 @@ module UiFramework.Internal exposing
     , WithContext
     , fromElement
     , node
+    , onClick
     , toElement
     , uiColumn
     , uiContextualText
@@ -17,6 +18,8 @@ module UiFramework.Internal exposing
 
 import Element exposing (Attribute, Device, Element)
 import Element.Font as Font
+import Html.Events
+import Json.Decode as Json
 import UiFramework.Configuration exposing (ThemeConfig)
 import UiFramework.Types exposing (Role(..))
 
@@ -133,3 +136,20 @@ uiParagraph attrs =
         (\_ ->
             Element.paragraph attrs
         )
+
+
+
+-- Util functions
+
+
+onClick : msg -> Attribute msg
+onClick message =
+    Html.Events.custom
+        "click"
+        (Json.succeed
+            { message = message
+            , stopPropagation = True
+            , preventDefault = False
+            }
+        )
+        |> Element.htmlAttribute
