@@ -1,6 +1,7 @@
 module UiFramework.ColorUtils exposing
     ( alterColor
     , colorLevel
+    , colorToHex
     , contrastTextColor
     , darken
     , hexToColor
@@ -136,3 +137,8 @@ hexToColor string =
             Color.Convert.hexToColor string
     in
     fromColor <| Result.withDefault (Color.rgb 0 0 0) cl
+
+
+colorToHex : Element.Color -> String
+colorToHex =
+    toColor >> Color.Convert.colorToHex
