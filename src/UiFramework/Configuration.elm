@@ -163,8 +163,8 @@ type alias GlobalConfig =
 type alias InputConfig =
     { fontColor : Color
     , fontSize : Int
-    , paddingX : Int
-    , paddingY : Int
+    , paddingX : Size -> Int
+    , paddingY : Size -> Int
     , borderColor : Color
     , borderWidth : Size -> Int
     , borderRadius : Size -> Int
@@ -225,7 +225,7 @@ type alias PaginationConfig =
 
 
 type alias RangeSliderConfig =
-    { trackHeight : Int
+    { trackSize : Int
     , trackBackgroundColor : Color
     , trackBorderRadius : Int
     , trackBoxShadow : Maybe BoxShadow
@@ -366,6 +366,32 @@ defaultBorderRadius size =
             5
 
 
+defaultPaddingX : Size -> Int
+defaultPaddingX size =
+    case size of
+        SizeSmall ->
+            8
+
+        SizeDefault ->
+            12
+
+        SizeLarge ->
+            16
+
+
+defaultPaddingY : Size -> Int
+defaultPaddingY size =
+    case size of
+        SizeSmall ->
+            4
+
+        SizeDefault ->
+            6
+
+        SizeLarge ->
+            8
+
+
 defaultAlertConfig : ThemeColor -> AlertConfig
 defaultAlertConfig themeColor =
     { paddingX = 20
@@ -396,28 +422,8 @@ defaultBadgeConfig themeColor =
 
 defaultButtonConfig : ThemeColor -> ButtonConfig
 defaultButtonConfig themeColor =
-    { paddingX =
-        \size ->
-            case size of
-                SizeSmall ->
-                    8
-
-                SizeDefault ->
-                    12
-
-                SizeLarge ->
-                    16
-    , paddingY =
-        \size ->
-            case size of
-                SizeSmall ->
-                    4
-
-                SizeDefault ->
-                    6
-
-                SizeLarge ->
-                    8
+    { paddingX = defaultPaddingX
+    , paddingY = defaultPaddingY
     , backgroundColor = themeColor
     , fontColor =
         \role ->
@@ -478,8 +484,8 @@ defaultInputConfig : Colors -> ThemeColor -> InputConfig
 defaultInputConfig colors themeColor =
     { fontColor = colors.gray700
     , fontSize = defaultFontSize SizeDefault
-    , paddingX = 12
-    , paddingY = 10
+    , paddingX = defaultPaddingX
+    , paddingY = defaultPaddingY
     , borderColor = colors.gray400
     , borderWidth = defaultBorderWidth
     , borderRadius = defaultBorderRadius
@@ -572,14 +578,14 @@ defaultPaginationConfig themeColor =
 
 defaultRangeSliderConfig : Colors -> ThemeColor -> RangeSliderConfig
 defaultRangeSliderConfig colors themeColor =
-    { trackHeight = 8
+    { trackSize = 8
     , trackBackgroundColor = colors.gray300
     , trackBorderRadius = 16
     , trackBoxShadow = Nothing -- TODO add shadow
     , thumbWidth = 16
     , thumbHeight = 16
     , thumbBackgroundColor = themeColor Primary
-    , thumbBorderRadius = 16
+    , thumbBorderRadius = 8
     , thumbBoxShadow = Nothing -- TODO add shadow
     , thumbActiveBackgroundColor = (themeColor >> lighten 0.35) Primary
     , thumbDisabledBackgroundColor = colors.gray500

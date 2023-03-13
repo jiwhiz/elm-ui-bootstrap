@@ -12,10 +12,10 @@ module UiFramework.Form.NumberField exposing
 
 import Element exposing (text)
 import Element.Input as Input
-import Form.Base as Base
-import Form.Error exposing (Error)
-import Form.Field as Field
 import Html.Attributes
+import UiFramework.Form.Base as Base
+import UiFramework.Form.Error exposing (Error)
+import UiFramework.Form.Field as Field
 import UiFramework.Form.FormUtils exposing (getLabelAbove, getPlaceholder, withCommonAttrs, withHtmlAttribute)
 import UiFramework.Internal as Internal
 import UiFramework.Types exposing (Role(..), Size(..))

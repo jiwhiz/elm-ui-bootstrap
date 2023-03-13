@@ -1,13 +1,16 @@
-module UiFramework.Form.TextField exposing
+module UiFramework.Form.TextareaField exposing
     ( Attributes
-    , TextField
-    , TextFieldConfig
+    , TextareaField
+    , TextareaFieldConfig
     , defaultAttributes
     , form
     , view
     , withHelpText
     , withLabel
+    , withNoResize
     , withPlaceholder
+    , withRows
+    , withSpellcheck
     )
 
 import Element exposing (Attribute, alignBottom, column, el, fill, height, none, paddingEach, paddingXY, px, text, width)
@@ -16,11 +19,12 @@ import Element.Border as Border
 import Element.Events as Events
 import Element.Font as Font
 import Element.Input as Input
+import Html.Attributes
 import UiFramework.Configuration as Configuration exposing (defaultFontSize)
 import UiFramework.Form.Base as Base
 import UiFramework.Form.Error exposing (Error)
 import UiFramework.Form.Field as Field
-import UiFramework.Form.FormUtils exposing (errorToString, getLabelAbove, getPlaceholder, when, whenJust, withCommonAttrs)
+import UiFramework.Form.FormUtils exposing (errorToString, getLabelAbove, getPlaceholder, when, whenJust, withCommonAttrs, withHtmlAttribute)
 import UiFramework.Internal as Internal
 import UiFramework.Types exposing (Role(..), Size(..))
 
@@ -29,7 +33,7 @@ type alias UiElement context msg =
     Internal.WithContext (Internal.UiContextual context) msg
 
 
-type alias TextField values =
+type alias TextareaField values =
     Field.Field Attributes String values
 
 
@@ -47,6 +51,9 @@ type alias Options =
     , append : Maybe String
     , readOnly : Bool
     , disabled : Bool
+    , rows : Int
+    , noResize : Bool
+    , spellcheck : Bool
     }
 
 
@@ -62,6 +69,9 @@ defaultAttributes =
         , append = Nothing
         , readOnly = False
         , disabled = False
+        , rows = 2
+        , noResize = False
+        , spellcheck = False
         }
 
 
@@ -80,15 +90,30 @@ withHelpText helpText (Attributes options) =
     Attributes { options | helpText = Just helpText }
 
 
+withRows : Int -> Attributes -> Attributes
+withRows rows (Attributes options) =
+    Attributes { options | rows = rows }
+
+
+withNoResize : Attributes -> Attributes
+withNoResize (Attributes options) =
+    Attributes { options | noResize = True }
+
+
+withSpellcheck : Attributes -> Attributes
+withSpellcheck (Attributes options) =
+    Attributes { options | spellcheck = True }
+
+
 form :
-    (TextField values -> field)
+    (TextareaField values -> field)
     -> Base.FieldConfig Attributes String values output
     -> Base.Form values output field
 form =
     Base.field { isEmpty = String.isEmpty }
 
 
-type alias TextFieldConfig msg =
+type alias TextareaFieldConfig msg =
     { onChange : String -> msg
     , onBlur : Maybe msg
     , disabled : Bool
@@ -100,18 +125,9 @@ type alias TextFieldConfig msg =
 
 
 view :
-    (List (Attribute msg)
-     ->
-        { onChange : String -> msg
-        , text : String
-        , placeholder : Maybe (Input.Placeholder msg)
-        , label : Input.Label msg
-        }
-     -> Element.Element msg
-    )
-    -> TextFieldConfig msg
+    TextareaFieldConfig msg
     -> UiElement context msg
-view renderer { onChange, onBlur, disabled, value, error, showError, attributes } =
+view { onChange, onBlur, disabled, value, error, showError, attributes } =
     let
         options =
             case attributes of
@@ -128,15 +144,18 @@ view renderer { onChange, onBlur, disabled, value, error, showError, attributes 
                     context.themeConfig.inputConfig
 
                 inputField =
-                    renderer
+                    Input.multiline
                         (inputAttributes context
                             |> whenJust onBlur Events.onLoseFocus
                             |> when disabled (Background.color config.disabledBackgroundColor)
+                            |> when options.noResize (Element.htmlAttribute <| Html.Attributes.style "resize" "none")
+                            |> withHtmlAttribute Html.Attributes.rows (Just options.rows)
                         )
                         { onChange = onChange
                         , text = value
                         , placeholder = getPlaceholder context options.placeholder
                         , label = getLabelAbove (showError && error /= Nothing) options.label themeColor
+                        , spellcheck = options.spellcheck
                         }
 
                 errorMessage =
@@ -176,15 +195,17 @@ view renderer { onChange, onBlur, disabled, value, error, showError, attributes 
 inputAttributes : Internal.UiContextual context -> List (Attribute msg)
 inputAttributes context =
     let
+        config : Configuration.InputConfig
         config =
             context.themeConfig.inputConfig
     in
     [ paddingXY (config.paddingX SizeDefault) (config.paddingY SizeDefault)
-    , height (px 40)
-    , alignBottom
+
+    --, alignBottom
     , Font.size config.fontSize
     , Font.color config.fontColor
-    , Font.center
+
+    --, Font.center
     , Border.rounded <| config.borderRadius SizeDefault
     , Border.width <| config.borderWidth SizeDefault
     , Border.solid

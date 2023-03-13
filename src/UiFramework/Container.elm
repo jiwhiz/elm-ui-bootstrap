@@ -3,7 +3,6 @@ module UiFramework.Container exposing (Container(..), Options, UiElement, defaul
 import Element exposing (Attribute, DeviceClass(..))
 import Element.Background as Background
 import Element.Border as Border
-import UiFramework
 import UiFramework.ColorUtils exposing (transparent)
 import UiFramework.Internal as Internal
 
@@ -32,7 +31,7 @@ defaultOptions : Options context msg
 defaultOptions =
     { jumbotron = False
     , fillWidth = False
-    , child = UiFramework.uiNone
+    , child = Internal.uiNone
     , attributes = []
     }
 

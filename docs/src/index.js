@@ -14,5 +14,5 @@ app.ports.changedUrl.subscribe(function () {
     document.querySelectorAll('pre code').forEach((block) => {
       hljs.highlightBlock(block);
     });
-  }, 0)
+  }, 50)
 });

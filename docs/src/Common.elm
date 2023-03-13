@@ -1,5 +1,6 @@
 module Common exposing
     ( Header
+    , bold
     , code
     , collapse
     , componentNavbar
@@ -87,7 +88,7 @@ moduleLayout config =
                                 ]
                               <|
                                 componentNavbar config.navigateToMsg config.currentRoute
-                            , Container.simple [ Element.width <| Element.fillPortion 6 ] <| config.content
+                            , Container.simple [ Element.width <| Element.fillPortion 6, Element.alignTop ] <| config.content
                             ]
                 ]
         )
@@ -160,14 +161,19 @@ section str =
     Typography.h1 [] (wrappedText str)
 
 
-
--- basically a  UiFramework.uiText wrapped in a uiParagraph
-
-
 wrappedText : String -> WithContext c msg
 wrappedText str =
     UiFramework.uiParagraph []
         [ UiFramework.uiText str ]
+
+
+bold : String -> WithContext c msg
+bold str =
+    UiFramework.fromElement
+        (\context ->
+            Element.el [ Font.bold ]
+                (Element.text str)
+        )
 
 
 
@@ -226,6 +232,14 @@ routeNameList =
     , ( Container, "Container" )
     , ( Dropdown, "Dropdown" )
     , ( Form, "Form" )
+    , ( FormCheckbox, "Form Checkbox" )
+    , ( FormNumber, "Form Number" )
+    , ( FormPassword, "Form Password" )
+    , ( FormRadio, "Form Radio" )
+    , ( FormRange, "Form Range" )
+    , ( FormSelect, "Form Select" )
+    , ( FormText, "Form Text" )
+    , ( FormTextarea, "Form Textarea" )
     , ( Icon, "Icon" )
     , ( Navbar, "Navbar" )
     , ( Pagination, "Pagination" )

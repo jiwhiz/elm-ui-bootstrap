@@ -1,15 +1,16 @@
 module UiFramework.Form.ComposableForm exposing (..)
 
-
-import Form.Base as Base
-import Form.Error exposing (Error)
-import Form.Field as Field
+import UiFramework.Form.Base as Base
 import UiFramework.Form.CheckboxField as CheckboxField
+import UiFramework.Form.Error exposing (Error)
+import UiFramework.Form.Field as Field
 import UiFramework.Form.NumberField as NumberField
+import UiFramework.Form.PasswordField as PasswordField
 import UiFramework.Form.RadioField as RadioField
 import UiFramework.Form.RangeField as RangeField
 import UiFramework.Form.SelectField as SelectField
 import UiFramework.Form.TextField as TextField
+import UiFramework.Form.TextareaField as TextareaField
 
 
 type alias Form values output =
@@ -21,16 +22,17 @@ type Field values
     | Checkbox (CheckboxField.CheckboxField values)
     | Select (SelectField.SelectField values)
     | Number (NumberField.NumberField values)
+    | Password (PasswordField.PasswordField values)
     | Range (RangeField.RangeField values)
     | Radio (RadioField.RadioField values)
+    | Textarea (TextareaField.TextareaField values)
     | Group (List (FilledField values))
 
 
 type TextType
     = TextRaw
     | TextEmail
-    | TextPassword
-    | TextArea
+    | TextUsername
     | TextSearch
 
 
@@ -105,20 +107,26 @@ mapFieldValues update values field =
         Text textType field_ ->
             Text textType (Field.mapValues newUpdate field_)
 
+        Checkbox field_ ->
+            Checkbox (Field.mapValues newUpdate field_)
+
         Number field_ ->
             Number (Field.mapValues newUpdate field_)
 
+        Password field_ ->
+            Password (Field.mapValues newUpdate field_)
+
         Range field_ ->
             Range (Field.mapValues newUpdate field_)
-
-        Checkbox field_ ->
-            Checkbox (Field.mapValues newUpdate field_)
 
         Radio field_ ->
             Radio (Field.mapValues newUpdate field_)
 
         Select field_ ->
             Select (Field.mapValues newUpdate field_)
+
+        Textarea field_ ->
+            Textarea (Field.mapValues newUpdate field_)
 
         Group fields ->
             Group
@@ -145,6 +153,18 @@ textField =
     TextField.form (Text TextRaw)
 
 
+usernameField :
+    { parser : String -> Result String output
+    , value : values -> String
+    , update : String -> values -> values
+    , error : values -> Maybe String
+    , attributes : TextField.Attributes
+    }
+    -> Form values output
+usernameField =
+    TextField.form (Text TextUsername)
+
+
 emailField :
     { parser : String -> Result String output
     , value : values -> String
@@ -157,30 +177,6 @@ emailField =
     TextField.form (Text TextEmail)
 
 
-passwordField :
-    { parser : String -> Result String output
-    , value : values -> String
-    , update : String -> values -> values
-    , error : values -> Maybe String
-    , attributes : TextField.Attributes
-    }
-    -> Form values output
-passwordField =
-    TextField.form (Text TextPassword)
-
-
-textareaField :
-    { parser : String -> Result String output
-    , value : values -> String
-    , update : String -> values -> values
-    , error : values -> Maybe String
-    , attributes : TextField.Attributes
-    }
-    -> Form values output
-textareaField =
-    TextField.form (Text TextArea)
-
-
 searchField :
     { parser : String -> Result String output
     , value : values -> String
@@ -191,6 +187,30 @@ searchField :
     -> Form values output
 searchField =
     TextField.form (Text TextSearch)
+
+
+passwordField :
+    { parser : String -> Result String output
+    , value : values -> String
+    , update : String -> values -> values
+    , error : values -> Maybe String
+    , attributes : PasswordField.Attributes
+    }
+    -> Form values output
+passwordField =
+    PasswordField.form Password
+
+
+textareaField :
+    { parser : String -> Result String output
+    , value : values -> String
+    , update : String -> values -> values
+    , error : values -> Maybe String
+    , attributes : TextareaField.Attributes
+    }
+    -> Form values output
+textareaField =
+    TextareaField.form Textarea
 
 
 numberField :

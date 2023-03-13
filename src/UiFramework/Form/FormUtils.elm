@@ -5,8 +5,8 @@ import Element.Background as Background
 import Element.Events as Events
 import Element.Font as Font
 import Element.Input as Input
-import Form.Error as Error exposing (Error)
 import Html
+import UiFramework.Form.Error as Error exposing (Error)
 import UiFramework.Internal as Internal
 import UiFramework.Types exposing (Role(..), Size(..))
 

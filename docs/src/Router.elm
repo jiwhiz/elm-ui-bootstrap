@@ -15,6 +15,14 @@ import Page.Container as Container
 import Page.Dropdown as Dropdown
 import Page.Examples as Examples
 import Page.Form as Form
+import Page.FormCheckbox as FormCheckbox
+import Page.FormNumber as FormNumber
+import Page.FormPassword as FormPassword
+import Page.FormRadio as FormRadio
+import Page.FormRange as FormRange
+import Page.FormSelect as FormSelect
+import Page.FormText as FormText
+import Page.FormTextarea as FormTextarea
 import Page.GettingStarted as GettingStarted
 import Page.Home as Home
 import Page.Icon as Icon
@@ -56,6 +64,14 @@ type Page
     | ContainerPage Container.Model
     | DropdownPage Dropdown.Model
     | FormPage Form.Model
+    | FormCheckboxPage FormCheckbox.Model
+    | FormNumberPage FormNumber.Model
+    | FormPasswordPage FormPassword.Model
+    | FormRadioPage FormRadio.Model
+    | FormRangePage FormRange.Model
+    | FormSelectPage FormSelect.Model
+    | FormTextPage FormText.Model
+    | FormTextareaPage FormTextarea.Model
     | IconPage Icon.Model
     | NavbarPage Navbar.Model
     | PaginationPage Pagination.Model
@@ -135,6 +151,30 @@ tabBarTitle model =
 
         FormPage _ ->
             "Form"
+
+        FormCheckboxPage _ ->
+            "Form Checkbox"
+
+        FormNumberPage _ ->
+            "Form Number"
+
+        FormPasswordPage _ ->
+            "Form Password"
+
+        FormRadioPage _ ->
+            "Form Radio"
+
+        FormRangePage _ ->
+            "Form Range"
+
+        FormSelectPage _ ->
+            "Form Select"
+
+        FormTextPage _ ->
+            "Form Text"
+
+        FormTextareaPage _ ->
+            "Form Textarea"
 
         IconPage _ ->
             "Icon"
@@ -270,6 +310,38 @@ content model sharedState =
             Form.view sharedState pageModel
                 |> Element.map FormMsg
 
+        FormCheckboxPage pageModel ->
+            FormCheckbox.view sharedState pageModel
+                |> Element.map FormCheckboxMsg
+
+        FormNumberPage pageModel ->
+            FormNumber.view sharedState pageModel
+                |> Element.map FormNumberMsg
+
+        FormPasswordPage pageModel ->
+            FormPassword.view sharedState pageModel
+                |> Element.map FormPasswordMsg
+
+        FormRadioPage pageModel ->
+            FormRadio.view sharedState pageModel
+                |> Element.map FormRadioMsg
+
+        FormRangePage pageModel ->
+            FormRange.view sharedState pageModel
+                |> Element.map FormRangeMsg
+
+        FormSelectPage pageModel ->
+            FormSelect.view sharedState pageModel
+                |> Element.map FormSelectMsg
+
+        FormTextPage pageModel ->
+            FormText.view sharedState pageModel
+                |> Element.map FormTextMsg
+
+        FormTextareaPage pageModel ->
+            FormTextarea.view sharedState pageModel
+                |> Element.map FormTextareaMsg
+
         IconPage pageModel ->
             Icon.view sharedState pageModel
                 |> Element.map IconMsg
@@ -318,6 +390,14 @@ type Msg
     | ContainerMsg Container.Msg
     | DropdownMsg Dropdown.Msg
     | FormMsg Form.Msg
+    | FormCheckboxMsg FormCheckbox.Msg
+    | FormNumberMsg FormNumber.Msg
+    | FormPasswordMsg FormPassword.Msg
+    | FormRadioMsg FormRadio.Msg
+    | FormRangeMsg FormRange.Msg
+    | FormSelectMsg FormSelect.Msg
+    | FormTextMsg FormText.Msg
+    | FormTextareaMsg FormTextarea.Msg
     | IconMsg Icon.Msg
     | NavbarMsg Navbar.Msg
     | PaginationMsg Pagination.Msg
@@ -385,6 +465,38 @@ update sharedState msg model =
         ( FormMsg subMsg, FormPage subModel ) ->
             Form.update sharedState subMsg subModel
                 |> updateWith FormPage FormMsg model
+
+        ( FormCheckboxMsg subMsg, FormCheckboxPage subModel ) ->
+            FormCheckbox.update sharedState subMsg subModel
+                |> updateWith FormCheckboxPage FormCheckboxMsg model
+
+        ( FormNumberMsg subMsg, FormNumberPage subModel ) ->
+            FormNumber.update sharedState subMsg subModel
+                |> updateWith FormNumberPage FormNumberMsg model
+
+        ( FormPasswordMsg subMsg, FormPasswordPage subModel ) ->
+            FormPassword.update sharedState subMsg subModel
+                |> updateWith FormPasswordPage FormPasswordMsg model
+
+        ( FormRadioMsg subMsg, FormRadioPage subModel ) ->
+            FormRadio.update sharedState subMsg subModel
+                |> updateWith FormRadioPage FormRadioMsg model
+
+        ( FormRangeMsg subMsg, FormRangePage subModel ) ->
+            FormRange.update sharedState subMsg subModel
+                |> updateWith FormRangePage FormRangeMsg model
+
+        ( FormSelectMsg subMsg, FormSelectPage subModel ) ->
+            FormSelect.update sharedState subMsg subModel
+                |> updateWith FormSelectPage FormSelectMsg model
+
+        ( FormTextMsg subMsg, FormTextPage subModel ) ->
+            FormText.update sharedState subMsg subModel
+                |> updateWith FormTextPage FormTextMsg model
+
+        ( FormTextareaMsg subMsg, FormTextareaPage subModel ) ->
+            FormTextarea.update sharedState subMsg subModel
+                |> updateWith FormTextareaPage FormTextareaMsg model
 
         ( IconMsg subMsg, IconPage subModel ) ->
             Icon.update sharedState subMsg subModel
@@ -482,6 +594,30 @@ navigateTo route sharedState model =
 
         Form ->
             Form.init |> initWith FormPage FormMsg model SharedState.NoUpdate
+
+        FormCheckbox ->
+            FormCheckbox.init |> initWith FormCheckboxPage FormCheckboxMsg model SharedState.NoUpdate
+
+        FormNumber ->
+            FormNumber.init |> initWith FormNumberPage FormNumberMsg model SharedState.NoUpdate
+
+        FormPassword ->
+            FormPassword.init |> initWith FormPasswordPage FormPasswordMsg model SharedState.NoUpdate
+
+        FormRadio ->
+            FormRadio.init |> initWith FormRadioPage FormRadioMsg model SharedState.NoUpdate
+
+        FormRange ->
+            FormRange.init |> initWith FormRangePage FormRangeMsg model SharedState.NoUpdate
+
+        FormSelect ->
+            FormSelect.init |> initWith FormSelectPage FormSelectMsg model SharedState.NoUpdate
+
+        FormText ->
+            FormText.init |> initWith FormTextPage FormTextMsg model SharedState.NoUpdate
+
+        FormTextarea ->
+            FormTextarea.init |> initWith FormTextareaPage FormTextareaMsg model SharedState.NoUpdate
 
         Icon ->
             Icon.init |> initWith IconPage IconMsg model SharedState.NoUpdate

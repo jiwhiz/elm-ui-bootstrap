@@ -15,6 +15,7 @@ import UiFramework.ColorUtils exposing (hexToColor)
 import UiFramework.Container as Container
 import UiFramework.Form.CheckboxField as CheckboxField
 import UiFramework.Form.ComposableForm as ComposableForm
+import UiFramework.Form.PasswordField as PasswordField
 import UiFramework.Form.TextField as TextField
 import UiFramework.Form.WebForm as WebForm
 import UiFramework.Icon as Icon
@@ -111,7 +112,7 @@ overview model =
 loginForm model =
     let
         usernameField =
-            ComposableForm.textField
+            ComposableForm.usernameField
                 { parser = Ok
                 , value = .username
                 , update = \value values -> { values | username = value }
@@ -129,9 +130,9 @@ loginForm model =
                 , update = \value values -> { values | password = value }
                 , error = always Nothing
                 , attributes =
-                    TextField.defaultAttributes
-                        |> TextField.withLabel "Password"
-                        |> TextField.withPlaceholder "Your password"
+                    PasswordField.defaultAttributes
+                        |> PasswordField.withLabel "Password"
+                        |> PasswordField.withPlaceholder "Your password"
                 }
 
         rememberMeCheckbox =

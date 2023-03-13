@@ -89,6 +89,32 @@ materiaThemeColor colors role =
             colors.gray800
 
 
+materiaPaddingX : Size -> Int
+materiaPaddingX size =
+    case size of
+        SizeSmall ->
+            8
+
+        SizeDefault ->
+            16
+
+        SizeLarge ->
+            16
+
+
+materiaPaddingY : Size -> Int
+materiaPaddingY size =
+    case size of
+        SizeSmall ->
+            4
+
+        SizeDefault ->
+            16
+
+        SizeLarge ->
+            8
+
+
 materiaButtonConfig : ThemeColor -> ButtonConfig
 materiaButtonConfig themeColor =
     let
@@ -96,28 +122,8 @@ materiaButtonConfig themeColor =
             defaultButtonConfig themeColor
     in
     { default
-        | paddingX =
-            \size ->
-                case size of
-                    SizeSmall ->
-                        8
-
-                    SizeDefault ->
-                        16
-
-                    SizeLarge ->
-                        16
-        , paddingY =
-            \size ->
-                case size of
-                    SizeSmall ->
-                        4
-
-                    SizeDefault ->
-                        16
-
-                    SizeLarge ->
-                        8
+        | paddingX = materiaPaddingX
+        , paddingY = materiaPaddingY
         , withShadow = Just boxShadows
         , borderWidth = \_ -> 0
     }
@@ -151,8 +157,8 @@ materiaInputConfig colors themeColor =
             defaultInputConfig colors themeColor
     in
     { default
-        | paddingX = 16
-        , paddingY = 0
+        | paddingX = materiaPaddingX
+        , paddingY = materiaPaddingY
         , borderColor = transparent
         , borderRadius = always 0
     }

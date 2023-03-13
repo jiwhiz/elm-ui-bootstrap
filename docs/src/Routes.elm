@@ -13,6 +13,14 @@ type Route
     | Container
     | Dropdown
     | Form
+    | FormCheckbox
+    | FormNumber
+    | FormPassword
+    | FormRadio
+    | FormRange
+    | FormSelect
+    | FormText
+    | FormTextarea
     | Icon
     | Navbar
     | Pagination
@@ -55,6 +63,30 @@ toUrlString route =
 
                 Form ->
                     [ "form" ]
+
+                FormCheckbox ->
+                    [ "form-checkbox" ]
+
+                FormNumber ->
+                    [ "form-number" ]
+
+                FormPassword ->
+                    [ "form-password" ]
+
+                FormRadio ->
+                    [ "form-radio" ]
+
+                FormRange ->
+                    [ "form-range" ]
+
+                FormSelect ->
+                    [ "form-select" ]
+
+                FormText ->
+                    [ "form-text" ]
+
+                FormTextarea ->
+                    [ "form-textarea" ]
 
                 Icon ->
                     [ "icon" ]
@@ -109,6 +141,14 @@ urlParser =
         , Url.map Container (Url.s "container")
         , Url.map Dropdown (Url.s "dropdown")
         , Url.map Form (Url.s "form")
+        , Url.map FormCheckbox (Url.s "form-checkbox")
+        , Url.map FormNumber (Url.s "form-number")
+        , Url.map FormPassword (Url.s "form-password")
+        , Url.map FormRadio (Url.s "form-radio")
+        , Url.map FormRange (Url.s "form-range")
+        , Url.map FormSelect (Url.s "form-select")
+        , Url.map FormText (Url.s "form-text")
+        , Url.map FormTextarea (Url.s "form-textarea")
         , Url.map Icon (Url.s "icon")
         , Url.map Navbar (Url.s "navbar")
         , Url.map Pagination (Url.s "pagination")

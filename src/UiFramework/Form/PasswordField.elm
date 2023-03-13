@@ -1,26 +1,28 @@
-module UiFramework.Form.TextField exposing
+module UiFramework.Form.PasswordField exposing
     ( Attributes
-    , TextField
-    , TextFieldConfig
+    , PasswordField
+    , PasswordFieldConfig
     , defaultAttributes
     , form
     , view
+    , withAutoFillCurrent
     , withHelpText
     , withLabel
     , withPlaceholder
     )
 
-import Element exposing (Attribute, alignBottom, column, el, fill, height, none, paddingEach, paddingXY, px, text, width)
+import Element
 import Element.Background as Background
 import Element.Border as Border
 import Element.Events as Events
 import Element.Font as Font
 import Element.Input as Input
-import UiFramework.Configuration as Configuration exposing (defaultFontSize)
+import Html.Attributes
+import UiFramework.Configuration as Configuration
 import UiFramework.Form.Base as Base
 import UiFramework.Form.Error exposing (Error)
 import UiFramework.Form.Field as Field
-import UiFramework.Form.FormUtils exposing (errorToString, getLabelAbove, getPlaceholder, when, whenJust, withCommonAttrs)
+import UiFramework.Form.FormUtils exposing (errorToString, getLabelAbove, getPlaceholder, when, whenJust, withCommonAttrs, withHtmlAttribute)
 import UiFramework.Internal as Internal
 import UiFramework.Types exposing (Role(..), Size(..))
 
@@ -29,7 +31,7 @@ type alias UiElement context msg =
     Internal.WithContext (Internal.UiContextual context) msg
 
 
-type alias TextField values =
+type alias PasswordField values =
     Field.Field Attributes String values
 
 
@@ -43,10 +45,9 @@ type alias Options =
     , helpText : Maybe String
     , mandatory : Bool
     , size : Maybe Size
-    , prepend : Maybe String
-    , append : Maybe String
-    , readOnly : Bool
     , disabled : Bool
+    , show : Bool
+    , current : Bool
     }
 
 
@@ -58,10 +59,9 @@ defaultAttributes =
         , helpText = Nothing
         , mandatory = True
         , size = Nothing
-        , prepend = Nothing
-        , append = Nothing
-        , readOnly = False
         , disabled = False
+        , show = False
+        , current = False
         }
 
 
@@ -80,15 +80,25 @@ withHelpText helpText (Attributes options) =
     Attributes { options | helpText = Just helpText }
 
 
+withShowPassword : Attributes -> Attributes
+withShowPassword (Attributes options) =
+    Attributes { options | show = True }
+
+
+withAutoFillCurrent : Attributes -> Attributes
+withAutoFillCurrent (Attributes options) =
+    Attributes { options | current = True }
+
+
 form :
-    (TextField values -> field)
+    (PasswordField values -> field)
     -> Base.FieldConfig Attributes String values output
     -> Base.Form values output field
 form =
     Base.field { isEmpty = String.isEmpty }
 
 
-type alias TextFieldConfig msg =
+type alias PasswordFieldConfig msg =
     { onChange : String -> msg
     , onBlur : Maybe msg
     , disabled : Bool
@@ -99,19 +109,8 @@ type alias TextFieldConfig msg =
     }
 
 
-view :
-    (List (Attribute msg)
-     ->
-        { onChange : String -> msg
-        , text : String
-        , placeholder : Maybe (Input.Placeholder msg)
-        , label : Input.Label msg
-        }
-     -> Element.Element msg
-    )
-    -> TextFieldConfig msg
-    -> UiElement context msg
-view renderer { onChange, onBlur, disabled, value, error, showError, attributes } =
+view : PasswordFieldConfig msg -> UiElement context msg
+view { onChange, onBlur, disabled, value, error, showError, attributes } =
     let
         options =
             case attributes of
@@ -127,8 +126,15 @@ view renderer { onChange, onBlur, disabled, value, error, showError, attributes 
                 config =
                     context.themeConfig.inputConfig
 
+                fieldFunction =
+                    if options.current then
+                        Input.currentPassword
+
+                    else
+                        Input.newPassword
+
                 inputField =
-                    renderer
+                    fieldFunction
                         (inputAttributes context
                             |> whenJust onBlur Events.onLoseFocus
                             |> when disabled (Background.color config.disabledBackgroundColor)
@@ -137,35 +143,36 @@ view renderer { onChange, onBlur, disabled, value, error, showError, attributes 
                         , text = value
                         , placeholder = getPlaceholder context options.placeholder
                         , label = getLabelAbove (showError && error /= Nothing) options.label themeColor
+                        , show = options.show
                         }
 
                 errorMessage =
                     case ( showError, error ) of
                         ( True, Just err ) ->
-                            el
+                            Element.el
                                 [ Font.color <| themeColor Danger
-                                , paddingXY 0 (config.paddingY SizeDefault // 2)
+                                , Element.paddingXY 0 (config.paddingY SizeDefault // 2)
                                 ]
-                                (text <| errorToString err)
+                                (Element.text <| errorToString err)
 
                         _ ->
-                            none
+                            Element.none
 
                 helpMessage =
                     options.helpText
                         |> Maybe.map
                             (\helpText ->
-                                el
+                                Element.el
                                     [ Font.color config.placeholderColor
-                                    , Font.size <| defaultFontSize SizeSmall
-                                    , paddingXY 0 (config.paddingY SizeDefault // 2)
+                                    , Font.size <| Configuration.defaultFontSize SizeSmall
+                                    , Element.paddingXY 0 (config.paddingY SizeDefault // 2)
                                     ]
-                                    (text helpText)
+                                    (Element.text helpText)
                             )
-                        |> Maybe.withDefault none
+                        |> Maybe.withDefault Element.none
             in
-            column
-                [ width fill ]
+            Element.column
+                [ Element.width Element.fill ]
                 [ inputField
                 , errorMessage
                 , helpMessage
@@ -173,15 +180,16 @@ view renderer { onChange, onBlur, disabled, value, error, showError, attributes 
         )
 
 
-inputAttributes : Internal.UiContextual context -> List (Attribute msg)
+inputAttributes : Internal.UiContextual context -> List (Element.Attribute msg)
 inputAttributes context =
     let
+        config : Configuration.InputConfig
         config =
             context.themeConfig.inputConfig
     in
-    [ paddingXY (config.paddingX SizeDefault) (config.paddingY SizeDefault)
-    , height (px 40)
-    , alignBottom
+    [ Element.paddingXY (config.paddingX SizeDefault) (config.paddingY SizeDefault)
+    , Element.height (Element.px 40)
+    , Element.alignBottom
     , Font.size config.fontSize
     , Font.color config.fontColor
     , Font.center

@@ -2,18 +2,21 @@ module UiFramework.Form.WebForm exposing (..)
 
 import Element exposing (Attribute, el, fill, spacing, text, width)
 import Element.Font as Font
+import Element.Input as Input
 import FontAwesome.Solid
-import Form.Error exposing (Error)
 import Set exposing (Set)
 import UiFramework.Alert as Alert
 import UiFramework.Button as Button
 import UiFramework.Form.CheckboxField as CheckboxField
 import UiFramework.Form.ComposableForm as ComposableForm exposing (Form)
+import UiFramework.Form.Error exposing (Error)
 import UiFramework.Form.NumberField as NumberField
+import UiFramework.Form.PasswordField as PasswordField
 import UiFramework.Form.RadioField as RadioField
 import UiFramework.Form.RangeField as RangeField
 import UiFramework.Form.SelectField as SelectField
 import UiFramework.Form.TextField as TextField
+import UiFramework.Form.TextareaField as TextareaField
 import UiFramework.Icon as Icon
 import UiFramework.Internal as Internal
 import UiFramework.Types exposing (Role(..))
@@ -67,12 +70,18 @@ type alias WebFormOptions values context msg =
     , validationStrategy : ValidationStrategy
     , displayFormError : String -> UiElement context msg
     , attributes : List (Attribute msg)
+    , hideButton : Bool
     }
 
 
 type ValidationStrategy
     = ValidateOnSubmit
     | ValidateOnBlur
+
+
+withHideButton : Bool -> WebForm values context msg -> WebForm values context msg
+withHideButton hide (WebForm options) =
+    WebForm { options | hideButton = hide }
 
 
 withSubmitButton : Button.Button context msg -> WebForm values context msg -> WebForm values context msg
@@ -121,6 +130,7 @@ simpleForm onChange content =
         , validationStrategy = ValidateOnSubmit
         , displayFormError = defaultDisplayFormError
         , attributes = []
+        , hideButton = False
         }
 
 
@@ -136,8 +146,7 @@ view :
 view state (WebForm options) =
     let
         { fields, result } =
-            Debug.log "ComposableForm.fill result:" <|
-                ComposableForm.fill options.content state.values
+            ComposableForm.fill options.content state.values
 
         errorTracking =
             (\(ErrorTracking e) -> e) state.errorTracking
@@ -228,7 +237,15 @@ view state (WebForm options) =
     in
     Internal.uiColumn
         ([ spacing 16, width fill ] ++ options.attributes)
-        (formError :: renderedFields ++ [ submitButton ])
+        (formError
+            :: renderedFields
+            ++ (if options.hideButton then
+                    []
+
+                else
+                    [ submitButton ]
+               )
+        )
 
 
 type alias FieldConfig values msg =
@@ -250,9 +267,34 @@ renderField ({ onChange, onBlur, disabled, showError } as fieldConfig) field =
     in
     case field.state of
         ComposableForm.Text type_ { attributes, value, update } ->
-            TextField.view
+            let
+                config =
+                    { onChange = update >> onChange
+                    , onBlur = blur ""
+                    , disabled = field.isDisabled || disabled
+                    , value = value
+                    , error = field.error
+                    , showError = showError "attributes.label"
+                    , attributes = attributes
+                    }
+            in
+            case type_ of
+                ComposableForm.TextRaw ->
+                    TextField.view Input.text config
+
+                ComposableForm.TextEmail ->
+                    TextField.view Input.email config
+
+                ComposableForm.TextUsername ->
+                    TextField.view Input.username config
+
+                ComposableForm.TextSearch ->
+                    TextField.view Input.search config
+
+        ComposableForm.Number { attributes, value, update } ->
+            NumberField.view
                 { onChange = update >> onChange
-                , onBlur = blur ""
+                , onBlur = blur "attributes.label"
                 , disabled = field.isDisabled || disabled
                 , value = value
                 , error = field.error
@@ -260,8 +302,8 @@ renderField ({ onChange, onBlur, disabled, showError } as fieldConfig) field =
                 , attributes = attributes
                 }
 
-        ComposableForm.Number { attributes, value, update } ->
-            NumberField.view
+        ComposableForm.Password { attributes, value, update } ->
+            PasswordField.view
                 { onChange = update >> onChange
                 , onBlur = blur "attributes.label"
                 , disabled = field.isDisabled || disabled
@@ -307,7 +349,18 @@ renderField ({ onChange, onBlur, disabled, showError } as fieldConfig) field =
         ComposableForm.Select { attributes, value, update } ->
             SelectField.view
                 { onChange = update >> onChange
-                , onBlur = blur ""
+                , onBlur = blur "attributes.label"
+                , disabled = field.isDisabled || disabled
+                , value = value
+                , error = field.error
+                , showError = showError "attributes.label"
+                , attributes = attributes
+                }
+
+        ComposableForm.Textarea { attributes, value, update } ->
+            TextareaField.view
+                { onChange = update >> onChange
+                , onBlur = blur "attributes.label"
                 , disabled = field.isDisabled || disabled
                 , value = value
                 , error = field.error

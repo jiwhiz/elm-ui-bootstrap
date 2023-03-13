@@ -31,7 +31,7 @@ module UiFramework.Icon exposing
 
 import Element exposing (Attribute, Color, Element, html)
 import FontAwesome.Attributes
-import FontAwesome.Icon
+import FontAwesome exposing(Icon)
 import FontAwesome.Layering
 import FontAwesome.Transforms as Transforms
 import Html exposing (Html)
@@ -69,7 +69,7 @@ type alias Options msg =
 
 
 type BaseIcon msg
-    = FontAwesome FontAwesome.Icon.Icon
+    = FontAwesome (FontAwesome.Icon FontAwesome.WithoutId)
     | Text String
     | Layered (List (Icon msg))
 
@@ -107,7 +107,7 @@ defaultOptions =
     }
 
 
-fontAwesome : FontAwesome.Icon.Icon -> Icon msg
+fontAwesome : FontAwesome.Icon FontAwesome.WithoutId -> Icon msg
 fontAwesome fontAwesomeIcon =
     Icon { defaultOptions | base = FontAwesome fontAwesomeIcon }
 
@@ -257,7 +257,7 @@ lay icon1 (Icon option2) =
             Icon { defaultOptions | base = Layered [ Icon option2, icon1 ] }
 
 
-simple : FontAwesome.Icon.Icon -> UiElement context msg
+simple : FontAwesome.Icon FontAwesome.WithoutId -> UiElement context msg
 simple icon =
     fontAwesome icon
         |> view
@@ -316,7 +316,7 @@ viewAsHtml (Icon options) =
                     Just FontAwesome.Attributes.spin
 
                 Pulse ->
-                    Just FontAwesome.Attributes.pulse
+                    Just FontAwesome.Attributes.spinPulse
 
                 NoAnimation ->
                     Nothing
@@ -356,7 +356,7 @@ viewAsHtml (Icon options) =
                 FontAwesome icon ->
                     FontAwesome.Layering.layers
                         attributes
-                        [ FontAwesome.Icon.viewTransformed [] options.transformations icon
+                        [ FontAwesome.transform options.transformations icon |> FontAwesome.view
                         , FontAwesome.Layering.counter attrs text
                         ]
 
@@ -375,7 +375,7 @@ viewAsHtml (Icon options) =
         Nothing ->
             case options.base of
                 FontAwesome icon ->
-                    FontAwesome.Icon.viewTransformed attributes options.transformations icon
+                    FontAwesome.transform options.transformations icon |> FontAwesome.view
 
                 Text str ->
                     FontAwesome.Layering.textTransformed attributes options.transformations str

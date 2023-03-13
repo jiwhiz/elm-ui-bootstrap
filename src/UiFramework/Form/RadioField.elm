@@ -5,15 +5,16 @@ module UiFramework.Form.RadioField exposing
     , defaultAttributes
     , form
     , view
+    , withInline
     , withLabel
     , withOptions
     )
 
 import Element exposing (paddingXY, spacing, text)
 import Element.Input as Input
-import Form.Base as Base
-import Form.Error exposing (Error)
-import Form.Field as Field
+import UiFramework.Form.Base as Base
+import UiFramework.Form.Error exposing (Error)
+import UiFramework.Form.Field as Field
 import UiFramework.Form.FormUtils exposing (getLabelAbove, withCommonAttrs)
 import UiFramework.Internal as Internal
 import UiFramework.Types exposing (Role(..), Size(..))
@@ -34,6 +35,7 @@ type Attributes
 type alias Options =
     { label : Maybe String
     , radioOptions : List ( String, String )
+    , inline : Bool
     }
 
 
@@ -42,6 +44,7 @@ defaultAttributes =
     Attributes
         { label = Nothing
         , radioOptions = []
+        , inline = False
         }
 
 
@@ -53,6 +56,11 @@ withLabel label (Attributes options) =
 withOptions : List ( String, String ) -> Attributes -> Attributes
 withOptions radioOptions (Attributes options) =
     Attributes { options | radioOptions = radioOptions }
+
+
+withInline : Attributes -> Attributes
+withInline (Attributes options) =
+    Attributes { options | inline = True }
 
 
 form :
@@ -81,10 +89,17 @@ view { onChange, onBlur, disabled, value, error, showError, attributes } =
             case attributes of
                 Attributes opt ->
                     opt
+
+        radioFun =
+            if options.inline then
+                Input.radioRow
+
+            else
+                Input.radio
     in
     Internal.fromElement
         (\context ->
-            Input.radio
+            radioFun
                 ([ spacing 10, paddingXY 0 8 ]
                     |> withCommonAttrs showError error False onBlur context
                 )
