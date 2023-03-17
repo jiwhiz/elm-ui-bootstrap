@@ -3,10 +3,12 @@ module UiFramework.Internal exposing
     , WithContext
     , fromElement
     , node
+    , elNode
     , onClick
     , toElement
     , uiColumn
     , uiContextualText
+    , uiElement
     , uiLink
     , uiNone
     , uiParagraph
@@ -28,6 +30,7 @@ import UiFramework.Types exposing (Role(..))
 -}
 type WithContext context msg
     = Node (context -> List (Element msg) -> Element msg) (List (WithContext context msg))
+    | ElNode (context -> Element msg -> Element msg) (WithContext context msg)
     | Leaf (context -> Element msg)
 
 
@@ -46,6 +49,9 @@ toElement context wc =
     case wc of
         Node f children ->
             f context <| List.map (toElement context) children
+
+        ElNode f el ->
+            f context (toElement context el)
 
         Leaf f ->
             f context
@@ -72,6 +78,14 @@ node :
     -> WithContext context msg
 node =
     Node
+
+
+elNode :
+    (context -> Element msg -> Element msg)
+    -> WithContext context msg
+    -> WithContext context msg
+elNode =
+    ElNode
 
 
 uiNone : WithContext (UiContextual c) msg
@@ -137,6 +151,13 @@ uiParagraph attrs =
             Element.paragraph attrs
         )
 
+
+uiElement : List (Attribute msg) -> WithContext c msg -> WithContext c msg
+uiElement attr =
+    elNode
+        (\_ ->
+            Element.el attr
+        )
 
 
 -- Util functions

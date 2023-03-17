@@ -1,4 +1,4 @@
-module UiFramework.Dropdown exposing (Dropdown, MenuItem, default, menuLinkItem, view, withIcon, withMenuIcon, withMenuItems, withMenuTitle, withTitle)
+module UiFramework.Dropdown exposing (Dropdown, MenuItem, default, menuLinkItem, menuHeader, view, withIcon, withMenuIcon, withMenuItems, withMenuTitle, withTitle)
 
 import Element
     exposing
@@ -122,6 +122,10 @@ withMenuTitle title item =
             item
 
 
+menuHeader : String -> MenuItem context msg
+menuHeader title =
+    Header title
+
 
 -- Render Dropdown
 
@@ -181,6 +185,9 @@ viewDropdownMenu items =
                             case item of
                                 LinkItem options ->
                                     Internal.toElement context <| viewLinkItem options
+
+                                Header title ->
+                                    Internal.toElement context <| Internal.uiText title
 
                                 _ ->
                                     none

@@ -1,10 +1,13 @@
 module UiFramework exposing
-    ( UiContextual
+    ( UiContext
+    , UiContextual
+    , UiElement
     , WithContext
     , fromElement
     , toElement
     , uiColumn
     , uiContextualText
+    , uiElement
     , uiLink
     , uiNone
     , uiParagraph
@@ -14,8 +17,19 @@ module UiFramework exposing
     , withContext
     )
 
-import Element exposing (Attribute, Element)
+import Element exposing (Attribute, Device, Element)
 import UiFramework.Internal as Internal
+import UiFramework.Configuration exposing (ThemeConfig)
+import UiFramework.Types exposing (Role(..))
+
+type alias UiContext =
+    { device : Device
+    , themeConfig : ThemeConfig
+    , parentRole : Maybe Role
+    }
+
+type alias UiElement msg =
+    Internal.WithContext (Internal.UiContextual UiContext) msg
 
 
 type alias UiContextual c =
@@ -40,6 +54,10 @@ withContext : (UiContextual c -> WithContext c msg) -> WithContext c msg
 withContext =
     Internal.withContext
 
+
+uiElement : List (Attribute msg) -> WithContext c msg -> WithContext c msg
+uiElement = 
+    Internal.uiElement
 
 uiNone : WithContext c msg
 uiNone =
